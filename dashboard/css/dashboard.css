@@ -1,0 +1,345 @@
+/* TheAvenueTeam.com Dashboard CSS */
+
+* {
+    outline: none;
+}
+
+body,html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    background: #fff;
+    color: #333;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #22b5ff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.center {
+    text-align: center;
+}
+
+h1,h2,h3 {
+    color: #5b5b5c;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    margin: 5px;
+}
+
+img {
+    border: 0;
+}
+
+img.thumbnail {
+    height: 240px;
+    width: 320px;
+}
+
+.small {
+    font-size: x-small;
+}
+
+.button {
+    background: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+    padding: 6px 12px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+input:invalid, select:invalid, textarea:invalid {
+    outline: 1px solid #FA8072;
+}
+
+input:not([type=submit]):not([type=file]):not([type=button]), select, textarea {
+    padding: 3px 6px;
+    color: inherit;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+#header {
+    background-color: #fff;
+    margin: 0;
+    padding: 5px;
+}
+
+#content {
+    clear: both;
+    margin: 0;
+    padding: 10px 5px;
+}
+
+table.grid {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.grid tr {
+    border: 1px solid #ccc;
+}
+
+table.grid th {
+    background-color: #22b5ff;
+    border: 1px solid #ccc;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+table.grid th a {
+    color: #fff;
+    font-weight: bold;
+}
+
+table.grid .title {
+    background-color: #22b5ff;
+    border: 1px solid #ccc;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px;
+}
+
+table.input {
+    border-collapse: collapse;
+}
+
+table.input th {
+    border-bottom: 1px solid #ccc;
+    color: #22b5ff;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: left;
+}
+
+table.input td {
+    padding: 3px;
+}
+
+table.lines {
+    border-collapse: collapse;
+}
+
+table.lines td {
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+table.clean {
+    border: 0px;
+}
+
+table.clean td {
+    border: 0px;
+    padding: 2px;
+}
+
+.alt {
+    background-color: #f2f2f2;
+}
+
+/*Credits: Dynamic Drive CSS Library */
+/*URL: http://www.dynamicdrive.com/style/ */
+.pagination {
+    margin: 5px;
+    padding: 2px;
+}
+
+.pagination ul {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.pagination li {
+    display: inline;
+    list-style-type: none;
+    padding-bottom: 1px;
+    padding: 1px;
+}
+
+.pagination a,.pagination a:visited {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    color: #22b5ff;
+    padding: 1px 5px;
+    text-decoration: none;
+}
+
+.pagination a:hover,.pagination a:active {
+    border: 1px solid #000;
+    color: #333;
+}
+
+.pagination li.currentpage {
+    background-color: #f2f2f2;
+    border: 1px solid #22b5ff;
+    color: #22b5ff;
+    font-weight: bold;
+    padding: 1px 5px;
+    text-align: center;
+}
+
+.pagination li.disablepage {
+    border: 1px solid #ccc;
+    color: #22b5ff;
+    padding: 0 5px;
+}
+
+.pagination li.nextpage {
+    font-weight: bold;
+}
+
+.New {
+    background-color: #AFEEEE;
+}
+
+.Unqualified {
+    background-color: #FFFF99;
+}
+
+.NoContract {
+    background-color: #79BAEC;
+}
+
+.Weak {
+    background-color: #98FB98;
+}
+
+.Mild {
+    background-color: #DDA0DD;
+}
+
+.Strong {
+    background-color: #FA8072;
+}
+
+.Hot {
+    background-color: #FBB117;
+}
+
+.active {
+    background-color: #57E964;
+}
+
+.pending {
+    background-color: #FFFF99;
+}
+
+.delisted {
+    background-color: #F75D59;
+}
+
+.orange {
+    background-color: #f2f2f2;
+}
+
+/* Jquery Popup */
+
+#fade { /*--Transparent background layer--*/
+    display: none; /*--hidden by default--*/
+    background: #000;
+    position: fixed; left: 0; top: 0;
+    width: 100%; height: 100%;
+    opacity: .80;
+    z-index: 9999;
+}
+
+.popup_block{
+    display: none; /*--hidden by default--*/
+    background: #fff;
+    padding: 20px;
+    border: 10px solid #ddd;
+    float: left;
+    position: fixed;
+    top: 50%; left: 50%;
+    z-index: 99999;
+    /*--CSS3 Box Shadows--*/
+    -webkit-box-shadow: 0px 0px 20px #000;
+    -moz-box-shadow: 0px 0px 20px #000;
+    box-shadow: 0px 0px 20px #000;
+    /*--CSS3 Rounded Corners--*/
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.year2 {
+    display: none;
+}
+
+.year3 {
+    display: none;
+}
+
+.year4 {
+    display: none;
+}
+
+.year5 {
+    display: none;
+}
+
+.year6 {
+    display: none;
+}
+
+.year7 {
+    display: none;
+}
+
+.year8 {
+    display: none;
+}
+
+.year9 {
+    display: none;
+}
+
+.year10 {
+    display: none;
+}

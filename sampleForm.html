@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8" />
+  </head>
+  <body>
+	<form action="http://crmds.net/dashboard/submitLead.php" method="post">
+	  <input type="hidden" id="affiliate_id" name="affiliate_id" value="78" />
+	  <input type="hidden" id="redirect" name="redirect" value="http://google.com" />
+	  <div>
+		<input type="text" id="company_name" name="company_name" placeholder="Company" />
+	  </div>
+	  <div>
+		<input type="text" id="first_name" name="first_name" placeholder="First Name *" required />
+	  </div>
+	  <div>
+		<input type="text" id="last_name" name="last_name" placeholder="Last Name *" required />
+	  </div>
+	  <div>
+		<input type="text" id="client_email" name="client_email" placeholder="Email *" required />
+	  </div>
+	  <div>
+		<input type="text" id="office_phone" name="office_phone" placeholder="Phone" />
+	  </div>
+	  <div>
+		<select id="property_type" name="property_type">
+			<option value=""></option>
+			<option value="Single Family">Single Family</option>
+			<option value="Townhome/Condo">Townhome/Condo</option>
+			<option value="Duplex">Duplex</option>
+			<option value="Multi Family">Multi Family</option>
+			<option value="Land">Land</option>
+			<option value="Listing">Listing</option>
+			<option value="TAT Agent">TAT Agent</option>
+			<option value="SHS Agent">SHS Agent</option>
+			<option value="PLV">PLV</option>
+		</select>
+	  </div>
+	  <div>
+		<input type="text" id="search_city" name="search_city" placeholder="City, State" />
+	  </div>
+	  <div>
+		<textarea id="provider_info" name="provider_info" rows="6" placeholder="Comments"></textarea>
+	  </div>
+	  <div>
+		<input type="submit" value="Submit" />
+	  </div>
+	</form>
+  </body>
+</html>
