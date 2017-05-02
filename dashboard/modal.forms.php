@@ -1,5 +1,6 @@
 <script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="js/autocomplete.multiselect.js"></script> -->
 
 <script type="text/javascript">
 tinyMCE.init({
@@ -62,10 +63,8 @@ $(document).ready(function () {
 	});
 </script>
 <div id="mass_email_popup" class="popup_block">
-	<p />
 	<h3>Mass Email Lead Contact</h3>
 	<form id="emailForm" name="emailForm">
-		<p />
 		Template: <select id="templateMassEmail" name="template" onchange="tinymce.get('messageMassEmail').setContent(this.value);">
 		<option value="">None</option>
 		<?php
@@ -80,12 +79,67 @@ $(document).ready(function () {
 			}
 		?>
 		</select>
-		<p />
+		<select id="lead_s" name="lead_s">
+			<option value="search_lead">Leads</option>
+			<option value="search_lead_type">Lead Type</option>
+		</select>
+		<br /><br />
+
+		<div id="lead_type_container" style="display:none;">
+			<select id="lead_type" name="lead_type" style="width:99%">
+			<?php
+				$result = $mysqli->query("SELECT LEAD_TYPE FROM leads GROUP BY LEAD_TYPE") or die(mysql_error());
+				while($row = mysqli_fetch_array($result)){
+					foreach($row AS $key => $value) {
+						$row[$key] = stripslashes($value);
+					}
+			?>			
+				<option value="<?php echo $row['LEAD_TYPE']; ?>"><?php echo $row['LEAD_TYPE']; ?></option>
+			<?php } ?>
+			</select>
+			<br /><br />		
+		</div>
+
+		<div id="leads_container" style="">
+			<!-- <input id="search_leads" name="search_leads" type="text" style="width:96%" placeholder="Search Leads" />
+			<br /><br /> -->
+			<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" style="width:96%" placeholder="Search Leads" />
+			<br /><br />			
+		</div>
+
 		<input id="subjectMassEmail" name="subject" type="text" style="width:96%" placeholder="Subject" />
-		<p />
+		<br /><br />
+
 		<textarea id="messageMassEmail" name="messageMassEmail" style="width:98%; height:480px"></textarea>
-		<p />
-		<input class="button" type="button" id="sendEmail" name="sendEmail" value="Send Email"
-		onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id=<?= $lead_id ?>'); $('.popup_block').hide(); $('#fade, a.close').remove();" />
+		<br />
+		<input class="button" type="button" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id=<?= $lead_id ?>'); $('.popup_block').hide(); $('#fade, a.close').remove();" />
 	</form>
 </div>
+
+<script>
+	$(document).ready(function(){
+	    $("#lead_s").change(function(){
+
+	            var optionValue = $(this).attr("value");
+	            if(optionValue == 'search_lead'){
+	               
+	              	$("#leads_container").show();
+	               	$("#lead_type_container").hide();
+
+	            } else{
+	               
+	            	$("#leads_container").hide();
+	               	$("#lead_type_container").show();
+
+	            }
+
+	    });
+
+
+	});
+
+
+
+
+
+</script>
