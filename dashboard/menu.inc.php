@@ -65,7 +65,7 @@ require_once('include/session.php');
 	<?php if ($session->isAdmin() || $session->isMaster()) { ?>
 	<li><a href="javascript:void(0);">Email</a>
         <ul>
-            <li><a class="poplight" href="#?w=700" rel="mass_email_popup">Mass</a></li>
+            <li><a class="modal-poplight" href="#?w=700" rel="mass_email_popup">Mass</a></li>
             <li><a href="adminTemplates.php">Drip</a></li>
         </ul>
     </li>
