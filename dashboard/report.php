@@ -80,8 +80,9 @@ $edquery = "DATE_ADDED<='" . date("Y-m-d", strtotime($end_date)) . "' AND";
 <th>Closed</th>
 <th>Closed Percent</th>
 </tr>
-<?
+<?php
 $result = $mysqli->query("SELECT * FROM users WHERE fullname!='' AND userlevel > 0 ORDER BY fullname ASC") or die(mysql_error());
+
 while($row = mysqli_fetch_array($result)){
 	$fullname = $row['fullname'];
 	$username = $row['username'];
@@ -116,7 +117,7 @@ while($row = mysqli_fetch_array($result)){
 		$epercent = ($executed / $leads) * 100;
 		$cpercent = ($closed / $leads) * 100;
 	}
-	?>
+?>
 	<tr>
 	<td><?=$fullname?></td>
 	<td><?=$leads?></td>
@@ -127,9 +128,7 @@ while($row = mysqli_fetch_array($result)){
 	<td><?=$closed?></td>
 	<td><?=sprintf("%02.1f", $cpercent)?> %</td>
 	</tr>
-	<?
-}
-?>
+<?php } ?>
 </table>
 <p />
 
