@@ -62,4 +62,12 @@ require_once('include/session.php');
         </ul>
     </li>
 	<?php } ?>
+	<?php if ($session->isAdmin() || $session->isMaster()) { ?>
+	<li><a href="javascript:void(0);">Email</a>
+        <ul>
+            <li><a href="emailMass.php">Mass</a></li>
+            <li><a href="adminTemplates.php">Drip</a></li>
+        </ul>
+    </li>
+	<?php } ?>
 </ul>
