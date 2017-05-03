@@ -1,5 +1,8 @@
+<link rel="stylesheet" type="text/css" href="css/tokeninput/token-input.css">
+<link rel="stylesheet" type="text/css" href="css/tokeninput/token-input-facebook.css">
 <script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="js/tokeninput/jquery.tokeninput.js"></script>
 <!-- <script type="text/javascript" src="js/autocomplete.multiselect.js"></script> -->
 
 <script type="text/javascript">
@@ -16,6 +19,10 @@ tinyMCE.init({
 	    theme_advanced_toolbar_align: "left"
 	});
 $(document).ready(function () {
+		//Autocomplete
+		$("#search_leads_auto_complete").tokenInput("ajax/tokeninput-leads-email.php", {
+           
+        });
 		//When you click on a link with class of poplight and the href starts with a #
 		$('a.modal-poplight[href^=#]').click(function () {
 			var popID = $(this).attr('rel'); //Get Popup Name
@@ -103,7 +110,7 @@ $(document).ready(function () {
 		<div id="leads_container" style="">
 			<!-- <input id="search_leads" name="search_leads" type="text" style="width:96%" placeholder="Search Leads" />
 			<br /><br /> -->
-			<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" style="width:96%" placeholder="Search Leads" />
+			<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" placeholder="Search Leads" />
 			<br /><br />			
 		</div>
 
