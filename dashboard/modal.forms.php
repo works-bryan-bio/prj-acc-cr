@@ -69,9 +69,9 @@ $(document).ready(function () {
 
 	});
 </script>
-<div id="mass_email_popup" class="popup_block">
+<div id="mass_email_popup"  class="popup_block">
 	<h3>Mass Email Lead Contact</h3>
-	<form id="emailForm" name="emailForm">
+	<form id="emailForm" action="submitEmailBlast.php" name="emailForm" method="post">
 		Template: <select id="templateMassEmail" name="template" onchange="tinymce.get('messageMassEmail').setContent(this.value);">
 		<option value="">None</option>
 		<?php
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 		<textarea id="messageMassEmail" name="messageMassEmail" style="width:98%; height:480px"></textarea>
 		<br />
-		<input class="button" type="button" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id=<?= $lead_id ?>'); $('.popup_block').hide(); $('#fade, a.close').remove();" />
+		<input class="button" type="submit" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id='); $('.popup_block').hide(); $('#fade, a.close').remove();" />
 	</form>
 </div>
 

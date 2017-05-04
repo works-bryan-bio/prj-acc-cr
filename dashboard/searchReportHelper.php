@@ -348,7 +348,9 @@ if ($action == 'add') {
 
 } elseif ($action == 'sendEmail') {
 
-	$subject = stripslashes($_POST['subject']);
+	
+
+	$subject= stripslashes($_POST['subject']);
 	$message = stripslashes($_POST['message']);
 	if ($message != null && $message != "") {
 		$full = $session->userinfo['fullname'];
