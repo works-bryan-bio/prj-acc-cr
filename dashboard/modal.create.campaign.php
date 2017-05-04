@@ -1,14 +1,7 @@
-<link rel="stylesheet" type="text/css" href="css/tokeninput/token-input.css">
-<link rel="stylesheet" type="text/css" href="css/tokeninput/token-input-facebook.css">
-<script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" src="js/tokeninput/jquery.tokeninput.js"></script>
-<!-- <script type="text/javascript" src="js/autocomplete.multiselect.js"></script> -->
-
 <script type="text/javascript">
 tinyMCE.init({
 	    mode: "exact",
-	    elements: "elm1,message,messageMassEmail",
+	    elements: "elm1,message,messageMassEmailc",
 	    plugins : "spellchecker",
 	    theme: "advanced",
 	    theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,spellchecker",
@@ -20,7 +13,7 @@ tinyMCE.init({
 	});
 $(document).ready(function () {
 		//Autocomplete
-		$("#search_leads_auto_complete").tokenInput("ajax/tokeninput-leads-email.php", {
+		$("#search_leads_auto_completec").tokenInput("ajax/tokeninput-leads-email.php", {
            
         });
 		//When you click on a link with class of poplight and the href starts with a #
@@ -34,7 +27,7 @@ $(document).ready(function () {
 			var popWidth = dim[0].split('=')[1]; //Gets the first query string value
 
 			//Fade in the Popup and add close button
-			$('#' + popID).fadeIn().css({'width': Number(popWidth)}).prepend('<a href="#" style="float:right" class="close">Close [X]</a>');
+			//$('#' + popID).fadeIn().css({'width': Number(popWidth)}).prepend('<a href="#" style="float:right" class="close">Close [X]</a>');
 
 			//Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css
 			var popMargTop = ($('#' + popID).height() + 80) / 2;
@@ -47,9 +40,9 @@ $(document).ready(function () {
 			});
 
 			if (popID === "mass_email_popup") {
-				document.getElementById("templateMassEmail").value = "";
-				document.getElementById("subjectMassEmail").value = "";
-				tinyMCE.get("messageMassEmail").setContent("");
+				document.getElementById("templateMassEmailc").value = "";
+				document.getElementById("subjectMassEmailc").value = "";
+				tinyMCE.get("messageMassEmailc").setContent("");
 			}
 
 			//Fade in Background
@@ -69,10 +62,11 @@ $(document).ready(function () {
 
 	});
 </script>
-<div id="mass_email_popup"  class="popup_block">
+
+<div id="create_campaign_popup" class="popup_block">
 	<h3>Mass Email Lead Contact</h3>
-	<form id="emailForm" action="submitEmailBlast.php" name="emailForm" method="post">
-		Template: <select id="templateMassEmail" name="template" onchange="tinymce.get('messageMassEmail').setContent(this.value);">
+	<form id="emailForm" name="emailForm">
+		Template: <select id="templateMassEmailc" name="template" onchange="tinymce.get('messageMassEmailc').setContent(this.value);">
 		<option value="">None</option>
 		<?php
 			$result = $mysqli->query("SELECT name,content FROM email_templates") or die(mysql_error());
@@ -86,13 +80,13 @@ $(document).ready(function () {
 			}
 		?>
 		</select>
-		<select id="lead_s" name="lead_s">
+		<select id="lead_sc" name="lead_sc">
 			<option value="search_lead">Leads</option>
 			<option value="search_lead_type">Lead Type</option>
 		</select>
 		<br /><br />
 
-		<div id="lead_type_container" style="display:none;">
+		<div id="lead_type_containerc" style="display:none;">
 			<select id="lead_type" name="lead_type" style="width:99%">
 			<?php
 				$result = $mysqli->query("SELECT LEAD_TYPE FROM leads GROUP BY LEAD_TYPE") or die(mysql_error());
@@ -107,36 +101,34 @@ $(document).ready(function () {
 			<br /><br />		
 		</div>
 
-		<div id="leads_container" style="">
+		<div id="leads_containerc" style="">
 			<!-- <input id="search_leads" name="search_leads" type="text" style="width:96%" placeholder="Search Leads" />
 			<br /><br /> -->
-			<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" placeholder="Search Leads" />
+			<input id="search_leads_auto_completec" name="search_leads_auto_completec" type="text" placeholder="Search Leads" />
 			<br /><br />			
 		</div>
 
-		<input id="subjectMassEmail" name="subject" type="text" style="width:96%" placeholder="Subject" />
+		<input id="subjectMassEmailc" name="subject" type="text" style="width:96%" placeholder="Subject" />
 		<br /><br />
 
-		<textarea id="messageMassEmail" name="messageMassEmail" style="width:98%; height:480px"></textarea>
+		<textarea id="messageMassEmailc" name="messageMassEmailc" style="width:98%; height:480px"></textarea>
 		<br />
-		<input class="button" type="submit" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id='); $('.popup_block').hide(); $('#fade, a.close').remove();" />
+		<input class="button" type="button" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id=<?= $lead_id ?>'); $('.popup_block').hide(); $('#fade, a.close').remove();" />
 	</form>
 </div>
 
 <script>
 	$(document).ready(function(){
-	    $("#lead_s").change(function(){
-
+	    $("#lead_sc").change(function(){
 	            var optionValue = $(this).attr("value");
 	            if(optionValue == 'search_lead'){
-	               
-	              	$("#leads_container").show();
-	               	$("#lead_type_container").hide();
+	              	$("#leads_containerc").show();
+	               	$("#lead_type_containerc").hide();
 
 	            } else{
 	               
-	            	$("#leads_container").hide();
-	               	$("#lead_type_container").show();
+	            	$("#leads_containerc").hide();
+	               	$("#lead_type_containerc").show();
 
 	            }
 
