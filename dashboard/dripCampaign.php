@@ -41,8 +41,8 @@ require_once('include/db_connect.php');
                 ?>
                 <tr>
                     <td>--</th>
-                    <td><?php echo $row['date_start']; ?></th>
-                    <td><?php echo $row['date_end']; ?></th>
+                    <td><?php echo $row['date_to_send']; ?></th>
+                    <td><?php echo $row['subject']; ?></th>
                     <td><?php echo $row['body_content']; ?></th>
                     <td><?php echo $row['status'] == 1 ? 'Active' : 'Disable'; ?></th>
                 </tr>
