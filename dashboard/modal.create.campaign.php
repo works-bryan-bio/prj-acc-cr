@@ -128,7 +128,7 @@ $(document).ready(function () {
 
 		<textarea id="messageMassEmailc" name="messageMassEmailc" style="width:98%; height:480px"></textarea>
 		<br />
-		<input class="button" type="button" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id=<?= $lead_id ?>'); $('.popup_block').hide(); $('#fade, a.close').remove();" />
+		<input class="button" type="submit" id="sendEmail" name="sendEmail" value="Send Email" onClick="" />
 	</form>
 </div>
 
