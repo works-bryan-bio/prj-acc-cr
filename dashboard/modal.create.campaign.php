@@ -1,3 +1,6 @@
+       
+
+
 <script type="text/javascript">
 tinyMCE.init({
 	    mode: "exact",
@@ -12,6 +15,7 @@ tinyMCE.init({
 	    theme_advanced_toolbar_align: "left"
 	});
 $(document).ready(function () {
+
 		//Autocomplete
 		$("#search_leads_auto_completec").tokenInput("ajax/tokeninput-leads-email.php", {
            
@@ -61,11 +65,13 @@ $(document).ready(function () {
 		});
 
 	});
+	
+  
 </script>
-
+<?php $date_to_send = date("Y-m-d", strtotime(date('m').'/01/'.date('Y').' 00:00:00')); ?>
 <div id="create_campaign_popup" class="popup_block">
-	<h3>Mass Email Lead Contact</h3>
-	<form id="emailForm" name="emailForm">
+	<h3>Drift Campaign</h3>
+	<form id="emailForm" name="emailForm" action="submitDriftCampaign.php" method="post" >
 		Template: <select id="templateMassEmailc" name="template" onchange="tinymce.get('messageMassEmailc').setContent(this.value);">
 		<option value="">None</option>
 		<?php
@@ -108,6 +114,15 @@ $(document).ready(function () {
 			<br /><br />			
 		</div>
 
+		<label>Date to send:</label>
+		<input type="text" name="date_to_send" id="date_to_send" size="10"
+			value="<?php if ($date_to_send!="") echo date("m/d/Y", strtotime($date_to_send)); else echo "" ?>" onChange="" />
+		<script type="text/javascript">
+			var s_cal = new tcal ({
+				'controlname': 'date_to_send'
+			});
+		</script>
+		<br /><br />
 		<input id="subjectMassEmailc" name="subject" type="text" style="width:96%" placeholder="Subject" />
 		<br /><br />
 
