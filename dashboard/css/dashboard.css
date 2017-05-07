@@ -95,6 +95,10 @@ input:not([type=submit]):not([type=file]):not([type=button]), select, textarea {
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
+.drip_edit_form {
+    width: 800px;
+}
+
 button, input, select, textarea {
     font-family: inherit;
     font-size: inherit;
