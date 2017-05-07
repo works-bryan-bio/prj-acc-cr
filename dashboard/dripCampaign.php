@@ -1,6 +1,37 @@
 <?php
 require_once("include/checklogin.php");
 require_once('include/db_connect.php');
+require_once('include/pagination.php');
+
+$size = 20;
+$link = "dripCampaign.php?page=%s";
+$orderby = "subject";
+if (isset($_GET['orderby'])){
+    $orderby = $_GET['orderby'];
+        $link .= "&orderby=" . $orderby;
+}
+$dir = "ASC";
+if (isset($_GET['dir'])){
+    $dir = $_GET['dir'];
+        $link .= "&dir=" . $dir;
+}
+$page = 1;
+if (isset($_GET['page'])){
+    $page = (int) $_GET['page'];
+}
+$filter = "";
+if (isset($_GET['filter'])){
+    $filter = $_GET['filter'];
+}
+$pagination = new Pagination();
+$pagination->setLink($link);
+$pagination->setPage($page);
+$pagination->setSize($size);
+$result        = $mysqli->query("SELECT COUNT(*) FROM drip_campaign");
+$row           = $result->fetch_row();
+$total_records = $row[0];
+$pagination->setTotalRecords($total_records);
+$result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderby . " " . $dir . " " . $pagination->getLimitSql()) or die(mysqli_error());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,15 +61,12 @@ require_once('include/db_connect.php');
                 <tr><td colspan="13"><h3>Campaign List</h3></td></tr>
                 <tr>
                     <th>Actions</th>
-                    <th>Subject</th>
-                    <th>Recipients</th>
-                    <th>Date to send</th>
-                    <th>Status</th>
+                    <th>Subject&nbsp;<a href="dripCampaign.php?orderby=subject&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=subject&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
+                    <th>Recipients&nbsp;<a href="dripCampaign.php?orderby=recipients&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=recipients&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
+                    <th>Date to send&nbsp;<a href="dripCampaign.php?orderby=date_to_send&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=date_to_send&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
+                    <th>Status&nbsp;<a href="dripCampaign.php?orderby=status&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=status&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
                 </tr>
-                <?php
-                    $result = $mysqli->query("SELECT * FROM drip_campaign LIMIT 50")or die(mysqli_error());
-                    while($row = mysqli_fetch_array($result)){
-                ?>
+                <?php while($row = mysqli_fetch_array($result_query)){ ?>
                 <tr>
                     <td class="center">
                         <a href="editDripCampaign.php?drip_id=<?=$row['id']?>">
@@ -63,6 +91,15 @@ require_once('include/db_connect.php');
                 ?>
 
             </table>
+            <div class="pagination">
+                <?php
+                    $navigation = $pagination->create_links();
+                    echo $navigation;
+                    $result->close();
+                    $mysqli->close();
+                ?>
+            </div>
+            <div clas="small" align="center">Total Record(s): <?=$total_records?></div>
     <?php require_once('modal.create.campaign.php'); ?>    
     </body>
 </html>
