@@ -30,9 +30,9 @@ require_once('include/db_connect.php');
                 <tr><td colspan="13"><h3>Campaign List</h3></td></tr>
                 <tr>
                     <th>Actions</th>
-                    <th>Campaign Start</th>
-                    <th>Campaign End</th>
-                    <th>Campaign Body</th>
+                    <th>Subject</th>
+                    <th>Recipients</th>
+                    <th>Date to send</th>
                     <th>Status</th>
                 </tr>
                 <?php
@@ -40,11 +40,23 @@ require_once('include/db_connect.php');
 					while($row = mysqli_fetch_array($result)){
                 ?>
                 <tr>
-                    <td>--</th>
-                    <td><?php echo $row['date_start']; ?></th>
-                    <td><?php echo $row['date_end']; ?></th>
-                    <td><?php echo $row['body_content']; ?></th>
-                    <td><?php echo $row['status'] == 1 ? 'Active' : 'Disable'; ?></th>
+                    <td class="center">
+                        <a href="editDripCampaign.php?drip_id=<?=$row['id']?>">
+                            <img src='images/edit.png' alt='Edit Drip Campaign' title='Edit Drip Campaign' />
+                        </a>
+                    </td>
+                    <td><?php echo $row['subject']; ?></td>
+                    <td>
+                        <?php 
+                            if( $row['recipient_type'] ){
+                                echo "Lead Email : " . $row['recipients'];
+                            }else{
+                                echo "Lead Type : " . $row['recipients'];
+                            }
+                        ?>                        
+                    </td>
+                    <td><?php echo $row['date_to_send']; ?></td>
+                    <td><?php echo $row['status'] == 1 ? 'Sent' : 'Onqueue'; ?></td>
                 </tr>
                 <?php
                 	}

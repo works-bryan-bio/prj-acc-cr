@@ -1,24 +1,46 @@
 <?php
 
 require_once("include/db_connect.php");
+$data  = $_POST;
+echo "<pre>";
+print_r($data);
+exit;
 
-$redir = "";
-if (isset($_POST["redirect"])) {
-  $redir = $_POST["redirect"];
+if( $data['subject'] != '' && $data['date_to_send'] != '' ){
+	$is_recipient_valid = false;
+	if( $data['lead_sc'] == 'search_lead' ){
+		$recipient_type = 1;
+		if( $data['search_leads_auto_completec'] != '' ){
+			$is_recipient_valid = true;
+		}
+	}else{
+		$recipient_type = 2;
+		if( $data['lead_type'] != '' ){
+			$is_recipient_valid = true;
+		}
+	}
+
+	if( $is_recipient_valid ){
+
+	}else{
+		header("Location: error.php");
+	}
+}else{
+	header("Location: error.php");
 }
 $company_name = $_POST["company_name"];
-$first_name = $_POST["first_name"];
-$last_name = $_POST["last_name"];
+$first_name   = $_POST["first_name"];
+$last_name    = $_POST["last_name"];
 $client_email = $_POST["client_email"];
 $office_phone = $_POST["office_phone"];
 $property_type = $_POST["property_type"];
-$search_city = $_POST["search_city"];
+$search_city   = $_POST["search_city"];
 $provider_info = $_POST["provider_info"];
-$affiliate_id = $_POST["affiliate_id"];
+$affiliate_id  = $_POST["affiliate_id"];
 
 if ($first_name != "" && $last_name != "" && $client_email != "" && $first_name != "1" && $last_name != "1" && $client_email != "1") {
 
-  $stmt = $mysqli->prepare("INSERT INTO leads (COMPANY_NAME, FIRST_NAME, LAST_NAME, CLIENT_EMAIL, OFFICE_PHONE,
+  $stmt = $mysqli->prepare("INSERT INTO drip_campaign (COMPANY_NAME, FIRST_NAME, LAST_NAME, CLIENT_EMAIL, OFFICE_PHONE,
 			PROPERTY_TYPE, SEARCH_CITY, PROVIDER_INFO,
 			STATUS, USERNAME, AFFILIATE_ID, DATE_ADDED)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'New', 'Not Assigned', ?, ?)

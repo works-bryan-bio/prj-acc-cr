@@ -2,8 +2,8 @@
 ul.token-input-list {
     overflow: hidden; 
     height: auto !important; 
-    height: 1%;
-    width: 400px;
+    height: 5%;
+    width: 100%;
     border: 1px solid #999;
     cursor: text;
     font-size: 12px;
@@ -73,7 +73,7 @@ div.token-input-dropdown {
     cursor: default;
     font-size: 12px;
     font-family: Verdana;
-    z-index: 99999;
+    z-index: 1;
 }
 
 div.token-input-dropdown p {
