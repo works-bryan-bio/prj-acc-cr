@@ -36,8 +36,8 @@ require_once('include/db_connect.php');
                     <th>Status</th>
                 </tr>
                 <?php
-					$result = $mysqli->query("SELECT * FROM drip_campaign LIMIT 50")or die(mysqli_error());
-					while($row = mysqli_fetch_array($result)){
+                    $result = $mysqli->query("SELECT * FROM drip_campaign LIMIT 50")or die(mysqli_error());
+                    while($row = mysqli_fetch_array($result)){
                 ?>
                 <tr>
                     <td class="center">
@@ -59,10 +59,10 @@ require_once('include/db_connect.php');
                     <td><?php echo $row['status'] == 1 ? 'Sent' : 'Onqueue'; ?></td>
                 </tr>
                 <?php
-                	}
+                    }
                 ?>
 
             </table>
-	<?php require_once('modal.create.campaign.php'); ?>    
+    <?php require_once('modal.create.campaign.php'); ?>    
     </body>
 </html>
