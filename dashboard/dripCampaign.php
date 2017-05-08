@@ -95,8 +95,8 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
                 <?php
                     $navigation = $pagination->create_links();
                     echo $navigation;
-                    $result->close();
-                    $mysqli->close();
+                    $result_query->close();
+                    //$mysqli->close();
                 ?>
             </div>
             <div clas="small" align="center">Total Record(s): <?=$total_records?></div>

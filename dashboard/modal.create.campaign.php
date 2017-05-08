@@ -74,7 +74,7 @@ $(document).ready(function () {
 </script>
 <?php $date_to_send = date("Y-m-d", strtotime(date('m').'/01/'.date('Y').' 00:00:00')); ?>
 <div id="create_campaign_popup" class="popup_block">
-	<h3>Drift Campaign</h3><br/>
+	<h3>Drip Campaign</h3><br/>
 	<form id="emailForm" name="emailForm" action="dripCampaignHelper.php" method="post">
 	<input type="hidden" name="addripcampaign" value="1">
 		<table style="width:100%;" class="table-form">
