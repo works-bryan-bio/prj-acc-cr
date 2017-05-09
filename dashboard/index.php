@@ -336,7 +336,7 @@ require_once('include/db_connect.php');
 								++$mild;
 							if ($row['PRIORITY'] == "Weak")
 								++$weak;
-							if ($row['PRIORITY'] == "NoContract")
+							if ($row['PRIORITY'] == "NoContact")
 								++$no_contract;
 							++$total;
 						}
@@ -388,7 +388,7 @@ require_once('include/db_connect.php');
                     <tr class="Strong"><td align="right">Strong:</td><td><?= $strong ?></td></tr>
                     <tr class="Mild"><td align="right">Mild:</td><td><?= $mild ?></td></tr>
                     <tr class="Weak"><td align="right">Weak:</td><td><?= $weak ?></td></tr>
-                    <tr class="NoContract"><td align="right">No Contract:</td><td><?= $no_contract ?></td></tr>
+                    <tr class="NoContact"><td align="right">No Contact:</td><td><?= $no_contract ?></td></tr>
                 </table>
             </div>
 

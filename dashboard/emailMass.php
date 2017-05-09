@@ -1158,7 +1158,7 @@ if ($session->isSHSAgent()) {
 <td align="left">
 <select name="priority" id="priority" class="<?=$prop['PRIORITY']?>" onchange="this.setAttribute('class', this.value)" required>
 <option value=""></option>
-<option value="NoContract" <?if($prop['PRIORITY']=="NoContract") echo "selected=\"selected\"";?>>No Contract</option>
+<option value="NoContact" <?if($prop['PRIORITY']=="NoContact") echo "selected=\"selected\"";?>>No Contact</option>
 <option value="Weak" <?if($prop['PRIORITY']=="Weak") echo "selected=\"selected\"";?>>Weak</option>
 <option value="Mild" <?if($prop['PRIORITY']=="Mild") echo "selected=\"selected\"";?>>Mild</option>
 <option value="Strong" <?if($prop['PRIORITY']=="Strong") echo "selected=\"selected\"";?>>Strong</option>
