@@ -7,6 +7,7 @@
  * correct.
  */
 define("DB_SERVER", "localhost");
+
 define("DB_USER", "simplehousesolut");
 define("DB_PASS", "pz!Cn_@#PD.*");
 define("DB_NAME", "simplehousesolut_db");
