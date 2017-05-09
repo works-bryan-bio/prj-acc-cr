@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_NOTICE);
 include("include/session.php");
 
 if($session->logged_in){

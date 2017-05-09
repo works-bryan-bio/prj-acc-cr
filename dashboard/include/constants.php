@@ -7,9 +7,9 @@
  * correct.
  */
 define("DB_SERVER", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "p@ssw0rd");
-define("DB_NAME", "shaner_dash");
+define("DB_USER", "simplehousesolut");
+define("DB_PASS", "pz!Cn_@#PD.*");
+define("DB_NAME", "simplehousesolut_db");
 
 /**
  * Database Table Constants - these constants
