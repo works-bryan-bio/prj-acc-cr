@@ -536,7 +536,8 @@ if($lead_id!=null) {
 <input class="button" type="submit" name="rsubmit" value="Remove Lead" onClick="return confirm_remove();" />
 <?php } ?>
 <input class="button" type="button" name="dbutton" value="Cancel" onclick="window.location='index.php'" />
-
+<!-- <input class="button" type="button" name="dbutton" value="Duplicate" onclick="window.location='duplicateLead.php'" formtarget="_blank" /> -->
+<a target="_blank" class="button" href="duplicateLead.php">Duplicate</a>
 <table class="input" width="100%">
 <tr>
 <th valign="bottom">
