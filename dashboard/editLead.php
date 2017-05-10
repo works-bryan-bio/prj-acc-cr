@@ -189,6 +189,14 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 		}
 
 		// save the data to the database
+		//Master Account only can change
+		$manager_arv = $prop['MANAGER_ARV'];
+		$manager_as_is_price = $prop['MANAGRE_AS_IS_PRICE'];
+		if( $session->isMaster() ){
+			$manager_arv = $_POST['manager_arv'];
+			$manager_as_is_price = $_POST['manager_as_is_price'];
+		}
+
 		$stmt = $mysqli->prepare("UPDATE leads SET
 								USERNAME=?, COMPANY_NAME=?, TITLE=?, FIRST_NAME=?, LAST_NAME=?, CLIENT_EMAIL=?, POSITION=?,
 								EXTRA_TITLE=?, EXTRA_FIRST_NAME=?, EXTRA_LAST_NAME=?, EXTRA_CLIENT_EMAIL=?, OFFICE_PHONE=?, CELL_PHONE=?,
@@ -205,9 +213,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 								TERM=?, MOVE_DATE=?, DEPOSIT=?, LISTED=?, HOW_LONG=?,
 								LISTING_PRICE=?, OFFER_PRICE=?, MOVING_REASON=?, TIME_FRAME_SELL=?, PRICE_FLEXIBLE=?,
 								ASKING_PRICE_REASON=?, CASH_QUICK_CLOSE=?, ANY_BETTER=?, DOESNT_SELL=?,
-								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?
+								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?, MANAGER_ARV=?, MANAGER_AS_IS_PRICE=?
 								WHERE lead_id=$lead_id") or die($mysqli->error);
-		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiii",
+		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiiiii",
 		$mysqli->real_escape_string($_POST["username"]),
 			stripslashes($mysqli->real_escape_string($_POST["company_name"])),
 			stripslashes($mysqli->real_escape_string($_POST["title"])),
@@ -303,7 +311,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$mysqli->real_escape_string($_POST["hh_repair_cost"]),
 			$mysqli->real_escape_string($_POST["wt_repair_cost"]),
 			$mysqli->real_escape_string($_POST["rh_lipstick"]),
-			$mysqli->real_escape_string($_POST["rh_rent_comp"])
+			$mysqli->real_escape_string($_POST["rh_rent_comp"]),
+			$mysqli->real_escape_string($manager_arv),
+			$mysqli->real_escape_string($manager_as_is_price)
 		) or die($mysqli->error);
 
 		/* Execute the statement */
@@ -955,8 +965,34 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </tr>
 
 <tr>
+<td align="right">MANAGER ARV:</td>
+<td align="left">
+	<?php 
+		$field_disabled = "";
+		if( !$session->isMaster() ){
+			$field_disabled = 'readonly="readonly" disabled="disabled"';
+		}
+	?>
+	<input id="manager_arv" name="manager_arv" <?php echo $field_disabled; ?> size="15" value="<?=$prop['MANAGER_ARV']?>" /> (No Commas)
+</td>
+</tr>
+
+<tr>
 <td align="right">As-Is Price:</td>
 <td align="left"><input id="as_is_price" name="as_is_price" size="15" value="<?=$prop['AS_IS_PRICE']?>" /> (No Commas)</td>
+</tr>
+
+<tr>
+<td align="right">Manager As-Is Price:</td>
+<td align="left">
+	<?php 
+		$field_disabled = "";
+		if( !$session->isMaster() ){
+			$field_disabled = 'readonly="readonly" disabled="disabled"';
+		}
+	?>
+	<input id="manager_as_is_price" name="manager_as_is_price" <?php echo $field_disabled; ?> size="15" value="<?=$prop['MANAGER_AS_IS_PRICE']?>" /> (No Commas)
+</td>
 </tr>
 
 <tr>
