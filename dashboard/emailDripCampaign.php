@@ -56,7 +56,7 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 									}
 									$email[] = $row;
 								}
-					if($email){echo "Tae 2";
+					if($email){
 						foreach ($email as $key => $value) {
 							if($value['CLIENT_EMAIL'] != ""){
 							   $email_bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 

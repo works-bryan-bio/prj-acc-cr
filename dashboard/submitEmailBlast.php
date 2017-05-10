@@ -3,17 +3,17 @@
 require_once("include/db_connect.php");
 require_once ("include/swiftmailer/lib/swift_required.php");
 
-if($_POST['search_leads_auto_complete'] <> null){ 
-	$email_list = "'". str_replace(",", "','", $_POST['search_leads_auto_complete']) ."'" ;
+if($_POST['lead_s'] == "search_lead"){ 
+	 $email_list = "'". str_replace(",", "','", $_POST['search_leads_auto_complete']) ."'" ;
 	$email =  array();
-	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_ID IN(".$email_list.")") or die(mysql_error());
+	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.")") or die(mysql_error());
 				while($row = mysqli_fetch_array($result)){
 					foreach($row AS $key => $value) {
 						$row[$key] = stripslashes($value);
 					}
 					$email[] = $row;
 				}
-	if($email <> null){
+	if($email){ 
 		foreach ($email as $key => $value) {
 			$bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
 		}
@@ -21,9 +21,9 @@ if($_POST['search_leads_auto_complete'] <> null){
 
 }
 
-if($_POST['lead_type'] != ""){
+if($_POST['lead_s'] == "search_lead_type"){ 
 
-	echo $lead_type = $_POST['lead_type']; 
+	$lead_type = $_POST['lead_type']; 
 	$email =  array();
 	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_TYPE = ". '"'.$lead_type.'"' ."  ") or die(mysql_error());
 				while($row = mysqli_fetch_array($result)){
@@ -32,7 +32,7 @@ if($_POST['lead_type'] != ""){
 					}
 					$email[] = $row;
 				}
-	if($email <> null){
+	if($email){ 
 		foreach ($email as $key => $value) {
 			if($value['CLIENT_EMAIL'] != ""){
 			   $bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
@@ -41,11 +41,6 @@ if($_POST['lead_type'] != ""){
 	}
 }
 
-echo "<pre>";
-print_r($bcc);
-print_r($_POST);
-echo "</pre>";
-// exit; 
 
 $subject = $_POST['subject'];
 $content = $_POST['messageMassEmail'];
@@ -79,11 +74,7 @@ $message = Swift_Message::newInstance($subject)
 // Send the message
 $result = $mailer->send($message);
 
-echo "<pre>";
-print_r($result);
-echo "</pre>";
 
-exit;
 header("Location: thank_you.php");
 
 ?>
