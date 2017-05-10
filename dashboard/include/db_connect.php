@@ -1,7 +1,7 @@
 <?php
-$mysqli = new mysqli("localhost","simplehousesolut","pz!Cn_@#PD.*","simplehousesolut_db") or die($mysqli->error);
-$username="simplehousesolut";
-$password="pz!Cn_@#PD.*";
+$mysqli = new mysqli("localhost","root","","shaner_dash") or die($mysqli->error);
+$username="root";
+$password="";
 
 function mysqli_result($res, $row, $field=0) {
     $res->data_seek($row);

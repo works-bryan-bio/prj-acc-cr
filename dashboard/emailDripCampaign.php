@@ -11,8 +11,6 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 					$email[] = $row;
 				}
 
-		  		
-
 		  if($email){
 		  	foreach ($email as $key => $value):
 		  		echo "<pre>";
@@ -22,7 +20,7 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 				$recipient_type = $value['recipient_type'];
 				$recipients	 =  $value['recipients'];
 				$subject     = $value['subject'];	
-				$content     = $value['body_content'];
+				$content     = strip_tags($value['body_content'] ,'<br>');
 
 
 				// This set the email and the name of the recipients from the id of leads 
@@ -68,7 +66,7 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 
 			// Engine for sending email 
 			// Create the Transport
-			$transport = Swift_SmtpTransport::newInstance('smtp.simplehousesolutionscrm.com', 25)
+			$transport = Swift_SmtpTransport::newInstance('mail.simplehousesolutionscrm.com', 26)
 			  ->setUsername('info@simplehousesolutionscrm.com')
 			  ->setPassword('abc123!xyz')
 			  ;

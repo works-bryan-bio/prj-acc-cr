@@ -8,9 +8,9 @@
  */
 define("DB_SERVER", "localhost");
 
-define("DB_USER", "simplehousesolut");
-define("DB_PASS", "pz!Cn_@#PD.*");
-define("DB_NAME", "simplehousesolut_db");
+define("DB_USER", "root");
+define("DB_PASS", "");
+define("DB_NAME", "shaner_dash");
 
 /**
  * Database Table Constants - these constants
