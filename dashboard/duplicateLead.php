@@ -5,8 +5,8 @@ require_once("include/db_connect.php");
 
 // store the lead_id if set
 $lead_id = null;
-if (isset($_GET['lead_id'])) {
-	$lead_id = $_GET['lead_id'];
+if (isset($_GET['duplicate_id'])) {
+	$lead_id = $_GET['duplicate_id'];
 }
 
 $action = "";
@@ -19,319 +19,7 @@ $username = $_SESSION['username'];
 $financing_available = "";
 if (isset($_POST["financing_available"])) {
 	$financing_available = implode(" ,", $_POST["financing_available"]);
-}
-
-// check if the form has been submitted. If it has, start to process the form and save it to the database
-if (isset($_POST["submit"]) && $lead_id==null) {
-
-	print $lead_id;
-
-	// get form data, making sure it is valid
-	$first_name = $mysqli->real_escape_string($_POST["first_name"]);
-	$last_name = $mysqli->real_escape_string($_POST["last_name"]);
-
-	// check to make sure that all required fields are available
-	if ($first_name != '' || $last_name !='') {
-
-		if ($_POST['add_notes']!="") {
-		} else {
-			$notes = $_POST['notes'];
-		}
-
-		// save the data to the database
-		$stmt = $mysqli->prepare("INSERT INTO leads (USERNAME, COMPANY_NAME, TITLE, FIRST_NAME, LAST_NAME, CLIENT_EMAIL, POSITION,
-								EXTRA_TITLE, EXTRA_FIRST_NAME, EXTRA_LAST_NAME, EXTRA_CLIENT_EMAIL,
-								OFFICE_PHONE, CELL_PHONE, OTHER_PHONE, FAX, WEBSITE, ADDRESS_1, ADDRESS_2, CITY, STATE, ZIP, OWNERS_ON_TITLE, SECOND_CHANCE,
-								FUNDS_FOR_PURCHASE, FINANCING_AVAILABLE, NEED_LENDER,
-								CLOSER, PRIORITY, TITLE_COMPANY, STATUS, PROPERTY_TYPE, YEAR_BUILT, SQUARE_FEET, GARAGE_TYPE, GARAGES, GARAGE_CONVERTED,
-								BEDROOMS, BATHROOMS, STORIES, POOL, RENTED, ARV, ASKING_PRICE, CURRENT_MORTGAGE, CURRENT_PAYMENTS, DEAD_REASON, BACKSIDE_CONTRACT,
-								CLOSED_DATE, EXIT_STRATEGY, FOLLOW_UP_DATE, FOLLOW_UP_TIME, PROVIDER_INFO, NOTES, LEAD_TYPE,
-								PREDICTED_AMT, FORECAST_CHANCE, EARNEST_RECEIPT, EXECUTED_DATE, END_OF_OPTION, SEARCH_CITY,
-								SEARCH_STATE, AREA_OF_INTEREST, AFFILIATE_ID, DATE_ADDED,
-								AS_IS_PRICE, OWNER_OCCUPIED, HOW_LONG_OWNED, ROOF_AGE, HVAC_AGE,
-								POOL_CONDITION, NEED_FOUNDATION_REPAIR, CABINET_TYPE, COUNTER_TYPE, FLOORING_TYPE,
-								MASTER_BATH_AGE, HALF_BATH_AGE, UPGRADES, INSURANCE, RENT_AMT,
-								TERM, MOVE_DATE, DEPOSIT, LISTED, HOW_LONG,
-								LISTING_PRICE, OFFER_PRICE, MOVING_REASON, TIME_FRAME_SELL, PRICE_FLEXIBLE,
-								ASKING_PRICE_REASON, CASH_QUICK_CLOSE, ANY_BETTER, DOESNT_SELL,
-								HH_REPAIR_COST, WT_REPAIR_COST, RH_LIPSTICK, RH_RENT_COMP
-								)
-								VALUES (
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-								?, ?, ?, ?, ?, ?, ?)
-								") or die($mysqli->error);
-		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssisisssssssssssssississiisssssssiiii",
-			$mysqli->real_escape_string($_POST["username"]),
-			stripslashes($mysqli->real_escape_string($_POST["company_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["title"])),
-			stripslashes($mysqli->real_escape_string($_POST["first_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["last_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["client_email"])),
-			stripslashes($mysqli->real_escape_string($_POST["position"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_title"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_first_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_last_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_client_email"])),
-			stripslashes($mysqli->real_escape_string($_POST["office_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["cell_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["other_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["fax"])),
-			stripslashes($mysqli->real_escape_string($_POST["website"])),
-			stripslashes($mysqli->real_escape_string($_POST["address_1"])),
-			stripslashes($mysqli->real_escape_string($_POST["address_2"])),
-			stripslashes($mysqli->real_escape_string($_POST["city"])),
-			$mysqli->real_escape_string($_POST["state"]),
-			stripslashes($mysqli->real_escape_string($_POST["zip"])),
-			stripslashes($mysqli->real_escape_string($_POST["owners_on_title"])),
-			$mysqli->real_escape_string($_POST["second_chance"]),
-			$mysqli->real_escape_string($_POST["funds_for_purchase"]),
-			$financing_available,
-			$mysqli->real_escape_string($_POST["need_lender"]),
-			stripslashes($mysqli->real_escape_string($_POST["closer"])),
-			$mysqli->real_escape_string($_POST["priority"]),
-			stripslashes($mysqli->real_escape_string($_POST["title_company"])),
-			$mysqli->real_escape_string($_POST["status"]),
-			$mysqli->real_escape_string($_POST["property_type"]),
-			$mysqli->real_escape_string($_POST["year_built"]),
-			$mysqli->real_escape_string($_POST["square_feet"]),
-			$mysqli->real_escape_string($_POST["garage_type"]),
-			$mysqli->real_escape_string($_POST["garages"]),
-			$mysqli->real_escape_string($_POST["garage_converted"]),
-			$mysqli->real_escape_string($_POST["bedrooms"]),
-			$mysqli->real_escape_string($_POST["bathrooms"]),
-			$mysqli->real_escape_string($_POST["stories"]),
-			$mysqli->real_escape_string($_POST["pool"]),
-			$mysqli->real_escape_string($_POST["rented"]),
-			$mysqli->real_escape_string($_POST["arv"]),
-			$mysqli->real_escape_string($_POST["asking_price"]),
-			$mysqli->real_escape_string($_POST["current_mortgage"]),
-			$mysqli->real_escape_string($_POST["current_payments"]),
-			$mysqli->real_escape_string($_POST["dead_reason"]),
-			$mysqli->real_escape_string($_POST["backside_contract"]),
-			$mysqli->real_escape_string($_POST["closed_date"]),
-			$mysqli->real_escape_string($_POST["exit_strategy"]),
-			$mysqli->real_escape_string($_POST["follow_up_date"]),
-			$mysqli->real_escape_string($_POST["follow_up_time"]),
-			stripslashes(str_replace('\r\n', '', $mysqli->real_escape_string($_POST["provider_info"]))),
-			$notes,
-			$mysqli->real_escape_string($_POST["lead_type"]),
-			$mysqli->real_escape_string($_POST["predicted_amt"]),
-			$mysqli->real_escape_string($_POST["forecast_chance"]),
-			$mysqli->real_escape_string($_POST["earnest_receipt"]),
-			$mysqli->real_escape_string($_POST["executed_date"]),
-			$mysqli->real_escape_string($_POST["end_of_option"]),
-			stripslashes($mysqli->real_escape_string($_POST["search_city"])),
-			$mysqli->real_escape_string($_POST["search_state"]),
-			stripslashes(str_replace('\r\n', '', $mysqli->real_escape_string($_POST["area_of_interest"]))),
-			$mysqli->real_escape_string($_POST["affiliate_id"]),
-			$mysqli->real_escape_string($_POST["date_added"]),
-			$mysqli->real_escape_string($_POST["as_is_price"]),
-			$mysqli->real_escape_string($_POST["owner_occupied"]),
-			$mysqli->real_escape_string($_POST["how_long_owned"]),
-			$mysqli->real_escape_string($_POST["roof_age"]),
-			$mysqli->real_escape_string($_POST["hvac_age"]),
-			$mysqli->real_escape_string($_POST["pool_condition"]),
-			$mysqli->real_escape_string($_POST["need_foundation_repair"]),
-			$mysqli->real_escape_string($_POST["cabinet_type"]),
-			$mysqli->real_escape_string($_POST["counter_type"]),
-			$mysqli->real_escape_string($_POST["flooring_type"]),
-			$mysqli->real_escape_string($_POST["master_bath_age"]),
-			$mysqli->real_escape_string($_POST["half_bath_age"]),
-			$mysqli->real_escape_string($_POST["upgrades"]),
-			$mysqli->real_escape_string($_POST["insurance"]),
-			$mysqli->real_escape_string($_POST["rent_amt"]),
-			$mysqli->real_escape_string($_POST["term"]),
-			$mysqli->real_escape_string($_POST["move_date"]),
-			$mysqli->real_escape_string($_POST["deposit"]),
-			$mysqli->real_escape_string($_POST["listed"]),
-			$mysqli->real_escape_string($_POST["how_long"]),
-			$mysqli->real_escape_string($_POST["listing_price"]),
-			$mysqli->real_escape_string($_POST["offer_price"]),
-			$mysqli->real_escape_string($_POST["moving_reason"]),
-			$mysqli->real_escape_string($_POST["time_frame_sell"]),
-			$mysqli->real_escape_string($_POST["price_flexible"]),
-			$mysqli->real_escape_string($_POST["asking_price_reason"]),
-			$mysqli->real_escape_string($_POST["cash_quick_close"]),
-			$mysqli->real_escape_string($_POST["any_better"]),
-			$mysqli->real_escape_string($_POST["doesnt_sell"]),
-			$mysqli->real_escape_string($_POST["hh_repair_cost"]),
-			$mysqli->real_escape_string($_POST["wt_repair_cost"]),
-			$mysqli->real_escape_string($_POST["rh_lipstick"]),
-			$mysqli->real_escape_string($_POST["rh_rent_comp"])
-		) or die($mysqli->error);
-
-		/* Execute the statement */
-		$stmt->execute() or die("Error: Could not execute statement");
-
-		/* close statement */
-		$stmt->close() or die("Error: Could not close statement");
-
-		// once saved, redirect back to the lead page
-		header("Location: editLead.php?lead_id=" . $mysqli->insert_id);
-	}
-} else if (isset($_POST["submit"]) || isset($_POST["dsubmit"]) && $lead_id!=null) {
-
-	// check to make sure that all required fields are available
-	if ($lead_id != '') {
-
-		if ($_POST['add_notes']!="") {
-			$notes = "[" . date("m/d/Y h:i A T") . " - " . $username . "]\n" . str_replace('\r\n', ' ', $mysqli->real_escape_string(stripslashes($_POST['add_notes']))) . "\n\n" . $_POST['notes'];
-		} else {
-			$notes = $_POST['notes'];
-		}
-
-		// save the data to the database
-		$stmt = $mysqli->prepare("UPDATE leads SET
-								USERNAME=?, COMPANY_NAME=?, TITLE=?, FIRST_NAME=?, LAST_NAME=?, CLIENT_EMAIL=?, POSITION=?,
-								EXTRA_TITLE=?, EXTRA_FIRST_NAME=?, EXTRA_LAST_NAME=?, EXTRA_CLIENT_EMAIL=?, OFFICE_PHONE=?, CELL_PHONE=?,
-								OTHER_PHONE=?, FAX=?, WEBSITE=?, ADDRESS_1=?, ADDRESS_2=?, CITY=?, STATE=?, ZIP=?, OWNERS_ON_TITLE=?, SECOND_CHANCE=?,
-								FUNDS_FOR_PURCHASE=?, FINANCING_AVAILABLE=?, NEED_LENDER=?,
-								CLOSER=?, PRIORITY=?, TITLE_COMPANY=?, STATUS=?, PROPERTY_TYPE=?, YEAR_BUILT=?, SQUARE_FEET=?, GARAGE_TYPE=?, GARAGES=?, GARAGE_CONVERTED=?,
-								BEDROOMS=?, BATHROOMS=?, STORIES=?, POOL=?, RENTED=?, ARV=?, ASKING_PRICE=?, CURRENT_MORTGAGE=?, CURRENT_PAYMENTS=?, DEAD_REASON=?, BACKSIDE_CONTRACT=?,
-								CLOSED_DATE=?, EXIT_STRATEGY=?, FOLLOW_UP_DATE=?, FOLLOW_UP_TIME=?, PROVIDER_INFO=?, NOTES=?, LEAD_TYPE=?,
-								PREDICTED_AMT=?, FORECAST_CHANCE=?, EARNEST_RECEIPT=?, EXECUTED_DATE=?, END_OF_OPTION=?, SEARCH_CITY=?,
-								SEARCH_STATE=?, AREA_OF_INTEREST=?, AFFILIATE_ID=?,
-								AS_IS_PRICE=?, OWNER_OCCUPIED=?, HOW_LONG_OWNED=?, ROOF_AGE=?, HVAC_AGE=?,
-								POOL_CONDITION=?, NEED_FOUNDATION_REPAIR=?, CABINET_TYPE=?, COUNTER_TYPE=?, FLOORING_TYPE=?,
-								MASTER_BATH_AGE=?, HALF_BATH_AGE=?, UPGRADES=?, INSURANCE=?, RENT_AMT=?,
-								TERM=?, MOVE_DATE=?, DEPOSIT=?, LISTED=?, HOW_LONG=?,
-								LISTING_PRICE=?, OFFER_PRICE=?, MOVING_REASON=?, TIME_FRAME_SELL=?, PRICE_FLEXIBLE=?,
-								ASKING_PRICE_REASON=?, CASH_QUICK_CLOSE=?, ANY_BETTER=?, DOESNT_SELL=?,
-								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?
-								WHERE lead_id=$lead_id") or die($mysqli->error);
-		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiii",
-		$mysqli->real_escape_string($_POST["username"]),
-			stripslashes($mysqli->real_escape_string($_POST["company_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["title"])),
-			stripslashes($mysqli->real_escape_string($_POST["first_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["last_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["client_email"])),
-			stripslashes($mysqli->real_escape_string($_POST["position"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_title"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_first_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_last_name"])),
-			stripslashes($mysqli->real_escape_string($_POST["extra_client_email"])),
-			stripslashes($mysqli->real_escape_string($_POST["office_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["cell_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["other_phone"])),
-			stripslashes($mysqli->real_escape_string($_POST["fax"])),
-			stripslashes($mysqli->real_escape_string($_POST["website"])),
-			stripslashes($mysqli->real_escape_string($_POST["address_1"])),
-			stripslashes($mysqli->real_escape_string($_POST["address_2"])),
-			stripslashes($mysqli->real_escape_string($_POST["city"])),
-			$mysqli->real_escape_string($_POST["state"]),
-			stripslashes($mysqli->real_escape_string($_POST["zip"])),
-			stripslashes($mysqli->real_escape_string($_POST["owners_on_title"])),
-			$mysqli->real_escape_string($_POST["second_chance"]),
-			$mysqli->real_escape_string($_POST["funds_for_purchase"]),
-			$financing_available,
-			$mysqli->real_escape_string($_POST["need_lender"]),
-			stripslashes($mysqli->real_escape_string($_POST["closer"])),
-			$mysqli->real_escape_string($_POST["priority"]),
-			stripslashes($mysqli->real_escape_string($_POST["title_company"])),
-			$mysqli->real_escape_string($_POST["status"]),
-			$mysqli->real_escape_string($_POST["property_type"]),
-			$mysqli->real_escape_string($_POST["year_built"]),
-			$mysqli->real_escape_string($_POST["square_feet"]),
-			$mysqli->real_escape_string($_POST["garage_type"]),
-			$mysqli->real_escape_string($_POST["garages"]),
-			$mysqli->real_escape_string($_POST["garage_converted"]),
-			$mysqli->real_escape_string($_POST["bedrooms"]),
-			$mysqli->real_escape_string($_POST["bathrooms"]),
-			$mysqli->real_escape_string($_POST["stories"]),
-			$mysqli->real_escape_string($_POST["pool"]),
-			$mysqli->real_escape_string($_POST["rented"]),
-			$mysqli->real_escape_string($_POST["arv"]),
-			$mysqli->real_escape_string($_POST["asking_price"]),
-			$mysqli->real_escape_string($_POST["current_mortgage"]),
-			$mysqli->real_escape_string($_POST["current_payments"]),
-			$mysqli->real_escape_string($_POST["dead_reason"]),
-			$mysqli->real_escape_string($_POST["backside_contract"]),
-			$mysqli->real_escape_string($_POST["closed_date"]),
-			$mysqli->real_escape_string($_POST["exit_strategy"]),
-			$mysqli->real_escape_string($_POST["follow_up_date"]),
-			$mysqli->real_escape_string($_POST["follow_up_time"]),
-			stripslashes(str_replace('\r\n', ' ', $mysqli->real_escape_string($_POST["provider_info"]))),
-			$notes,
-			$mysqli->real_escape_string($_POST["lead_type"]),
-			$mysqli->real_escape_string($_POST["predicted_amt"]),
-			$mysqli->real_escape_string($_POST["forecast_chance"]),
-			$mysqli->real_escape_string($_POST["earnest_receipt"]),
-			$mysqli->real_escape_string($_POST["executed_date"]),
-			$mysqli->real_escape_string($_POST["end_of_option"]),
-			stripslashes($mysqli->real_escape_string($_POST["search_city"])),
-			$mysqli->real_escape_string($_POST["search_state"]),
-			stripslashes(str_replace('\r\n', '', $mysqli->real_escape_string($_POST["area_of_interest"]))),
-			$mysqli->real_escape_string($_POST["affiliate_id"]),
-			$mysqli->real_escape_string($_POST["as_is_price"]),
-			$mysqli->real_escape_string($_POST["owner_occupied"]),
-			$mysqli->real_escape_string($_POST["how_long_owned"]),
-			$mysqli->real_escape_string($_POST["roof_age"]),
-			$mysqli->real_escape_string($_POST["hvac_age"]),
-			$mysqli->real_escape_string($_POST["pool_condition"]),
-			$mysqli->real_escape_string($_POST["need_foundation_repair"]),
-			$mysqli->real_escape_string($_POST["cabinet_type"]),
-			$mysqli->real_escape_string($_POST["counter_type"]),
-			$mysqli->real_escape_string($_POST["flooring_type"]),
-			$mysqli->real_escape_string($_POST["master_bath_age"]),
-			$mysqli->real_escape_string($_POST["half_bath_age"]),
-			$mysqli->real_escape_string($_POST["upgrades"]),
-			$mysqli->real_escape_string($_POST["insurance"]),
-			$mysqli->real_escape_string($_POST["rent_amt"]),
-			$mysqli->real_escape_string($_POST["term"]),
-			$mysqli->real_escape_string($_POST["move_date"]),
-			$mysqli->real_escape_string($_POST["deposit"]),
-			$mysqli->real_escape_string($_POST["listed"]),
-			$mysqli->real_escape_string($_POST["how_long"]),
-			$mysqli->real_escape_string($_POST["listing_price"]),
-			$mysqli->real_escape_string($_POST["offer_price"]),
-			$mysqli->real_escape_string($_POST["moving_reason"]),
-			$mysqli->real_escape_string($_POST["time_frame_sell"]),
-			$mysqli->real_escape_string($_POST["price_flexible"]),
-			$mysqli->real_escape_string($_POST["asking_price_reason"]),
-			$mysqli->real_escape_string($_POST["cash_quick_close"]),
-			$mysqli->real_escape_string($_POST["any_better"]),
-			$mysqli->real_escape_string($_POST["doesnt_sell"]),
-			$mysqli->real_escape_string($_POST["hh_repair_cost"]),
-			$mysqli->real_escape_string($_POST["wt_repair_cost"]),
-			$mysqli->real_escape_string($_POST["rh_lipstick"]),
-			$mysqli->real_escape_string($_POST["rh_rent_comp"])
-		) or die($mysqli->error);
-
-		/* Execute the statement */
-		$stmt->execute() or die("Error: Could not execute statement");
-
-		/* close statement */
-		$stmt->close() or die("Error: Could not close statement");
-
-		// once saved, redirect back to the lead page or dashboard, depending on the button pressed
-		if (isset($_POST["dsubmit"])) {
-			header("Location: index.php");
-		} else {
-			header("Location: editLead.php?lead_id=" . $lead_id);
-		}
-	}
-	else	{
-		echo "Error: Lead ID is required";
-	}
-
-} else if (isset($_POST["rsubmit"]) && $lead_id!=null) {
-
-	$result = $mysqli->query("DELETE FROM leads WHERE LEAD_ID=" . $lead_id);
-	$result = $mysqli->query("DELETE FROM search_report WHERE LEAD_ID=" . $lead_id);
-	$result = $mysqli->query("DELETE FROM emails WHERE LEAD_ID=" . $lead_id);
-	header("Location: index.php");
-
-} else {
-// if the form hasn't been submitted, display the form)
+}	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -488,12 +176,12 @@ if($lead_id!=null) {
 		or die(mysqli_error());
 	$prop_next     = mysqli_fetch_array($result_next_record);
 	$prop_previous = mysqli_fetch_array($result_previous_record);	
-
 }
 ?>
-<form name="form1" method="post" action="<?=$PHP_SELF?>" onsubmit="return check_hot_strong();">
+<form name="form1" method="post" action="duplicateLeadHelper.php" onsubmit="return check_hot_strong();">
 <input type="hidden" name="date_added" value="<?=date("Y-m-d H:i:s")?>">
 <input type="hidden" name="affiliate_id" value="<?php if ($prop!=null) { echo $prop['AFFILIATE_ID']; } else { echo "50"; } ?>">
+<input type="hidden" name="addlead" value="1">
 <div align="center">
 <?php
 	if($lead_id!=null) {
@@ -542,17 +230,17 @@ if($lead_id!=null) {
 <input class="button" type="submit" name="submit" value="Save Changes" />
 <input class="button" type="submit" name="dsubmit" value="Save and Go to Dashboard" <?php if ($lead_id==null) echo "disabled='disabled'" ?> />
 <?php if ($session->isMaster()) { ?>
-<input class="button" type="submit" name="rsubmit" value="Remove Lead" onClick="return confirm_remove();" />
+<!-- <input class="button" type="submit" name="rsubmit" value="Remove Lead" onClick="return confirm_remove();" /> -->
 <?php } ?>
 <input class="button" type="button" name="dbutton" value="Cancel" onclick="window.location='index.php'" />
 <!-- <input class="button" type="button" name="dbutton" value="Duplicate" onclick="window.location='duplicateLead.php'" formtarget="_blank" /> -->
 <a target="_blank" class="button" href="duplicateLead.php?duplicate_id=<?php echo $lead_id ?>">Duplicate</a>
 <div style="float:right;margin-right:10px;">	
 <?php if( !empty($prop_previous) ){ ?>
-<a class="button" href="editLead.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
+<a class="button" href="duplicateLead.php?duplicate_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
 <?php } ?>
 <?php if( !empty($prop_next) ){ ?>
-<a class="button" href="editLead.php?lead_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
+<a class="button" href="duplicateLead.php?duplicate_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
 <?php } ?>
 </div>
 <table class="input" width="100%">
@@ -581,17 +269,17 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <tr><td align="right">Lead Type:</td><td align="left" colspan="2">
 <select id="lead_type" name="lead_type" required>
 <option value=""></option>
-<option value="Buyer" <?if($prop['LEAD_TYPE']=='Buyer') echo "selected=\"selected\""?>>Buyer</option>
-<option value="Cash Buyer" <?if($prop['LEAD_TYPE']=='Cash Buyer') echo "selected=\"selected\""?>>Cash Buyer</option>
-<option value="Fathom Realtor" <?if($prop['LEAD_TYPE']=='Fathom Realtor') echo "selected=\"selected\""?>>Fathom Realtor</option>
-<option value="Inner Circle" <?if($prop['LEAD_TYPE']=='Inner Circle') echo "selected=\"selected\""?>>Inner Circle</option>
-<option value="Institutional Lender" <?if($prop['LEAD_TYPE']=='Institutional Lender') echo "selected=\"selected\""?>>Institutional Lender</option>
-<option value="Mortgage Broker" <?if($prop['LEAD_TYPE']=='Mortgage Broker') echo "selected=\"selected\""?>>Mortgage Broker</option>
-<option value="Private Lender" <?if($prop['LEAD_TYPE']=='Private Lender') echo "selected=\"selected\""?>>Private Lender</option>
-<option value="Property Manager" <?if($prop['LEAD_TYPE']=='Property Manager') echo "selected=\"selected\""?>>Property Manager</option>
-<option value="Realtor" <?if($prop['LEAD_TYPE']=='Realtor') echo "selected=\"selected\""?>>Realtor</option>
-<option value="Seller" <?if($prop['LEAD_TYPE']=='Seller') echo "selected=\"selected\""?>>Seller</option>
-<option value="Wholesaler" <?if($prop['LEAD_TYPE']=='Wholesaler') echo "selected=\"selected\""?>>Wholesaler</option>
+<option value="Buyer" <?php if($prop['LEAD_TYPE']=='Buyer') echo "selected=\"selected\""?>>Buyer</option>
+<option value="Cash Buyer" <?php if($prop['LEAD_TYPE']=='Cash Buyer') echo "selected=\"selected\""?>>Cash Buyer</option>
+<option value="Fathom Realtor" <?php if($prop['LEAD_TYPE']=='Fathom Realtor') echo "selected=\"selected\""?>>Fathom Realtor</option>
+<option value="Inner Circle" <?php if($prop['LEAD_TYPE']=='Inner Circle') echo "selected=\"selected\""?>>Inner Circle</option>
+<option value="Institutional Lender" <?php if($prop['LEAD_TYPE']=='Institutional Lender') echo "selected=\"selected\""?>>Institutional Lender</option>
+<option value="Mortgage Broker" <?php if($prop['LEAD_TYPE']=='Mortgage Broker') echo "selected=\"selected\""?>>Mortgage Broker</option>
+<option value="Private Lender" <?php if($prop['LEAD_TYPE']=='Private Lender') echo "selected=\"selected\""?>>Private Lender</option>
+<option value="Property Manager" <?php if($prop['LEAD_TYPE']=='Property Manager') echo "selected=\"selected\""?>>Property Manager</option>
+<option value="Realtor" <?php if($prop['LEAD_TYPE']=='Realtor') echo "selected=\"selected\""?>>Realtor</option>
+<option value="Seller" <?php if($prop['LEAD_TYPE']=='Seller') echo "selected=\"selected\""?>>Seller</option>
+<option value="Wholesaler" <?php if($prop['LEAD_TYPE']=='Wholesaler') echo "selected=\"selected\""?>>Wholesaler</option>
 </select>
 </td></tr>
 
@@ -651,7 +339,7 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['ABBREV']?>" <?if($row['ABBREV']==$prop['STATE']) echo "selected=\"selected\""?>><?=$row['ABBREV']?></option>
+<option value="<?=$row['ABBREV']?>" <?php if($row['ABBREV']==$prop['STATE']) echo "selected=\"selected\""?>><?=$row['ABBREV']?></option>
 <?php
 		}
 ?>
@@ -669,9 +357,9 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="second_chance">
 <option value=""></option>
-<option value="No" <?if($prop['SECOND_CHANCE']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['SECOND_CHANCE']=="Yes") echo "selected=\"selected\""?>>Yes</option>
-<option value="Both" <?if($prop['SECOND_CHANCE']=="Both") echo "selected=\"selected\""?>>Both</option>
+<option value="No" <?php if($prop['SECOND_CHANCE']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['SECOND_CHANCE']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="Both" <?php if($prop['SECOND_CHANCE']=="Both") echo "selected=\"selected\""?>>Both</option>
 </select>
 </td>
 </tr>
@@ -688,11 +376,11 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <tr <?php if ($session->isTATAgent() || $session->isSHSAgent()) echo "style=\"display:none\""; ?>>
 <td align="right" valign="top">Financing Available:</td>
 <td align="left">
-<input type="checkbox" name="financing_available[]" value="Hard Money" <?if(strpos($prop['FINANCING_AVAILABLE'], "Hard Money") !== FALSE) echo "checked";?> />Hard Money<br />
-<input type="checkbox" name="financing_available[]" value="Soft Money" <?if(strpos($prop['FINANCING_AVAILABLE'], "Soft Money") !== FALSE) echo "checked";?> />Soft Money<br />
-<input type="checkbox" name="financing_available[]" value="Cash" <?if(strpos($prop['FINANCING_AVAILABLE'], "Cash") !== FALSE) echo "checked";?> />Cash<br />
-<input type="checkbox" name="financing_available[]" value="Traditional" <?if(strpos($prop['FINANCING_AVAILABLE'], "Traditional") !== FALSE) echo "checked";?> />Traditional<br />
-<input type="checkbox" name="financing_available[]" value="LOC" <?if(strpos($prop['FINANCING_AVAILABLE'], "LOC") !== FALSE) echo "checked";?> />LOC<br />
+<input type="checkbox" name="financing_available[]" value="Hard Money" <?php if(strpos($prop['FINANCING_AVAILABLE'], "Hard Money") !== FALSE) echo "checked";?> />Hard Money<br />
+<input type="checkbox" name="financing_available[]" value="Soft Money" <?php if(strpos($prop['FINANCING_AVAILABLE'], "Soft Money") !== FALSE) echo "checked";?> />Soft Money<br />
+<input type="checkbox" name="financing_available[]" value="Cash" <?php if(strpos($prop['FINANCING_AVAILABLE'], "Cash") !== FALSE) echo "checked";?> />Cash<br />
+<input type="checkbox" name="financing_available[]" value="Traditional" <?php if(strpos($prop['FINANCING_AVAILABLE'], "Traditional") !== FALSE) echo "checked";?> />Traditional<br />
+<input type="checkbox" name="financing_available[]" value="LOC" <?php if(strpos($prop['FINANCING_AVAILABLE'], "LOC") !== FALSE) echo "checked";?> />LOC<br />
 </td>
 </tr>
 
@@ -702,15 +390,15 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="property_type" required>
 <option value=""></option>
-<option value="Single Family" <?if($prop['PROPERTY_TYPE']=="Single Family" || $lead_id==null) echo "selected=\"selected\"";?>>Single Family</option>
-<option value="Townhome/Condo" <?if($prop['PROPERTY_TYPE']=="Townhome/Condo") echo "selected=\"selected\"";?>>Townhome/Condo</option>
-<option value="Duplex" <?if($prop['PROPERTY_TYPE']=="Duplex") echo "selected=\"selected\"";?>>Duplex</option>
-<option value="Multi Family" <?if($prop['PROPERTY_TYPE']=="Multi Family") echo "selected=\"selected\"";?>>Multi Family</option>
-<option value="Land" <?if($prop['PROPERTY_TYPE']=="Land") echo "selected=\"selected\"";?>>Land</option>
-<option value="Listing" <?if($prop['PROPERTY_TYPE']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
-<option value="TAT Agent" <?if($prop['PROPERTY_TYPE']=="TAT Agent") echo "selected=\"selected\"";?>>TAT Agent</option>
-<option value="SHS Agent" <?if($prop['PROPERTY_TYPE']=="SHS Agent") echo "selected=\"selected\"";?>>SHS Agent</option>
-<option value="PLV" <?if($prop['PROPERTY_TYPE']=="PLV") echo "selected=\"selected\"";?>>PLV</option>
+<option value="Single Family" <?php if($prop['PROPERTY_TYPE']=="Single Family" || $lead_id==null) echo "selected=\"selected\"";?>>Single Family</option>
+<option value="Townhome/Condo" <?php if($prop['PROPERTY_TYPE']=="Townhome/Condo") echo "selected=\"selected\"";?>>Townhome/Condo</option>
+<option value="Duplex" <?php if($prop['PROPERTY_TYPE']=="Duplex") echo "selected=\"selected\"";?>>Duplex</option>
+<option value="Multi Family" <?php if($prop['PROPERTY_TYPE']=="Multi Family") echo "selected=\"selected\"";?>>Multi Family</option>
+<option value="Land" <?php if($prop['PROPERTY_TYPE']=="Land") echo "selected=\"selected\"";?>>Land</option>
+<option value="Listing" <?php if($prop['PROPERTY_TYPE']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
+<option value="TAT Agent" <?php if($prop['PROPERTY_TYPE']=="TAT Agent") echo "selected=\"selected\"";?>>TAT Agent</option>
+<option value="SHS Agent" <?php if($prop['PROPERTY_TYPE']=="SHS Agent") echo "selected=\"selected\"";?>>SHS Agent</option>
+<option value="PLV" <?php if($prop['PROPERTY_TYPE']=="PLV") echo "selected=\"selected\"";?>>PLV</option>
 </select>
 </td>
 </tr>
@@ -726,8 +414,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="garage_type">
 <option value=""></option>
-<option value="Attached" <?if($prop['GARAGE_TYPE']=="Attached") echo "selected=\"selected\""?>>Attached</option>
-<option value="Detatched" <?if($prop['GARAGE_TYPE']=="Detatched") echo "selected=\"selected\""?>>Detatched</option>
+<option value="Attached" <?php if($prop['GARAGE_TYPE']=="Attached") echo "selected=\"selected\""?>>Attached</option>
+<option value="Detatched" <?php if($prop['GARAGE_TYPE']=="Detatched") echo "selected=\"selected\""?>>Detatched</option>
 </select>
 </td>
 </tr>
@@ -736,10 +424,10 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Garages:</td>
 <td align="left">
 <select name="garages">
-<option value="0" <?if($prop['GARAGES']==0) echo "selected=\"selected\""?>>0</option>
-<option value="1" <?if($prop['GARAGES']==1) echo "selected=\"selected\""?>>1</option>
-<option value="2" <?if($prop['GARAGES']==2) echo "selected=\"selected\""?>>2</option>
-<option value="3" <?if($prop['GARAGES']==3) echo "selected=\"selected\""?>>3</option>
+<option value="0" <?php if($prop['GARAGES']==0) echo "selected=\"selected\""?>>0</option>
+<option value="1" <?php if($prop['GARAGES']==1) echo "selected=\"selected\""?>>1</option>
+<option value="2" <?php if($prop['GARAGES']==2) echo "selected=\"selected\""?>>2</option>
+<option value="3" <?php if($prop['GARAGES']==3) echo "selected=\"selected\""?>>3</option>
 </select>
 </td>
 </tr>
@@ -749,8 +437,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="garage_converted">
 <option value=""></option>
-<option value="No" <?if($prop['GARAGE_CONVERTED']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['GARAGE_CONVERTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['GARAGE_CONVERTED']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['GARAGE_CONVERTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -759,12 +447,12 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Bedrooms:</td>
 <td align="left">
 <select name="bedrooms">
-<option value="0" <?if($prop['BEDROOMS']==0) echo "selected=\"selected\""?>>0</option>
-<option value="1" <?if($prop['BEDROOMS']==1) echo "selected=\"selected\""?>>1</option>
-<option value="2" <?if($prop['BEDROOMS']==2) echo "selected=\"selected\""?>>2</option>
-<option value="3" <?if($prop['BEDROOMS']==3) echo "selected=\"selected\""?>>3</option>
-<option value="4" <?if($prop['BEDROOMS']==4) echo "selected=\"selected\""?>>4</option>
-<option value="5" <?if($prop['BEDROOMS']==5) echo "selected=\"selected\""?>>5</option>
+<option value="0" <?php if($prop['BEDROOMS']==0) echo "selected=\"selected\""?>>0</option>
+<option value="1" <?php if($prop['BEDROOMS']==1) echo "selected=\"selected\""?>>1</option>
+<option value="2" <?php if($prop['BEDROOMS']==2) echo "selected=\"selected\""?>>2</option>
+<option value="3" <?php if($prop['BEDROOMS']==3) echo "selected=\"selected\""?>>3</option>
+<option value="4" <?php if($prop['BEDROOMS']==4) echo "selected=\"selected\""?>>4</option>
+<option value="5" <?php if($prop['BEDROOMS']==5) echo "selected=\"selected\""?>>5</option>
 </select>
 </td>
 </tr>
@@ -773,12 +461,12 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Bathrooms:</td>
 <td align="left">
 <select id="bathrooms" name="bathrooms">
-<option value="0" <?if($prop['BATHROOMS']==0) echo "selected=\"selected\""?>>0</option>
-<option value="1" <?if($prop['BATHROOMS']==1) echo "selected=\"selected\""?>>1</option>
-<option value="2" <?if($prop['BATHROOMS']==2) echo "selected=\"selected\""?>>2</option>
-<option value="3" <?if($prop['BATHROOMS']==3) echo "selected=\"selected\""?>>3</option>
-<option value="4" <?if($prop['BATHROOMS']==4) echo "selected=\"selected\""?>>4</option>
-<option value="5" <?if($prop['BATHROOMS']==5) echo "selected=\"selected\""?>>5</option>
+<option value="0" <?php if($prop['BATHROOMS']==0) echo "selected=\"selected\""?>>0</option>
+<option value="1" <?php if($prop['BATHROOMS']==1) echo "selected=\"selected\""?>>1</option>
+<option value="2" <?php if($prop['BATHROOMS']==2) echo "selected=\"selected\""?>>2</option>
+<option value="3" <?php if($prop['BATHROOMS']==3) echo "selected=\"selected\""?>>3</option>
+<option value="4" <?php if($prop['BATHROOMS']==4) echo "selected=\"selected\""?>>4</option>
+<option value="5" <?php if($prop['BATHROOMS']==5) echo "selected=\"selected\""?>>5</option>
 </select>
 </td>
 </tr>
@@ -787,9 +475,9 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Stories:</td>
 <td align="left">
 <select name="stories">
-<option value="0" <?if($prop['STORIES']==0) echo "selected=\"selected\""?>>0</option>
-<option value="1" <?if($prop['STORIES']==1) echo "selected=\"selected\""?>>1</option>
-<option value="2" <?if($prop['STORIES']==2) echo "selected=\"selected\""?>>2</option>
+<option value="0" <?php if($prop['STORIES']==0) echo "selected=\"selected\""?>>0</option>
+<option value="1" <?php if($prop['STORIES']==1) echo "selected=\"selected\""?>>1</option>
+<option value="2" <?php if($prop['STORIES']==2) echo "selected=\"selected\""?>>2</option>
 </select>
 </td>
 </tr>
@@ -798,8 +486,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Pool:</td>
 <td align="left">
 <select name="pool">
-<option value="No" <?if($prop['POOL']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['POOL']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['POOL']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['POOL']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -809,8 +497,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select id="pool_condition" name="pool_condition">
 <option value=""></option>
-<option value="Good" <?if($prop['POOL_CONDITION']=="Good") echo "selected=\"selected\""?>>Good</option>
-<option value="Bad" <?if($prop['POOL_CONDITION']=="Bad") echo "selected=\"selected\""?>>Bad</option>
+<option value="Good" <?php if($prop['POOL_CONDITION']=="Good") echo "selected=\"selected\""?>>Good</option>
+<option value="Bad" <?php if($prop['POOL_CONDITION']=="Bad") echo "selected=\"selected\""?>>Bad</option>
 </select>
 </td>
 </tr>
@@ -819,10 +507,10 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Roof Age:</td>
 <td align="left">
 <select id="roof_age" name="roof_age">
-<option value="1" <?if($prop['ROOF_AGE']=='1') echo "selected=\"selected\""?>>1</option>
-<option value="2" <?if($prop['ROOF_AGE']=='2') echo "selected=\"selected\""?>>2</option>
-<option value="3" <?if($prop['ROOF_AGE']=='3') echo "selected=\"selected\""?>>3</option>
-<option value="4+" <?if($prop['ROOF_AGE']=='4+') echo "selected=\"selected\""?>>4+</option>
+<option value="1" <?php if($prop['ROOF_AGE']=='1') echo "selected=\"selected\""?>>1</option>
+<option value="2" <?php if($prop['ROOF_AGE']=='2') echo "selected=\"selected\""?>>2</option>
+<option value="3" <?php if($prop['ROOF_AGE']=='3') echo "selected=\"selected\""?>>3</option>
+<option value="4+" <?php if($prop['ROOF_AGE']=='4+') echo "selected=\"selected\""?>>4+</option>
 </select>
 </td>
 </tr>
@@ -831,9 +519,9 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">HVAC Age:</td>
 <td align="left">
 <select id="hvac_age" name="hvac_age">
-<option value="0-4" <?if($prop['HVAC_AGE']=='0-4') echo "selected=\"selected\""?>>0-4</option>
-<option value="5-9" <?if($prop['HVAC_AGE']=='5-9') echo "selected=\"selected\""?>>5-9</option>
-<option value="10+" <?if($prop['HVAC_AGE']=='10+') echo "selected=\"selected\""?>>10+</option>
+<option value="0-4" <?php if($prop['HVAC_AGE']=='0-4') echo "selected=\"selected\""?>>0-4</option>
+<option value="5-9" <?php if($prop['HVAC_AGE']=='5-9') echo "selected=\"selected\""?>>5-9</option>
+<option value="10+" <?php if($prop['HVAC_AGE']=='10+') echo "selected=\"selected\""?>>10+</option>
 </select>
 </td>
 </tr>
@@ -842,8 +530,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Need Foundation Repair:</td>
 <td align="left">
 <select id="need_foundation_repair" name="need_foundation_repair">
-<option value="No" <?if($prop['NEED_FOUNDATION_REPAIR']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['NEED_FOUNDATION_REPAIR']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['NEED_FOUNDATION_REPAIR']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['NEED_FOUNDATION_REPAIR']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -870,8 +558,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Insurance:</td>
 <td align="left">
 <select id="insurance" name="insurance">
-<option value="No" <?if($prop['INSURANCE']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['INSURANCE']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['INSURANCE']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['INSURANCE']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -884,8 +572,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="owner_occupied">
 <option value=""></option>
-<option value="Yes" <?if($prop['OWNER_OCCUPIED']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="No" <?if($prop['OWNER_OCCUPIED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="Yes" <?php if($prop['OWNER_OCCUPIED']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="No" <?php if($prop['OWNER_OCCUPIED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -895,8 +583,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="rented">
 <option value=""></option>
-<option value="Yes" <?if($prop['RENTED']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="No" <?if($prop['RENTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="Yes" <?php if($prop['RENTED']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="No" <?php if($prop['RENTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -930,8 +618,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="listed">
 <option value=""></option>
-<option value="Yes" <?if($prop['LISTED']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="No" <?if($prop['LISTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="Yes" <?php if($prop['LISTED']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="No" <?php if($prop['LISTED']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -969,8 +657,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="current_payments">
 <option value=""></option>
-<option value="Yes" <?if($prop['CURRENT_PAYMENTS']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="No" <?if($prop['CURRENT_PAYMENTS']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="Yes" <?php if($prop['CURRENT_PAYMENTS']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="No" <?php if($prop['CURRENT_PAYMENTS']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -1007,8 +695,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="right">Backside Contract:</td>
 <td align="left">
 <select name="backside_contract">
-<option value="No" <?if($prop['BACKSIDE_CONTRACT']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['BACKSIDE_CONTRACT']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['BACKSIDE_CONTRACT']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['BACKSIDE_CONTRACT']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 </tr>
@@ -1018,20 +706,20 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <td align="left">
 <select name="exit_strategy">
 <option value=""></option>
-<option value="Flip" <?if($prop['EXIT_STRATEGY']=="Flip") echo "selected=\"selected\"";?>>Flip</option>
-<option value="Wholesale" <?if($prop['EXIT_STRATEGY']=="Wholesale") echo "selected=\"selected\"";?>>Wholesale</option>
-<option value="Assignment" <?if($prop['EXIT_STRATEGY']=="Assignment") echo "selected=\"selected\"";?>>Assignment</option>
-<option value="Hedge Fund" <?if($prop['EXIT_STRATEGY']=="Hedge Fund") echo "selected=\"selected\"";?>>Hedge Fund</option>
-<option value="Rental" <?if($prop['EXIT_STRATEGY']=="Rental") echo "selected=\"selected\"";?>>Rental</option>
-<option value="Listing" <?if($prop['EXIT_STRATEGY']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
+<option value="Flip" <?php if($prop['EXIT_STRATEGY']=="Flip") echo "selected=\"selected\"";?>>Flip</option>
+<option value="Wholesale" <?php if($prop['EXIT_STRATEGY']=="Wholesale") echo "selected=\"selected\"";?>>Wholesale</option>
+<option value="Assignment" <?php if($prop['EXIT_STRATEGY']=="Assignment") echo "selected=\"selected\"";?>>Assignment</option>
+<option value="Hedge Fund" <?php if($prop['EXIT_STRATEGY']=="Hedge Fund") echo "selected=\"selected\"";?>>Hedge Fund</option>
+<option value="Rental" <?php if($prop['EXIT_STRATEGY']=="Rental") echo "selected=\"selected\"";?>>Rental</option>
+<option value="Listing" <?php if($prop['EXIT_STRATEGY']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
 </select>
 </td>
 </tr>
 
 <tr><td align="right">Need Lender:</td><td align="left">
 <select name="need_lender">
-<option value="No" <?if($prop['NEED_LENDER']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['NEED_LENDER']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['NEED_LENDER']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['NEED_LENDER']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td></tr>
 
@@ -1059,7 +747,7 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['ABBREV']?>" <?if($row['ABBREV']==$prop['SEARCH_STATE']) echo "selected=\"selected\""?>><?=$row['ABBREV']?></option>
+<option value="<?=$row['ABBREV']?>" <?php if($row['ABBREV']==$prop['SEARCH_STATE']) echo "selected=\"selected\""?>><?=$row['ABBREV']?></option>
 <?php
 		}
 ?>
@@ -1089,7 +777,7 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['AFFILIATE_ID']?>" <?if($row['AFFILIATE_ID']==$prop['AFFILIATE_ID'] || ($prop==null && $row['AFFILIATE_ID']==50)) echo "selected=\"selected\""?>><?=$row['COMPANY_NAME']?></option>
+<option value="<?=$row['AFFILIATE_ID']?>" <?php if($row['AFFILIATE_ID']==$prop['AFFILIATE_ID'] || ($prop==null && $row['AFFILIATE_ID']==50)) echo "selected=\"selected\""?>><?=$row['COMPANY_NAME']?></option>
 <?php
 		}
 ?>
@@ -1110,7 +798,7 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['username']?>" <?if($row['username'] == $prop['USERNAME'] || ($lead_id == null && $row['username'] == $session->username)) echo "selected=\"selected\""?>><?=$row['fullname']?></option>
+<option value="<?=$row['username']?>" <?php if($row['username'] == $prop['USERNAME'] || ($lead_id == null && $row['username'] == $session->username)) echo "selected=\"selected\""?>><?=$row['fullname']?></option>
 <?php
 		}
 ?>
@@ -1126,49 +814,49 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <?php
 if ($session->isAdmin() || $session->isMaster()) {
 ?>
-<option value="Hot Lead (0%)" <?if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
-<option value="Listing Appointment (30%)" <?if($prop['FORECAST_CHANCE']=="Listing Appointment (30%)") echo "selected=\"selected\"";?>>Listing Appointment (30%)</option>
-<option value="Showing (30%)" <?if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
-<option value="Docusign Sent (60%)" <?if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
-<option value="Active Listing (70%)" <?if($prop['FORECAST_CHANCE']=="Active Listing (70%)") echo "selected=\"selected\"";?>>Active Listing (70%)</option>
-<option value="Offer (75%)" <?if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
-<option value="Executed (75%)" <?if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
-<option value="Pending (75%)" <?if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
-<option value="Exit Confirmed (95%)" <?if($prop['FORECAST_CHANCE']=="Exit Confirmed (95%)") echo "selected=\"selected\"";?>>Exit Confirmed (95%)</option>
-<option value="Closed (100%)" <?if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
+<option value="Hot Lead (0%)" <?php if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
+<option value="Listing Appointment (30%)" <?php if($prop['FORECAST_CHANCE']=="Listing Appointment (30%)") echo "selected=\"selected\"";?>>Listing Appointment (30%)</option>
+<option value="Showing (30%)" <?php if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
+<option value="Docusign Sent (60%)" <?php if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
+<option value="Active Listing (70%)" <?php if($prop['FORECAST_CHANCE']=="Active Listing (70%)") echo "selected=\"selected\"";?>>Active Listing (70%)</option>
+<option value="Offer (75%)" <?php if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
+<option value="Executed (75%)" <?php if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
+<option value="Pending (75%)" <?php if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
+<option value="Exit Confirmed (95%)" <?php if($prop['FORECAST_CHANCE']=="Exit Confirmed (95%)") echo "selected=\"selected\"";?>>Exit Confirmed (95%)</option>
+<option value="Closed (100%)" <?php if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
 <?php
 }
 if ($session->isAssetManager()) {
 ?>
-<option value="Hot Lead (0%)" <?if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
-<option value="Showing (30%)" <?if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
-<option value="Docusign Sent (60%)" <?if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
-<option value="Offer (75%)" <?if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
-<option value="Executed (75%)" <?if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
-<option value="Pending (75%)" <?if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
-<option value="Closed (100%)" <?if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
+<option value="Hot Lead (0%)" <?php if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
+<option value="Showing (30%)" <?php if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
+<option value="Docusign Sent (60%)" <?php if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
+<option value="Offer (75%)" <?php if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
+<option value="Executed (75%)" <?php if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
+<option value="Pending (75%)" <?php if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
+<option value="Closed (100%)" <?php if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
 <?php
 }
 if ($session->isTATAgent()) {
 ?>
-<option value="Hot Lead (0%)" <?if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
-<option value="Listing Appointment (30%)" <?if($prop['FORECAST_CHANCE']=="Listing Appointment (30%)") echo "selected=\"selected\"";?>>Listing Appointment (30%)</option>
-<option value="Showing (30%)" <?if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
-<option value="Active Listing (70%)" <?if($prop['FORECAST_CHANCE']=="Active Listing (70%)") echo "selected=\"selected\"";?>>Active Listing (70%)</option>
-<option value="Offer (75%)" <?if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
-<option value="Executed (75%)" <?if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
-<option value="Pending (75%)" <?if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
-<option value="Closed (100%)" <?if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
+<option value="Hot Lead (0%)" <?php if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
+<option value="Listing Appointment (30%)" <?php if($prop['FORECAST_CHANCE']=="Listing Appointment (30%)") echo "selected=\"selected\"";?>>Listing Appointment (30%)</option>
+<option value="Showing (30%)" <?php if($prop['FORECAST_CHANCE']=="Showing (30%)") echo "selected=\"selected\"";?>>Showing (30%)</option>
+<option value="Active Listing (70%)" <?php if($prop['FORECAST_CHANCE']=="Active Listing (70%)") echo "selected=\"selected\"";?>>Active Listing (70%)</option>
+<option value="Offer (75%)" <?php if($prop['FORECAST_CHANCE']=="Offer (75%)") echo "selected=\"selected\"";?>>Offer (75%)</option>
+<option value="Executed (75%)" <?php if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
+<option value="Pending (75%)" <?php if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
+<option value="Closed (100%)" <?php if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option>
 <?php
 }
 if ($session->isSHSAgent()) {
 ?>
-<option value="Hot Lead (0%)" <?if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
-<option value="Docusign Sent (60%)" <?if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
-<option value="Executed (75%)" <?if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
-<option value="Pending (75%)" <?if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
-<option value="Exit Confirmed (95%)" <?if($prop['FORECAST_CHANCE']=="Exit Confirmed (95%)") echo "selected=\"selected\"";?>>Exit Confirmed (95%)</option>
-<option value="Closed (100%)" <?if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option
+<option value="Hot Lead (0%)" <?php if($prop['FORECAST_CHANCE']=="Hot Lead (0%)") echo "selected=\"selected\"";?>>Hot Lead (0%)</option>
+<option value="Docusign Sent (60%)" <?php if($prop['FORECAST_CHANCE']=="Docusign Sent (60%)") echo "selected=\"selected\"";?>>Docusign Sent (60%)</option>
+<option value="Executed (75%)" <?php if($prop['FORECAST_CHANCE']=="Executed (75%)") echo "selected=\"selected\"";?>>Executed (75%)</option>
+<option value="Pending (75%)" <?php if($prop['FORECAST_CHANCE']=="Pending (75%)") echo "selected=\"selected\"";?>>Pending (75%)</option>
+<option value="Exit Confirmed (95%)" <?php if($prop['FORECAST_CHANCE']=="Exit Confirmed (95%)") echo "selected=\"selected\"";?>>Exit Confirmed (95%)</option>
+<option value="Closed (100%)" <?php if($prop['FORECAST_CHANCE']=="Closed (100%)") echo "selected=\"selected\"";?>>Closed (100%)</option
 <?php } ?>
 </select>
 </td>
@@ -1176,11 +864,11 @@ if ($session->isSHSAgent()) {
 <td align="left">
 <select name="priority" id="priority" class="<?=$prop['PRIORITY']?>" onchange="this.setAttribute('class', this.value)" required>
 <option value=""></option>
-<option value="NoContact" <?if($prop['PRIORITY']=="NoContact") echo "selected=\"selected\"";?>>No Contact</option>
-<option value="Weak" <?if($prop['PRIORITY']=="Weak") echo "selected=\"selected\"";?>>Weak</option>
-<option value="Mild" <?if($prop['PRIORITY']=="Mild") echo "selected=\"selected\"";?>>Mild</option>
-<option value="Strong" <?if($prop['PRIORITY']=="Strong") echo "selected=\"selected\"";?>>Strong</option>
-<option value="Hot" <?if($prop['PRIORITY']=="Hot") echo "selected=\"selected\"";?>>Hot</option>
+<option value="NoContact" <?php if($prop['PRIORITY']=="NoContact") echo "selected=\"selected\"";?>>No Contact</option>
+<option value="Weak" <?php if($prop['PRIORITY']=="Weak") echo "selected=\"selected\"";?>>Weak</option>
+<option value="Mild" <?php if($prop['PRIORITY']=="Mild") echo "selected=\"selected\"";?>>Mild</option>
+<option value="Strong" <?php if($prop['PRIORITY']=="Strong") echo "selected=\"selected\"";?>>Strong</option>
+<option value="Hot" <?php if($prop['PRIORITY']=="Hot") echo "selected=\"selected\"";?>>Hot</option>
 </select>
 </td>
 </tr>
@@ -1215,13 +903,13 @@ if ($prop['PREDICTED_AMT']!="") {
 <td align="left">
 <select name="status" required>
 <option value=""></option>
-<option value="New" <?if($prop['STATUS']=="New") echo "selected=\"selected\"";?>>New</option>
-<option value="Live" <?if($prop['STATUS']=="Live") echo "selected=\"selected\"";?>>Live</option>
-<option value="Dead" <?if($prop['STATUS']=="Dead") echo "selected=\"selected\"";?>>Dead</option>
-<option value="On Hold" <?if($prop['STATUS']=="On Hold") echo "selected=\"selected\"";?>>On Hold</option>
-<option value="Unqualified" <?if($prop['STATUS']=="Unqualified") echo "selected=\"selected\"";?>>Unqualified</option>
-<option value="Terminated" <?if($prop['STATUS']=="Terminated") echo "selected=\"selected\"";?>>Terminated</option>
-<option value="Closed" <?if($prop['STATUS']=="Closed") echo "selected=\"selected\"";?>>Closed</option>
+<option value="New" <?php if($prop['STATUS']=="New") echo "selected=\"selected\"";?>>New</option>
+<option value="Live" <?php if($prop['STATUS']=="Live") echo "selected=\"selected\"";?>>Live</option>
+<option value="Dead" <?php if($prop['STATUS']=="Dead") echo "selected=\"selected\"";?>>Dead</option>
+<option value="On Hold" <?php if($prop['STATUS']=="On Hold") echo "selected=\"selected\"";?>>On Hold</option>
+<option value="Unqualified" <?php if($prop['STATUS']=="Unqualified") echo "selected=\"selected\"";?>>Unqualified</option>
+<option value="Terminated" <?php if($prop['STATUS']=="Terminated") echo "selected=\"selected\"";?>>Terminated</option>
+<option value="Closed" <?php if($prop['STATUS']=="Closed") echo "selected=\"selected\"";?>>Closed</option>
 </select>
 </td>
 </tr>
@@ -1230,38 +918,38 @@ if ($prop['PREDICTED_AMT']!="") {
 <td align="right">Earnest Receipt:</td>
 <td align="left">
 <select name="earnest_receipt">
-<option value="No" <?if($prop['EARNEST_RECEIPT']=="No") echo "selected=\"selected\""?>>No</option>
-<option value="Yes" <?if($prop['EARNEST_RECEIPT']=="Yes") echo "selected=\"selected\""?>>Yes</option>
+<option value="No" <?php if($prop['EARNEST_RECEIPT']=="No") echo "selected=\"selected\""?>>No</option>
+<option value="Yes" <?php if($prop['EARNEST_RECEIPT']=="Yes") echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td>
 <td align="right">Dead Reason:</td>
 <td align="left">
 <select name="dead_reason">
-<option value="N/A" <?if($prop['DEAD_REASON']=="N/A") echo "selected=\"selected\"";?>>N/A</option>
-<option value="No Contact Information" <?if($prop['DEAD_REASON']=="No Contact Information") echo "selected=\"selected\"";?>>No Contact Information</option>
-<option value="Unable To Reach Client" <?if($prop['DEAD_REASON']=="Unable To Reach Client") echo "selected=\"selected\"";?>>Unable To Reach Client</option>
-<option value="Not Moving from Current Office" <?if($prop['DEAD_REASON']=="Not Moving from Current Office") echo "selected=\"selected\"";?>>Not Moving from Current Office</option>
-<option value="Had to Dead - Not Known" <?if($prop['DEAD_REASON']=="Had to Dead - Not Known") echo "selected=\"selected\"";?>>Had to Dead - Not Known</option>
-<option value="Never connected" <?if($prop['DEAD_REASON']=="Never connected") echo "selected=\"selected\"";?>>Never connected</option>
-<option value="Went Sublet" <?if($prop['DEAD_REASON']=="Went Sublet") echo "selected=\"selected\"";?>>Went Sublet</option>
-<option value="Went Serviced - We don't Deal" <?if(stripslashes($prop['DEAD_REASON'])=="Went Serviced - We don\'t Deal") echo "selected=\"selected\"";?>>Went Serviced - We don't Deal</option>
-<option value="Went to a Rejected Provider" <?if($prop['DEAD_REASON']=="Went to a Rejected Provider") echo "selected=\"selected\"";?>>Went to a Rejected Provider</option>
-<option value="Already working with Broker" <?if($prop['DEAD_REASON']=="Already working with Broker") echo "selected=\"selected\"";?>>Already working with Broker</option>
-<option value="Took Space - We didn't Deal" <?if(stripslashes($prop['DEAD_REASON'])=="Took Space - We didn\'t Deal") echo "selected=\"selected\"";?>>Took Space - We didn't Deal</option>
-<option value="Storage Space Requirement" <?if($prop['DEAD_REASON']=="Storage Space Requirement") echo "selected=\"selected\"";?>>Storage Space Requirement</option>
-<option value="No Match - Budget" <?if($prop['DEAD_REASON']=="No Match - Budget") echo "selected=\"selected\"";?>>No Match - Budget</option>
-<option value="No Match - Too Small" <?if($prop['DEAD_REASON']=="No Match - Too Small") echo "selected=\"selected\"";?>>No Match - Too Small</option>
-<option value="Nothing in the Search Area" <?if($prop['DEAD_REASON']=="Nothing in the Search Area") echo "selected=\"selected\"";?>>Nothing in the Search Area</option>
-<option value="Project Cancelled" <?if($prop['DEAD_REASON']=="Project Cancelled") echo "selected=\"selected\"";?>>Project Cancelled</option>
-<option value="Did not win Contract" <?if($prop['DEAD_REASON']=="Did not win Contract") echo "selected=\"selected\"";?>>Did not win Contract</option>
-<option value="Duplicate - To Be Removed" <?if($prop['DEAD_REASON']=="Duplicate - To Be Removed") echo "selected=\"selected\"";?>>Duplicate - To Be Removed</option>
-<option value="Student" <?if($prop['DEAD_REASON']=="Student") echo "selected=\"selected\"";?>>Student</option>
-<option value="Affiliate Test" <?if($prop['DEAD_REASON']=="Affiliate Test") echo "selected=\"selected\"";?>>Affiliate Test</option>
-<option value="On Hold" <?if($prop['DEAD_REASON']=="On Hold") echo "selected=\"selected\"";?>>On Hold</option>
-<option value="Spam" <?if($prop['DEAD_REASON']=="Spam") echo "selected=\"selected\"";?>>Spam</option>
-<option value="Received From Another Source" <?if($prop['DEAD_REASON']=="Received From Another Source") echo "selected=\"selected\"";?>>Received From Another Source</option>
-<option value="Proposed Usage Not Allowed" <?if($prop['DEAD_REASON']=="Proposed Usage Not Allowed") echo "selected=\"selected\"";?>>Proposed Usage Not Allowed</option>
-<option value="Removed" <?if($prop['DEAD_REASON']=="Removed") echo "selected=\"selected\"";?>>Removed</option>
+<option value="N/A" <?php if($prop['DEAD_REASON']=="N/A") echo "selected=\"selected\"";?>>N/A</option>
+<option value="No Contact Information" <?php if($prop['DEAD_REASON']=="No Contact Information") echo "selected=\"selected\"";?>>No Contact Information</option>
+<option value="Unable To Reach Client" <?php if($prop['DEAD_REASON']=="Unable To Reach Client") echo "selected=\"selected\"";?>>Unable To Reach Client</option>
+<option value="Not Moving from Current Office" <?php if($prop['DEAD_REASON']=="Not Moving from Current Office") echo "selected=\"selected\"";?>>Not Moving from Current Office</option>
+<option value="Had to Dead - Not Known" <?php if($prop['DEAD_REASON']=="Had to Dead - Not Known") echo "selected=\"selected\"";?>>Had to Dead - Not Known</option>
+<option value="Never connected" <?php if($prop['DEAD_REASON']=="Never connected") echo "selected=\"selected\"";?>>Never connected</option>
+<option value="Went Sublet" <?php if($prop['DEAD_REASON']=="Went Sublet") echo "selected=\"selected\"";?>>Went Sublet</option>
+<option value="Went Serviced - We don't Deal" <?php if(stripslashes($prop['DEAD_REASON'])=="Went Serviced - We don\'t Deal") echo "selected=\"selected\"";?>>Went Serviced - We don't Deal</option>
+<option value="Went to a Rejected Provider" <?php if($prop['DEAD_REASON']=="Went to a Rejected Provider") echo "selected=\"selected\"";?>>Went to a Rejected Provider</option>
+<option value="Already working with Broker" <?php if($prop['DEAD_REASON']=="Already working with Broker") echo "selected=\"selected\"";?>>Already working with Broker</option>
+<option value="Took Space - We didn't Deal" <?php if(stripslashes($prop['DEAD_REASON'])=="Took Space - We didn\'t Deal") echo "selected=\"selected\"";?>>Took Space - We didn't Deal</option>
+<option value="Storage Space Requirement" <?php if($prop['DEAD_REASON']=="Storage Space Requirement") echo "selected=\"selected\"";?>>Storage Space Requirement</option>
+<option value="No Match - Budget" <?php if($prop['DEAD_REASON']=="No Match - Budget") echo "selected=\"selected\"";?>>No Match - Budget</option>
+<option value="No Match - Too Small" <?php if($prop['DEAD_REASON']=="No Match - Too Small") echo "selected=\"selected\"";?>>No Match - Too Small</option>
+<option value="Nothing in the Search Area" <?php if($prop['DEAD_REASON']=="Nothing in the Search Area") echo "selected=\"selected\"";?>>Nothing in the Search Area</option>
+<option value="Project Cancelled" <?php if($prop['DEAD_REASON']=="Project Cancelled") echo "selected=\"selected\"";?>>Project Cancelled</option>
+<option value="Did not win Contract" <?php if($prop['DEAD_REASON']=="Did not win Contract") echo "selected=\"selected\"";?>>Did not win Contract</option>
+<option value="Duplicate - To Be Removed" <?php if($prop['DEAD_REASON']=="Duplicate - To Be Removed") echo "selected=\"selected\"";?>>Duplicate - To Be Removed</option>
+<option value="Student" <?php if($prop['DEAD_REASON']=="Student") echo "selected=\"selected\"";?>>Student</option>
+<option value="Affiliate Test" <?php if($prop['DEAD_REASON']=="Affiliate Test") echo "selected=\"selected\"";?>>Affiliate Test</option>
+<option value="On Hold" <?php if($prop['DEAD_REASON']=="On Hold") echo "selected=\"selected\"";?>>On Hold</option>
+<option value="Spam" <?php if($prop['DEAD_REASON']=="Spam") echo "selected=\"selected\"";?>>Spam</option>
+<option value="Received From Another Source" <?php if($prop['DEAD_REASON']=="Received From Another Source") echo "selected=\"selected\"";?>>Received From Another Source</option>
+<option value="Proposed Usage Not Allowed" <?php if($prop['DEAD_REASON']=="Proposed Usage Not Allowed") echo "selected=\"selected\"";?>>Proposed Usage Not Allowed</option>
+<option value="Removed" <?php if($prop['DEAD_REASON']=="Removed") echo "selected=\"selected\"";?>>Removed</option>
 </select>
 </td>
 </tr>
@@ -1529,6 +1217,3 @@ if ($prop['PREDICTED_AMT']!="") {
 </div>
 </body>
 </html>
-<?php
-}
-?>
