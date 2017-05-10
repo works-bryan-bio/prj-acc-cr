@@ -480,6 +480,15 @@ if($lead_id!=null) {
 	$result = $mysqli->query("SELECT * FROM leads WHERE lead_id=" . $lead_id)
 		or die(mysqli_error());
 	$prop = mysqli_fetch_array($result);
+
+	//Next and Previous Record
+	$result_next_record     = $mysqli->query("SELECT lead_id FROM leads WHERE lead_id >" . $lead_id . " ORDER BY lead_id ASC LIMIT 1")
+		or die(mysqli_error());
+	$result_previous_record = $mysqli->query("SELECT lead_id FROM leads WHERE lead_id <" . $lead_id . " ORDER BY lead_id DESC LIMIT 1")
+		or die(mysqli_error());
+	$prop_next     = mysqli_fetch_array($result_next_record);
+	$prop_previous = mysqli_fetch_array($result_previous_record);	
+
 }
 ?>
 <form name="form1" method="post" action="<?=$PHP_SELF?>" onsubmit="return check_hot_strong();">
@@ -536,6 +545,14 @@ if($lead_id!=null) {
 <input class="button" type="submit" name="rsubmit" value="Remove Lead" onClick="return confirm_remove();" />
 <?php } ?>
 <input class="button" type="button" name="dbutton" value="Cancel" onclick="window.location='index.php'" />
+<div style="float:right;margin-right:10px;">	
+<?php if( !empty($prop_previous) ){ ?>
+<a class="button" href="editLead.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
+<?php } ?>
+<?php if( !empty($prop_next) ){ ?>
+<a class="button" href="editLead.php?lead_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
+<?php } ?>
+</div>
 
 <table class="input" width="100%">
 <tr>
@@ -831,13 +848,13 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </tr>
 
 <tr><td align="right">Kitchen Cabinet Age/Type:</td><td align="left">
-<input name="cabinet_type" size="30" value="<?=stripslashes($prop['CABINET_TYPE'])?>" /></td></tr>
+<textarea name="cabinet_type" style="height:80px;width:310px;"><?=stripslashes($prop['CABINET_TYPE'])?></textarea></td></tr>
 
 <tr><td align="right">Counter Top Age/Type:</td><td align="left">
-<input name="counter_type" size="30" value="<?=stripslashes($prop['COUNTER_TYPE'])?>" /></td></tr>
+<textarea name="counter_type" style="height:80px;width:310px;"><?=stripslashes($prop['COUNTER_TYPE'])?></textarea></td></tr>
 
 <tr><td align="right">Flooring Age/Type:</td><td align="left">
-<input name="flooring_type" size="30" value="<?=stripslashes($prop['FLOORING_TYPE'])?>" /></td></tr>
+<textarea name="flooring_type" style="height:80px;width:310px;"><?=stripslashes($prop['FLOORING_TYPE'])?></textarea></td></tr>
 
 <tr><td align="right">Master Bath Age:</td><td align="left">
 <input name="master_bath_age" size="30" value="<?=stripslashes($prop['MASTER_BATH_AGE'])?>" /></td></tr>
