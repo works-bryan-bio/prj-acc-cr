@@ -1,5 +1,5 @@
 <?php
-$mysqli = new mysqli("localhost","simplehousesolut","pz!Cn_@#PD.*","simplehousesolut_db") or die($mysqli->error);
+$mysqli = new mysqli("localhost","root","p@ssw0rd","shaner_dash") or die($mysqli->error);
 $username="simplehousesolut";
 $password="pz!Cn_@#PD.*";
 
