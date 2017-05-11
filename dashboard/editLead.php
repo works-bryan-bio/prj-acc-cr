@@ -555,6 +555,8 @@ if($lead_id!=null) {
 <input class="button" type="submit" name="rsubmit" value="Remove Lead" onClick="return confirm_remove();" />
 <?php } ?>
 <input class="button" type="button" name="dbutton" value="Cancel" onclick="window.location='index.php'" />
+<!-- <input class="button" type="button" name="dbutton" value="Duplicate" onclick="window.location='duplicateLead.php'" formtarget="_blank" /> -->
+<a target="_blank" class="button" href="duplicateLead.php">Duplicate</a>
 <div style="float:right;margin-right:10px;">	
 <?php if( !empty($prop_previous) ){ ?>
 <a class="button" href="editLead.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
@@ -563,7 +565,6 @@ if($lead_id!=null) {
 <a class="button" href="editLead.php?lead_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
 <?php } ?>
 </div>
-
 <table class="input" width="100%">
 <tr>
 <th valign="bottom">
