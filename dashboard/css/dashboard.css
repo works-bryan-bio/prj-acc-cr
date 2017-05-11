@@ -347,6 +347,3 @@ table.clean td {
 .year10 {
     display: none;
 }
-:disabled {
-    background: #EEEEEE !important;
-}

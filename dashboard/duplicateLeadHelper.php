@@ -19,7 +19,7 @@ class DuplicateLeadHelper {
         elseif( isset($_POST['updatelead']) ) {
             $this->updateDripCampaign();
         }
-		else if (isset($_POST['dellead'])) { /* Admin submitted add user form */ 
+        else if (isset($_POST['dellead'])) { /* Admin submitted add user form */ 
             $this->deleteLead();
         }
         else if( isset($_GET['del']) ) {
@@ -34,7 +34,7 @@ class DuplicateLeadHelper {
         }
     }
 
-	function addDripCampaign() {
+    function addDripCampaign() {
         global $session, $database, $form;
 
         $data = $_POST;

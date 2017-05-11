@@ -2,7 +2,7 @@
 
 require_once("include/db_connect.php");
 require_once ("include/swiftmailer/lib/swift_required.php");
-$date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
+$date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
 			$result = $mysqli->query("SELECT * FROM drip_campaign WHERE date_to_send = '". $date ."' ") or die(mysql_error());
 				while($row = mysqli_fetch_array($result)){
 					foreach($row AS $key => $value) {
@@ -11,32 +11,28 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 					$email[] = $row;
 				}
 
-		  		
-
-		  if($email){
+		  if(isset($email)){
 		  	foreach ($email as $key => $value):
-		  		echo "<pre>";
-				print_r($value);
-				echo "</pre>";
-
+		  			  		
+		  		$id = $value['id'];
 				$recipient_type = $value['recipient_type'];
 				$recipients	 =  $value['recipients'];
 				$subject     = $value['subject'];	
-				$content     = $value['body_content'];
+				$content     = strip_tags($value['body_content'] ,'<br>');
 
 
 				// This set the email and the name of the recipients from the id of leads 
 				if($recipient_type == 1){ 
 				    $email_list = "'". str_replace(",", "','", $recipients) ."'" ;
 					$email =  array();
-					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.")") or die(mysql_error());
+					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.") AND status = 1") or die(mysql_error());
 								while($row = mysqli_fetch_array($result)){
 									foreach($row AS $key => $value) {
 										$row[$key] = stripslashes($value);
 									}
 									$email[] = $row;
 								}
-					if(is_array($email)){
+					if($email){
 						
 						foreach ($email as $key => $value) {
 							$email_bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
@@ -68,7 +64,7 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 
 			// Engine for sending email 
 			// Create the Transport
-			$transport = Swift_SmtpTransport::newInstance('smtp.simplehousesolutionscrm.com', 25)
+			$transport = Swift_SmtpTransport::newInstance('mail.simplehousesolutionscrm.com', 26)
 			  ->setUsername('info@simplehousesolutionscrm.com')
 			  ->setPassword('abc123!xyz')
 			  ;
@@ -92,18 +88,15 @@ $date = date("2017-05-05"); //  	2017-05-05 - Y-m-d
 
 			// Send the message
 			$result = $mailer->send($message);	
-
-
-			echo "<pre>";
-			print_r($result);
-			print_r($bcc);
-			echo "</pre>";
+			
+			//Update the campaign once sent
+			$mysqli->query("UPDATE drip_campaign SET status = 1  WHERE id = ". $id ." ") or die(mysql_error());
           
 		  	endforeach;
 		  } 
 
 
-exit;
-header("Location: thank_you.php");
+
+
 
 ?>

@@ -42,11 +42,12 @@ if($_POST['lead_s'] == "search_lead_type"){
 }
 
 
+
 $subject = $_POST['subject'];
-$content = $_POST['messageMassEmail'];
+$content = strip_tags($_POST['messageMassEmail'], '<br>');  
 
 // Create the Transport
-$transport = Swift_SmtpTransport::newInstance('smtp.simplehousesolutionscrm.com', 25)
+$transport = Swift_SmtpTransport::newInstance('mail.simplehousesolutionscrm.com', 26)
   ->setUsername('info@simplehousesolutionscrm.com')
   ->setPassword('abc123!xyz')
   ;
@@ -70,9 +71,9 @@ $message = Swift_Message::newInstance($subject)
 // Give it a body
 ->setBody($content)
 ;
-
 // Send the message
 $result = $mailer->send($message);
+
 
 
 header("Location: thank_you.php");
