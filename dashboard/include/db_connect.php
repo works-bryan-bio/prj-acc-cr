@@ -1,8 +1,8 @@
 <?php
 
-$mysqli = new mysqli("localhost","root","p@ssw0rd","shaner_dash") or die($mysqli->error);
+$mysqli = new mysqli("localhost","root","","shaner_dash") or die($mysqli->error);
 $username="shaner_dash";
-$password="crmdsdb";
+$password="";
 
 function mysqli_result($res, $row, $field=0) {
     $res->data_seek($row);
