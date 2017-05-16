@@ -156,7 +156,7 @@ $queryString = "search=" . $search . "&status=" . $status . "&affiliate_id=" . $
 <label for="priority">Strength:</label>
 <select id="priority" name="priority" onchange="changeCriteria()">
 <option value="All">All</option>
-<option value="NoContract" <?if($priority=="NoContract") echo "selected=\"selected\"";?>>No Contract</option>
+<option value="NoContact" <?if($priority=="NoContact") echo "selected=\"selected\"";?>>No Contact</option>
 <option value="Weak" <?if($priority=="Weak") echo "selected=\"selected\"";?>>Weak</option>
 <option value="Mild" <?if($priority=="Mild") echo "selected=\"selected\"";?>>Mild</option>
 <option value="Strong" <?if($priority=="Strong") echo "selected=\"selected\"";?>>Strong</option>
@@ -282,7 +282,7 @@ while($row = mysqli_fetch_array($result)){
 <td><?=$row['CELL_PHONE']?></td>
 <td><?=$row['FOLLOW_UP_DATE']?></td>
 <td><?=$row['FOLLOW_UP_TIME']?></td>
-<td class="<?= $row['PRIORITY'] ?>"><?php if ($row['PRIORITY'] == "NoContract") { echo "No Contract"; } else { echo $row['PRIORITY']; } ?></td>
+<td class="<?= $row['PRIORITY'] ?>"><?php if ($row['PRIORITY'] == "NoContact") { echo "No Contact"; } else { echo $row['PRIORITY']; } ?></td>
 <td><?=$row['STATUS']?></td>
 <td><?=$row['USERNAME']?></td>
 </tr>
