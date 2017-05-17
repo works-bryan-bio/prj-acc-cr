@@ -44,101 +44,35 @@ class leadPdfHelper {
 
         $content = '
             <page style="">
+                <div>Logo Here</div>
+                <h1>Seller Lead - Interview Sheet</h1>   
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
-                    <tr>
-                        <td style="text-align:center;" align="center" colspan="4">
-                            <div>Logo Here</div>
-                        </td>
-                    </tr>    
-                    <tr>
-                        <td style="" colspan="4">
-                            <h1>Seller Lead - Interview Sheet</h1>
-                        </td>
-                    </tr>
-                </table>    
-                <br />
-                <table cellspacing="0" style="font-size: 11pt;">
-                    <tr>
-                        <td>
-                            Property Address:
-                        </td>
-                        <td style="text-decoration:underline;">
-                           '.$data['ADDRESS_1'].'
-                        </td>
-                        <td>
-                            Date: 
-                        </td>
-                        <td style="text-decoration:underline;">
-                            '.date("F j, Y", strtotime($data['DATE_ADDED'])).'
-                        </td>
-                        <td>
-                            Lead Source:
-                        </td>
-                        <td style="text-decoration:underline;">
-                            '. $data['affiliate_name'] .'
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            City, State, Zip:
-                        </td>
-                        <td style="text-decoration:underline;">
-                           '.$data['CITY'] . ',' . $data['STATE'] . ','. $data['ZIP']. '
-                        </td>
-                        <td>
-                            Phone #: 
-                        </td>
-                        <td style="text-decoration:underline;">
-                            '. $office_phone_other .'
-                        </td>
-                        <td>
-                            Phone Type:
-                        </td>
-                        <td style="text-decoration:underline;">
-                            Home Cell Work
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Contact Person:
-                        </td>
-                        <td style="text-decoration:underline;">
-                           '. $data['FIRST_NAME'] . ' ' . $data['LAST_NAME'] .'
-                        </td>
-                        <td>
-                            
-                        </td>
-                        <td style="text-decoration:underline;">
-                            
-                        </td>
-                        <td>
-                            2nd Chance Prog.:
-                        </td>
-                        <td style="text-decoration:underline;">
-                            Y N Both
-                        </td>
-                    </tr>  
-                    <tr>
-                        <td>
-                            Owner(s) on Title:
-                        </td>
-                        <td style="text-decoration:underline;">
-                          
-                        </td>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            Email.
-                        </td>
-                        <td style="text-decoration:underline;">
-                            '.$data['CLIENT_EMAIL'].'
-                        </td>
-                        <td style="text-decoration:underline;">
-                           
-                        </td>
-                    </tr>                                                                
+                    <td style="width:50%;" width="50%">
+                        <strong>Property Address:</strong> '. $data['ADDRESS_1'] .'
+                    </td>
+                    <td style="width:20%" width="20%">
+                        <strong>Date:</strong> '.date("F j, Y", strtotime($data['DATE_ADDED'])).'
+                    </td>
+                    <td style="width:30%" width="30%">
+                       <strong>Lead Source:</strong> '.$data['affiliate_name'].'
+                    </td>
                 </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:45%;" width="45%">
+                        <strong>City, State, Zip:</strong> '. $data['CITY'] . ',' . $data['STATE'] . ','. $data['ZIP'] .'
+                    </td>
+                    <td style="width:25%" width="25%">
+                        <strong>Phone #:</strong> '.$office_phone_other.'
+                    </td>
+                    <td style="width:30%" width="30%">
+                       <strong>Phone Type:</strong> Home Cell Work
+                    </td>
+                </table>
+                <br /><br />
+                <div>Contact Person: _________________________________________ 2nd Change Program: Y N Both</div>
+                <div>Owner(s) on Title: ______________________________________ Email: _________________________</div>
+                
                 <h3>Property Information</h3>
                 <div>Do you currently leave in the home Y / N How long: ______ Bed: ______ Bath: ______ Year Built: ______ </div>
                 <div>Garage: _______ 1 / 2 / 3 Car Garage Converted Garage: Y / N Stories: ______ Sqft: ______ </div>
@@ -199,9 +133,9 @@ class leadPdfHelper {
         $pdfFileName = $fName; 
         $html2pdf->Output("files/$pdfFileName", 'F');           
 
-        $base_folder = '/bigfish/tim/prj-acc-cr/dashboard/';
+        $base_folder = '/sl/prj-acc-cr/dashboard/'; //$base_folder = '/bigfish/tim/prj-acc-cr/dashboard/';
 
-        $pdf_path = 'https://' . $_SERVER['SERVER_NAME'] . $base_folder . 'files/' . $pdfFileName;
+        $pdf_path = 'http://' . $_SERVER['SERVER_NAME'] . $base_folder . 'files/' . $pdfFileName;
         header('Location: ' . $pdf_path);
 
     }
