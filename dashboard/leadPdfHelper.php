@@ -42,18 +42,25 @@ class leadPdfHelper {
 
         $office_phone_other = !empty($data['OFFICE_PHONE']) ? $data['OFFICE_PHONE'] : $data['CELL_PHONE'];
 
+        if(!empty($data['OFFICE_PHONE'])) {
+            $phone_type = "Work";
+        }elseif(!empty($data['CELL_PHONE'])) {
+            $phone_type = "Cell";
+        }elseif(!empty($data['OTHER_PHONE'])){
+            $phone_type = "Home";
+        }        
+
         $content = '
             <page style="">
-                <div>Logo Here</div>
                 <h1>Seller Lead - Interview Sheet</h1>   
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
-                    <td style="width:50%;" width="50%">
+                    <td style="width:45%;" width="45%">
                         <strong>Property Address:</strong> '. $data['ADDRESS_1'] .'
                     </td>
                     <td style="width:20%" width="20%">
                         <strong>Date:</strong> '.date("F j, Y", strtotime($data['DATE_ADDED'])).'
                     </td>
-                    <td style="width:30%" width="30%">
+                    <td style="width:35%" width="35%">
                        <strong>Lead Source:</strong> '.$data['affiliate_name'].'
                     </td>
                 </table>
@@ -66,62 +73,231 @@ class leadPdfHelper {
                         <strong>Phone #:</strong> '.$office_phone_other.'
                     </td>
                     <td style="width:30%" width="30%">
-                       <strong>Phone Type:</strong> Home Cell Work
+                       <strong>Phone Type:</strong> '.$phone_type.'
                     </td>
                 </table>
                 <br /><br />
-                <div>Contact Person: _________________________________________ 2nd Change Program: Y N Both</div>
-                <div>Owner(s) on Title: ______________________________________ Email: _________________________</div>
-                
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:45%;" width="45%">
+                        <strong>Contact Person:</strong> '. $data['FIRST_NAME'] . ' ' . $data['LAST_NAME'] .'
+                    </td>
+                    <td style="width:50%" width="50%">
+                        <strong>2nd Chance Program:</strong> '. $data['SECOND_CHANCE'] .'
+                    </td>
+                </table>
+                <br /><br />     
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:45%;" width="45%">
+                        <strong>Owner(s) on Title:</strong> '. '---' .'
+                    </td>
+                    <td style="width:50%" width="50%">
+                        <strong>Email:</strong> '. $data['CLIENT_EMAIL'] .'
+                    </td>
+                </table>
+                <br /><br />
                 <h3>Property Information</h3>
-                <div>Do you currently leave in the home Y / N How long: ______ Bed: ______ Bath: ______ Year Built: ______ </div>
-                <div>Garage: _______ 1 / 2 / 3 Car Garage Converted Garage: Y / N Stories: ______ Sqft: ______ </div>
-                <div>Age of Roof: _______ Age of HVAC ______ Age of Pool EQPT: ______ Foundation Repaired? ________ </div>
-                <div>Age/Type Kitchen Cabinet: ______________________ Age/Type Counter Tops: _____________________</div>
-                <div>Flooring Age/Type: ___________________________ Master Bath Age: ______ Half Bath Age: ______</div>
-                <div>Upgrades? ____________________________________________________________________________</div>
-                <div>Have Insurance: _______ Rent Amount: _______ Term: _______ Move Date: _______ Deposit: _______</div>
-                <div>Is the Home Listed: ______ Price: ______ How Long: ______ Offers? / How Much?: ______</div>
-                <div>Notes: ____________________________________________________________________</div>
-                <div>____________________________________________________________________</div>
-                <div>____________________________________________________________________</div>
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:45%;" width="45%">
+                        <strong>Do you currently leave in the home:</strong> '. '___' .'
+                    </td>
+                    <td style="width:20%" width="20%">
+                        <strong>How long:</strong> '. '__' .'
+                    </td>
+                    <td style="width:10%" width="10%">
+                        <strong>Bed:</strong> '. $data['BEDROOMS'] .'
+                    </td>
+                    <td style="width:10%" width="10%">
+                        <strong>Bath:</strong> '. $data['BATHROOMS'] .'
+                    </td>
+                    <td style="width:15%" width="15%">
+                        <strong>Yr Built:</strong> '. $data['YEAR_BUILT'] .'
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:20%;" width="20%">
+                        <strong>Garage:</strong> '. $data['GARAGE_TYPE'] . ' (' . $data['GARAGES'] .')
+                    </td>
+                    <td style="width:35%" width="35%">
+                        <strong>Car Garage Converted Garage:</strong> '. $data['GARAGE_CONVERTED'] .'
+                    </td>
+                    <td style="width:20%" width="20%">
+                        <strong>Stories:</strong> '. $data['STORIES'] .'
+                    </td>
+                    <td style="width:20%" width="20%">
+                        <strong>Sqft:</strong> '. $data['SQUARE_FEET'] .'
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:25%;" width="25%">
+                        <strong>Age of Roof:</strong> '. $data['ROOF_AGE'] . '
+                    </td>
+                    <td style="width:25%" width="25%">
+                        <strong>Age of HVAC:</strong> '. $data['HVAC_AGE'] .'
+                    </td>
+                    <td style="width:25%" width="25%">
+                        <strong>Age of Pool EQPT:</strong> '. '---' .'
+                    </td>
+                    <td style="width:25%" width="25%">
+                        <strong>Foundation Repaired:</strong> '. $data['NEED_FOUNDATION_REPAIR'] .'
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:50%;" width="50%">
+                        <strong>Age/Type Kitchen Cabinet:</strong> '. $data['CABINET_TYPE'] . '
+                    </td>
+                    <td style="width:50%" width="50%">
+                        <strong>Age/Type Counter Tops:</strong> '. $data['COUNTER_TYPE'] .'
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:33%;" width="33%">
+                        <strong>Flooring Age/Type:</strong> '. $data['FLOORING_TYPE'] . '
+                    </td>
+                    <td style="width:33%" width="33%">
+                        <strong>Master Bath Age:</strong> '. $data['MASTER_BATH_AGE'] .'
+                    </td>
+                    <td style="width:33%" width="33%">
+                        <strong>Half Bath Age:</strong> '. $data['HALF_BATH_AGE'] .'
+                    </td>
+                </table>   
+                <br /><br />       
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>Upgrades:</strong> '. $data['UPGRADES'] . '
+                    </td>
+                </table>                                                       
+                <br /><br />  
+                <br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:20%;" width="20%">
+                        <strong>Have Insurance:</strong> '. $data['INSURANCE'] . '
+                    </td>
+                    <td style="width:20%;" width="20%">
+                        <strong>Rent Amt:</strong> '. $data['RENT_AMT'] . '
+                    </td>
+                    <td style="width:20%;" width="20%">
+                        <strong>Term:</strong> '. $data['TERM'] . '
+                    </td>
+                    <td style="width:25%;" width="25%">
+                        <strong>Move Date:</strong> '. $data['MOVE_DATE'] . '
+                    </td>
+                    <td style="width:15%;" width="15%">
+                        <strong>Deposit:</strong> '. $data['DEPOSIT'] . '
+                    </td>
+                </table>               
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:25%;" width="25%">
+                        <strong>Is the Home Listed:</strong> '. $data['LISTED'] . '
+                    </td>
+                    <td style="width:15%;" width="15%">
+                        <strong>Price:</strong> '. $data['LISTING_PRICE'] . '
+                    </td>
+                    <td style="width:20%;" width="20%">
+                        <strong>How Long:</strong> '. $data['HOW_LONG'] . '
+                    </td>
+                    <td style="width:35%;" width="35%">
+                        <strong>Offers?/How Much?:</strong> '. $data['OFFER_PRICE'] . '
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>Notes:</strong> '. $data['NOTES'] . '
+                    </td>
+                </table>
+                <br /><br />
+                <br />
                 <h3>Motivation & Price</h3>
-                <div>Is there a particular reason you are looking to sell at this time?</div>
-                <div>____________________________________________________________________</div>
-                <div>How quickly are you looking to sell? Timeline: __________________________</div>
-                <div>____________________________________________________________________</div>
-                <div>What are you looking to sell the property for?________________ Is that price flexible? ________</div>
-                <div>How did you establish that number?________________________________________________________</div>
-                <div>If I can offer you cash and close quickly what is the best you can do? ______________________</div>
-                <div>Can you do any better than that?_________________________________________________________</div>
-                <div>What are you going to do if the property does not sell? ____________________________</div>
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>Is there a particular reason you are looking to sell at this time?</strong> '. $data['MOVING_REASON'] . '
+                    </td>
+                </table>                
+                <br /><br />
+                <br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>How quickly are you looking to sell? Timeline:</strong> '. $data['TIME_FRAME_SELL'] . '
+                    </td>
+                </table>
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:70%;" width="70%">
+                        <strong>What are you looking to sell the property for?</strong> '. '--' . '
+                    </td>
+                    <td style="width:30%;" width="30%">
+                        <strong>Is that price flexible?</strong> '. $data['PRICE_FLEXIBLE'] . '
+                    </td>
+                </table>  
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>How did you establish that number?</strong> '. $data['ASKING_PRICE_REASON'] . '
+                    </td>
+                </table>  
+                <br /><br />
+
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>If I can offer you cash and close quickly what is the best you can do?</strong> '. $data['CASH_QUICK_CLOSE'] . '
+                    </td>
+                </table>  
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>Can you do any better than that?</strong> '. $data['ANY_BETTER'] . '
+                    </td>
+                </table>  
+                <br /><br />
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:100%;" width="100%">
+                        <strong>What are you going to do if the property does not sell?</strong> '. $data['DOESNT_SELL'] . '
+                    </td>
+                </table>  
+                <br /><br />
+                
                 <h3>Mortgage Information</h3>
-                <div>What do you currently owe on the property?_________ Are you current on the payment? _________</div>
+                <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                    <td style="width:60%;" width="60%">
+                        <strong>What do you currently owe on the property?</strong> '. $data['CURRENT_MORTGAGE'] . '
+                    </td>
+                    <td style="width:40%;" width="40%">
+                        <strong>Are you current on the payment?</strong> '. $data['CURRENT_PAYMENTS'] . '
+                    </td>
+                </table> 
+                <br /><br />
                 <h3>Exit Strategy</h3>
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                     <td style="width:50%" width="50%">
-                        <h4>Unlimited Exit</h4>
-                        <div>ARV ________ Confident Not Confident</div>
-                        <div>70% of  ARV ______________________</div>
-                        <div>Repair Cost ________ Confident Not Confident</div>
-                        <div>MAO ________ Confident Not Confident</div>
-                        <h4>Half-Hab/Make Ready/As-Is on MLS</h4>
-                        <div>As-Is Price ________ Confident Not Confident</div>
-                        <div>Repair Cost ________ Confident Not Confident</div>
-                        <div>Asking Price _________</div>
-                        <div>Potential Profit _________ (Must be 30k with no question)</div>
+                       <h3>Unlimited Exit</h3>
+                       <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                        <tr>
+                            <td style="width:50%" width="50%">ARV</td>
+                            <td style="width:50%" width="50%">>Confident</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">ARV</td>
+                            <td style="width:50%" width="50%">Confident</td>
+                        </tr>
+                       </table>
                     </td>
                     <td style="width:50%" width="50%">
-                        <h4>Wholesale or Terminate</h4>
-                        <div>ARV ________ Confident Not Confident</div>
-                        <div>80% of  ARV ______________________</div>
-                        <div>Repair Cost ________ Typically 20k-30k</div>
-                        <div>Fee: $5,000</div>
-                        <div>Asking Price________</div>
-                        <h4>Rental or Hedge</h4>
-                        <div>Build 1985+ | Lipstick | Purchase $ | Under 170k</div>
-                        <div>ARV ________ Confident Not Confident</div>
-                        <div>80% of ARV _______ Rent Comp ______</div>
+                        <h3>Wholesale or Terminate</h3>
+                       <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                        <tr>
+                            <td style="width:50%" width="50%">ARV</td>
+                            <td style="width:50%" width="50%">>Confident</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">ARV</td>
+                            <td style="width:50%" width="50%">Confident</td>
+                        </tr>
+                       </table>                       
                     </td>
                 </table>
             </page>
@@ -133,7 +309,7 @@ class leadPdfHelper {
         $pdfFileName = $fName; 
         $html2pdf->Output("files/$pdfFileName", 'F');           
 
-        $base_folder = '/sl/prj-acc-cr/dashboard/'; //$base_folder = '/bigfish/tim/prj-acc-cr/dashboard/';
+        $base_folder = '/bigfish/tim/prj-acc-cr/dashboard/'; //$base_folder = '/sl/prj-acc-cr/dashboard/';
 
         $pdf_path = 'http://' . $_SERVER['SERVER_NAME'] . $base_folder . 'files/' . $pdfFileName;
         header('Location: ' . $pdf_path);
