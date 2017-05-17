@@ -183,7 +183,7 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 	if ($lead_id != '') {
 
 		if ($_POST['add_notes']!="") {
-			$notes = "[" . date("m/d/Y h:i A T") . " - " . $username . "]\n" . str_replace('\r\n', ' ', $mysqli->real_escape_string(stripslashes($_POST['add_notes']))) . "\n\n" . $_POST['notes'];
+			$notes = "[" . date("m/d/Y h:i A T") . " - " . $username . "]&#13;" . $mysqli->real_escape_string(stripslashes($_POST['add_notes'])) . "&#13;&#13;" . $_POST['notes'];
 		} else {
 			$notes = $_POST['notes'];
 		}
