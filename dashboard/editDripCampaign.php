@@ -79,17 +79,18 @@ require_once("include/db_connect.php");
                 <td align="right">Recipient:</td>
                 <td align="left" colspan="">
                     <div id="lead_type_containerc" style="display:none;">
-                        <select id="lead_type" name="lead_type" style="width:99%">
+                        <!-- <select id="lead_type" name="lead_type" style="width:99%">
                         <?php
-                            $result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
-                            while($row = mysqli_fetch_array($result)){
-                                foreach($row AS $key => $value) {
-                                    $row[$key] = stripslashes($value);
-                                }
+                            //$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
+                            //while($row = mysqli_fetch_array($result)){
+                                //foreach($row AS $key => $value) {
+                                    //$row[$key] = stripslashes($value);
+                                //}
                         ?>          
-                            <option <?php echo $result_array['recipients'] == $row['LEAD_TYPE'] ? 'selected' : ''; ?> value="<?php echo $row['LEAD_TYPE']; ?>"><?php echo $row['LEAD_TYPE']; ?></option>
-                        <?php } ?>
-                        </select>                       
+                            <option <?php //echo $result_array['recipients'] == $row['LEAD_TYPE'] ? 'selected' : ''; ?> value="<?php //echo $row['LEAD_TYPE']; ?>"><?php echo $row['LEAD_TYPE']; ?></option>
+                        <?php //} ?>
+                        </select>  -->                      
+                        <input id="search_lead_types_auto_completecc" name="lead_type" type="text" value="" placeholder="Search Lead Types" />                        
                     </div>
                     <div id="leads_containerc" style="display: none;">
                         <input id="search_leads_auto_completec" name="search_leads_auto_completec" type="text" value="" placeholder="Search Leads" />                        
@@ -156,7 +157,7 @@ require_once("include/db_connect.php");
             elements: "elm1,message,messageMassEmailc",
             plugins : "spellchecker",
             theme: "advanced",
-            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,spellchecker",
+            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,spellchecker,image",
             theme_advanced_buttons2: "",
             theme_advanced_buttons3: "",
             theme_advanced_buttons4: "",
@@ -168,6 +169,10 @@ require_once("include/db_connect.php");
 
             //Autocomplete
             $("#search_leads_auto_completec").tokenInput("ajax/tokeninput-leads-email.php", {
+                theme: "facebook",
+                preventDuplicates: true
+            });
+            $("#search_lead_types_auto_completecc").tokenInput("ajax/tokeninput-lead-types.php", {
                 theme: "facebook",
                 preventDuplicates: true
             });

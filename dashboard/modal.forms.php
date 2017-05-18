@@ -29,6 +29,10 @@ $(document).ready(function () {
            	theme: "facebook",
         	preventDuplicates: true
         });
+        $("#search_lead_types_auto_complete").tokenInput("ajax/tokeninput-lead-types.php", {
+           	theme: "facebook",
+        	preventDuplicates: true
+        });
 		//When you click on a link with class of poplight and the href starts with a #
 		$('a.modal-poplight[href^=#]').click(function () {
 			var popID = $(this).attr('rel'); //Get Popup Name
@@ -96,17 +100,18 @@ $(document).ready(function () {
 				<td>Recipient</td>
 				<td>
 					<div id="lead_type_container" style="display:none;">
-						<select id="lead_type" name="lead_type" style="width:99%;">
+						<!-- <select id="lead_type" name="lead_type" style="width:99%;">
 						<?php
-							$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
-							while($row = mysqli_fetch_array($result)){
-								foreach($row AS $key => $value) {
-									$row[$key] = stripslashes($value);
-								}
+							//$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
+							//while($row = mysqli_fetch_array($result)){
+								//foreach($row AS $key => $value) {
+									//$row[$key] = stripslashes($value);
+								//}
 						?>			
-							<option value="<?php echo $row['LEAD_TYPE']; ?>"><?php echo $row['LEAD_TYPE']; ?></option>
-						<?php } ?>
-						</select>								
+							<option value="<?php //echo $row['LEAD_TYPE']; ?>"><?php //echo $row['LEAD_TYPE']; ?></option>
+						<?php //} ?>
+						</select> -->
+						<input id="search_lead_types_auto_complete" name="lead_type" type="text" placeholder="Search Lead Types" />						
 					</div>
 					<div id="leads_container" style="">						
 						<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" placeholder="Search Leads" />						
