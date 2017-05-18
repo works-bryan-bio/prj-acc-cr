@@ -50,6 +50,10 @@ class leadPdfHelper {
             $phone_type = "Home";
         }        
 
+        $lipstick = $data['RH_LIPSTICK'] == 1 ? 'OK' : '';
+        $arv70percent = $data['ARV'] * 0.70;
+        $arv80percent = $data['ARV'] * 0.80;
+
         $content = '
             <page style="">
                 <h1>Seller Lead - Interview Sheet</h1>   
@@ -58,7 +62,7 @@ class leadPdfHelper {
                         <strong>Property Address:</strong> '. $data['ADDRESS_1'] .'
                     </td>
                     <td style="width:20%" width="20%">
-                        <strong>Date:</strong> '.date("F j, Y", strtotime($data['DATE_ADDED'])).'
+                        <strong>Date:</strong> '.date("M j, Y", strtotime($data['DATE_ADDED'])).'
                     </td>
                     <td style="width:35%" width="35%">
                        <strong>Lead Source:</strong> '.$data['affiliate_name'].'
@@ -207,9 +211,10 @@ class leadPdfHelper {
                 <br /><br />
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                     <td style="width:100%;" width="100%">
-                        <strong>Notes:</strong> '. $data['NOTES'] . '
+                        <strong>Notes:</strong> '. substr($data['NOTES'],0,500) . '
                     </td>
                 </table>
+                <br /><br />
                 <br /><br />
                 <br />
                 <h3>Motivation & Price</h3>
@@ -270,34 +275,97 @@ class leadPdfHelper {
                         <strong>Are you current on the payment?</strong> '. $data['CURRENT_PAYMENTS'] . '
                     </td>
                 </table> 
-                <br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
                 <h3>Exit Strategy</h3>
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                     <td style="width:50%" width="50%">
-                       <h3>Unlimited Exit</h3>
+                       <h4>Unlimited Exit</h4>
                        <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">>Confident</td>
+                            <td style="width:50%" width="50%"> ' . $data['ARV'] . ' </td>
                         </tr>
                         <tr>
-                            <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">Confident</td>
+                            <td style="width:50%" width="50%">70% of ARV: </td>
+                            <td style="width:50%" width="50%"> ' . $arv70percent . ' </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Repair Cost</td>
+                            <td style="width:50%" width="50%">--</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">MAO</td>
+                            <td style="width:50%" width="50%">--</td>
+                        </tr>
+                       </table>
+                       <h4>Half-Hab/Make Ready/As-Is on MLS</h4>
+                       <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                        <tr>
+                            <td style="width:50%" width="50%">As-Is Price</td>
+                            <td style="width:50%" width="50%">' . $data['AS_IS_PRICE'] . '</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Repair Cost</td>
+                            <td style="width:50%" width="50%"> '. $data['HH_REPAIR_COST'].' (Max 10k)</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Asking Price</td>
+                            <td style="width:50%" width="50%">' . $data['ASKING_PRICE'] . '</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Potential Profit</td>
+                            <td style="width:50%" width="50%">(Must be 30k with no question)</td>
                         </tr>
                        </table>
                     </td>
                     <td style="width:50%" width="50%">
-                        <h3>Wholesale or Terminate</h3>
+                        <h4>Wholesale or Terminate</h4>
                        <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">>Confident</td>
+                            <td style="width:50%" width="50%">' . $data['ARV'] . '</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">80% of ARV: </td>
+                            <td style="width:50%" width="50%"> ' . $arv80percent . ' </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Repair Cost</td>
+                            <td style="width:50%" width="50%"> '.$data['WT_REPAIR_COST'].' (Typically 20-30k)</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Fee </td>
+                            <td style="width:50%" width="50%">$5000</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Asking Price</td>
+                            <td style="width:50%" width="50%">' . $data['ASKING_PRICE'] . '</td>
+                            
+                        </tr>
+                        <tr>
+                            <td style="width:50%" width="50%">Potential Profit</td>
+                            <td style="width:50%" width="50%">(Must be over 10k)</td>
+                        </tr>
+                       </table>    
+                       <h4>Rental or Hedge</h4>     
+                       <table cellspacing="0" style="font-size: 10pt; width: 100%;">
+                        <tr>
+                            <td style="width:50%" width="50%">
+                                Built 1985+ Lipstick ' . $lipstick . '
+                            </td>
+                            <td style="width:50%" width="50%">
+                                Purchase $ Under 170k
+                            </td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">Confident</td>
-                        </tr>
-                       </table>                       
+                            <td style="width:50%" width="50%">' . $data['ARV'] . '</td>
+                        </tr>      
+                        <tr>
+                            <td style="width:50%" width="50%">80% of ARV: ' . $arv80percent . ' </td>
+                            <td style="width:50%" width="50%">Rent Comp. '.$data['RH_RENT_COMP'].' </td>
+                        </tr>             
+                       </table>                                  
                     </td>
                 </table>
             </page>
@@ -309,7 +377,8 @@ class leadPdfHelper {
         $pdfFileName = $fName; 
         $html2pdf->Output("files/$pdfFileName", 'F');           
 
-        $base_folder = '/bigfish/tim/prj-acc-cr/dashboard/'; //$base_folder = '/sl/prj-acc-cr/dashboard/';
+        //$base_folder = '/bigfish/tim/prj-acc-cr/dashboard/';
+        $base_folder = '/sl/prj-acc-cr/dashboard/';
 
         $pdf_path = 'http://' . $_SERVER['SERVER_NAME'] . $base_folder . 'files/' . $pdfFileName;
         header('Location: ' . $pdf_path);
