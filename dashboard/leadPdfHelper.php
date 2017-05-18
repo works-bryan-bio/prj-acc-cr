@@ -50,7 +50,9 @@ class leadPdfHelper {
             $phone_type = "Home";
         }        
 
-        $lipstick = $data['RH_LIPSTICK'] == 1 ? 'Ok' : '';
+        $lipstick = $data['RH_LIPSTICK'] == 1 ? 'OK' : '';
+        $arv70percent = $data['ARV'] * 0.70;
+        $arv80percent = $data['ARV'] * 0.80;
 
         $content = '
             <page style="">
@@ -209,11 +211,12 @@ class leadPdfHelper {
                 <br /><br />
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                     <td style="width:100%;" width="100%">
-                        <strong>Notes:</strong> '. $data['NOTES'] . '
+                        <strong>Notes:</strong> '. substr($data['NOTES'],0,500) . '
                     </td>
                 </table>
                 <br /><br />
                 <br /><br />
+                <br />
                 <h3>Motivation & Price</h3>
                 <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                     <td style="width:100%;" width="100%">
@@ -280,10 +283,11 @@ class leadPdfHelper {
                        <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">--</td>
+                            <td style="width:50%" width="50%"> ' . $data['ARV'] . ' </td>
                         </tr>
                         <tr>
-                            <td style="width:50%" width="50%">70% of ARV</td>
+                            <td style="width:50%" width="50%">70% of ARV: </td>
+                            <td style="width:50%" width="50%"> ' . $arv70percent . ' </td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Repair Cost</td>
@@ -298,7 +302,7 @@ class leadPdfHelper {
                        <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                         <tr>
                             <td style="width:50%" width="50%">As-Is Price</td>
-                            <td style="width:50%" width="50%">--</td>
+                            <td style="width:50%" width="50%">' . $data['AS_IS_PRICE'] . '</td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Repair Cost</td>
@@ -306,7 +310,7 @@ class leadPdfHelper {
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Asking Price</td>
-                            <td style="width:50%" width="50%">--</td>
+                            <td style="width:50%" width="50%">' . $data['ASKING_PRICE'] . '</td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Potential Profit</td>
@@ -319,20 +323,24 @@ class leadPdfHelper {
                        <table cellspacing="0" style="font-size: 10pt; width: 100%;">
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">--</td>
+                            <td style="width:50%" width="50%">' . $data['ARV'] . '</td>
                         </tr>
                         <tr>
-                            <td style="width:50%" width="50%">80% of ARV</td>
+                            <td style="width:50%" width="50%">80% of ARV: </td>
+                            <td style="width:50%" width="50%"> ' . $arv80percent . ' </td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Repair Cost</td>
                             <td style="width:50%" width="50%"> '.$data['WT_REPAIR_COST'].' (Typically 20-30k)</td>
                         </tr>
                         <tr>
-                            <td style="width:50%" width="50%">Fee $5000</td>
+                            <td style="width:50%" width="50%">Fee </td>
+                            <td style="width:50%" width="50%">$5000</td>
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Asking Price</td>
+                            <td style="width:50%" width="50%">' . $data['ASKING_PRICE'] . '</td>
+                            
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">Potential Profit</td>
@@ -351,10 +359,10 @@ class leadPdfHelper {
                         </tr>
                         <tr>
                             <td style="width:50%" width="50%">ARV</td>
-                            <td style="width:50%" width="50%">---</td>
+                            <td style="width:50%" width="50%">' . $data['ARV'] . '</td>
                         </tr>      
                         <tr>
-                            <td style="width:50%" width="50%">80% of ARV</td>
+                            <td style="width:50%" width="50%">80% of ARV: ' . $arv80percent . ' </td>
                             <td style="width:50%" width="50%">Rent Comp. '.$data['RH_RENT_COMP'].' </td>
                         </tr>             
                        </table>                                  
