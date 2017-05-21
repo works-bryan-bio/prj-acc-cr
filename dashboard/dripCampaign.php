@@ -5,7 +5,7 @@ require_once('include/pagination.php');
 
 $size = 20;
 $link = "dripCampaign.php?page=%s";
-$orderby = "subject";
+$orderby = "name";
 if (isset($_GET['orderby'])){
     $orderby = $_GET['orderby'];
         $link .= "&orderby=" . $orderby;
@@ -58,13 +58,10 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
             </div>
             <br />
             <table class="grid">
-                <tr><td colspan="13"><h3>Campaign List</h3></td></tr>
+                <tr><td colspan="2"><h3>Campaign List</h3></td></tr>
                 <tr>
-                    <th>Actions</th>
-                    <th>Subject&nbsp;<a href="dripCampaign.php?orderby=subject&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=subject&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
-                    <th>Recipients&nbsp;<a href="dripCampaign.php?orderby=recipients&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=recipients&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
-                    <th>Date to send&nbsp;<a href="dripCampaign.php?orderby=date_to_send&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=date_to_send&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
-                    <th>Status&nbsp;<a href="dripCampaign.php?orderby=status&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=status&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>
+                    <th style="width:5%;">Actions</th>
+                    <th>Name&nbsp;<a href="dripCampaign.php?orderby=subject&dir=ASC&filter=<?=$filter?>">&#9650;</a>&nbsp;<a href="dripCampaign.php?orderby=subject&dir=DESC&filter=<?=$filter?>">&#9660;</a></th>                    
                 </tr>
                 <?php while($row = mysqli_fetch_array($result_query)){ ?>
                 <tr>
@@ -73,18 +70,7 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
                             <img src='images/edit.png' alt='Edit Drip Campaign' title='Edit Drip Campaign' />
                         </a>
                     </td>
-                    <td><?php echo $row['subject']; ?></td>
-                    <td>
-                        <?php 
-                            if( $row['recipient_type'] ){
-                                echo "Lead Email : " . $row['recipients'];
-                            }else{
-                                echo "Lead Type : " . $row['recipients'];
-                            }
-                        ?>                        
-                    </td>
-                    <td><?php echo $row['date_to_send']; ?></td>
-                    <td><?php echo $row['status'] == 1 ? 'Sent' : 'Onqueue'; ?></td>
+                    <td><?php echo $row['name']; ?></td>                    
                 </tr>
                 <?php
                     }

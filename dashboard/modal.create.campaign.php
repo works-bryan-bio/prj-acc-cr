@@ -83,79 +83,9 @@ $(document).ready(function () {
 	<input type="hidden" name="addripcampaign" value="1">
 		<table style="width:100%;" class="table-form">
 			<tr>
-				<td style="width:100px;">Subject</td>
+				<td style="width:100px;">Campaign Name</td>
 				<td><input id="dripSubject" name="subject" type="text" style="width:97%" placeholder="" /></td>
-			</tr>
-			<tr>
-				<td>Recipient Type</td>
-				<td>
-					<select id="lead_sc" name="lead_sc">
-						<option value="search_lead">Leads</option>
-						<option value="search_lead_type">Lead Type</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>Recipient</td>
-				<td>
-					<div id="lead_type_containerc" style="display:none;">
-						<!-- <select id="lead_type" name="lead_type" style="width:99%">
-						<?php
-							//$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
-							//while($row = mysqli_fetch_array($result)){
-								//foreach($row AS $key => $value) {
-									//$row[$key] = stripslashes($value);
-								//}
-						?>			
-							<option value="<?php //cho $row['LEAD_TYPE']; ?>"><?php //echo $row['LEAD_TYPE']; ?></option>
-						<?php //} ?>
-						</select> -->	
-						<input id="search_lead_types_auto_completec" name="lead_type" type="text" placeholder="Search Lead Types" />						
-					</div>
-					<div id="leads_containerc" style="">
-						<input id="search_leads_auto_completec" name="search_leads_auto_completec" type="text" placeholder="Search Leads" />						
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>Date to send</td>
-				<td>
-					<input type="text" name="date_to_send" id="date_to_send" size="10"
-						value="<?php if ($date_to_send!="") echo date("m/d/Y", strtotime($date_to_send)); else echo "" ?>" onChange="" />
-					<script type="text/javascript">
-						var s_cal = new tcal ({
-							'controlname': 'date_to_send'
-						});
-					</script>
-				</td>
-			</tr>
-			<tr><td colspan="2">&nbsp;</td></tr>
-			<tr>
-				<td>Template</td>
-				<td>
-					<select id="templateMassEmailc" name="template" onchange="tinymce.get('messageMassEmailc').setContent(this.value);">
-					<option value="">None</option>
-					<?php
-						$result = $mysqli->query("SELECT name,content FROM email_templates") or die(mysql_error());
-						while($row = mysqli_fetch_array($result)){
-							foreach($row AS $key => $value) {
-								$row[$key] = stripslashes($value);
-							}
-					?>
-					<option value="<?=str_replace('"', "'", $row['content'])?>"><?=$row['name']?></option>
-					<?php
-						}
-					?>
-					</select>
-				</td>
 			</tr>			
-			<tr>	
-				<td>Email Content</td>			
-				<td><textarea id="messageMassEmailc" name="messageDrip" style="width:98%; height:480px"></textarea></td>
-			</tr>
-			<tr>
-				<td colspan="2" style="text-align:right;"><input class="button" type="submit" id="saveCampaign" name="saveCampaign" value="Save Campaign" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id='); $('.popup_block').hide(); $('#fade, a.close').remove();" /></td>
-			</tr>
 		</table>
 	</form>
 </div>

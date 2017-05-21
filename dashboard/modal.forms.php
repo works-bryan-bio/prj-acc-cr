@@ -9,6 +9,16 @@
 	padding:4px;
 	vertical-align: top;
 }
+.lead-type-list{
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.lead-type-list li{
+	display: inline-block;
+	margin: 5px;
+	width:182px;	
+}
 </style>
 <script type="text/javascript">
 tinyMCE.init({
@@ -86,36 +96,27 @@ $(document).ready(function () {
 			<tr>
 				<td style="width:100px;">Subject</td>	
 				<td><input id="subjectMassEmail" name="subject" type="text" style="width:97%" placeholder="" /></td>
-			</tr>			
+			</tr>						
 			<tr>
-				<td>Recipient Type</td>
+				<td>Leads</td>
 				<td>
-					<select id="lead_s" name="lead_s">
-						<option value="search_lead">Leads</option>
-						<option value="search_lead_type">Lead Type</option>
-					</select>
+					<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" placeholder="Search Leads" />											
 				</td>
 			</tr>
 			<tr>
-				<td>Recipient</td>
-				<td>
-					<div id="lead_type_container" style="display:none;">
-						<!-- <select id="lead_type" name="lead_type" style="width:99%;">
-						<?php
-							//$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
-							//while($row = mysqli_fetch_array($result)){
-								//foreach($row AS $key => $value) {
-									//$row[$key] = stripslashes($value);
-								//}
-						?>			
-							<option value="<?php //echo $row['LEAD_TYPE']; ?>"><?php //echo $row['LEAD_TYPE']; ?></option>
-						<?php //} ?>
-						</select> -->
-						<input id="search_lead_types_auto_complete" name="lead_type" type="text" placeholder="Search Lead Types" />						
-					</div>
-					<div id="leads_container" style="">						
-						<input id="search_leads_auto_complete" name="search_leads_auto_complete" type="text" placeholder="Search Leads" />						
-					</div>
+				<td>Lead Types</td>
+				<td>		
+					<ul class="lead-type-list">			
+					<?php 
+						$result = $mysqli->query("SELECT LEAD_TYPE FROM leads WHERE LEAD_TYPE <> '' GROUP BY LEAD_TYPE") or die(mysql_error());
+						while($row = mysqli_fetch_array($result)){
+							foreach($row AS $key => $value) {
+								$row[$key] = stripslashes($value);
+							}
+					?>
+						<li><label><input type="checkbox" name="lead_type[]" /><?php echo $row['LEAD_TYPE']; ?></label></li>
+					<?php } ?>
+					</ul>						
 				</td>
 			</tr>
 			<tr><td colspan="2">&nbsp;</td></tr>
@@ -140,7 +141,7 @@ $(document).ready(function () {
 			</tr>			
 			<tr>	
 				<td>Email Content</td>			
-				<td><textarea id="messageMassEmail" name="messageMassEmail" style="width:98%; height:480px"></textarea></td>
+				<td><textarea id="messageMassEmail" name="messageMassEmail" style="width:98%; height:280px"></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2" style="text-align:right;"><input class="button" type="submit" id="sendEmail" name="sendEmail" value="Send Email" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id='); $('.popup_block').hide(); $('#fade, a.close').remove();" /></td>
