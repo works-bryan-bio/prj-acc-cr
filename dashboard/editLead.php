@@ -24,8 +24,6 @@ if (isset($_POST["financing_available"])) {
 // check if the form has been submitted. If it has, start to process the form and save it to the database
 if (isset($_POST["submit"]) && $lead_id==null) {
 
-	print $lead_id;
-
 	// get form data, making sure it is valid
 	$first_name = $mysqli->real_escape_string($_POST["first_name"]);
 	$last_name = $mysqli->real_escape_string($_POST["last_name"]);
@@ -330,6 +328,56 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 	$result = $mysqli->query("DELETE FROM emails WHERE LEAD_ID=" . $lead_id);
 	header("Location: index.php");
 
+} else if (isset($_POST['submit_file']) && $lead_id!=null) {
+
+	header('Content-Type: text/plain; charset=utf-8');
+
+	if(isset($_FILES['fileToUpload'])){
+
+		$errors 	 = array();
+		$file_name = $_FILES['fileToUpload']['name'];
+		$file_size = $_FILES['fileToUpload']['size'];
+		$file_tmp  = $_FILES['fileToUpload']['tmp_name'];
+		$file_type = $_FILES['fileToUpload']['type'];
+		$file_err  = $_FILES['fileToUpload']['error'];
+		$file_title = $_POST['file_title'];
+
+		if(isset($file_err) && $file_err != 0) {
+			$errors[] = 'Error uploading file..';
+		}
+
+		if(!isset($file_title) || $file_title == '') {
+			$errors[] = 'File Name must not be null..';
+		}
+
+		if(empty($errors)==true) {
+			move_uploaded_file($file_tmp,"files/lead_attachments/".strtolower($file_name));
+			//After upload save file to database
+			global $session, $database, $form;			
+			$q = "INSERT INTO lead_attachments (
+                                    lead_id, title, filename, date_uploaded
+                                )VALUES(
+                                    " . $lead_id . ",
+                                    '" . stripslashes(str_replace('\r\n', ' ', $_POST['file_title'])) . "',
+                                    '" . stripslashes(str_replace('\r\n', ' ', strtolower($file_name))) . "',
+                                    '" . stripslashes(str_replace('\r\n', ' ', date("Y-m-d H:i:s"))) . "')";  
+
+            $result = $database->query($q); 
+            header("Location: editLead.php?lead_id=" . $lead_id);
+		}else{
+		 print_r($errors);
+		 exit;
+		}
+	}	
+
+} else if( $_GET['del_attachment'] == 1 && $lead_id != null && $_GET['del_attachment'] != '' ) {
+	global $session, $database, $form;
+
+	unlink('files/lead_attachments/'. $_GET['file']);
+
+	$del = "DELETE FROM lead_attachments WHERE id = ". $_GET['attach_id'] ." ";  
+	$result = $database->query($del);
+	header("Location: editLead.php?lead_id=" . $lead_id); 	
 } else {
 // if the form hasn't been submitted, display the form)
 ?>
@@ -491,7 +539,7 @@ if($lead_id!=null) {
 
 }
 ?>
-<form name="form1" method="post" action="<?=$PHP_SELF?>" onsubmit="return check_hot_strong();">
+<form name="form1" method="post" action="<?=$PHP_SELF?>" onsubmit="return check_hot_strong();" enctype="multipart/form-data">
 <input type="hidden" name="date_added" value="<?=date("Y-m-d H:i:s")?>">
 <input type="hidden" name="affiliate_id" value="<?php if ($prop!=null) { echo $prop['AFFILIATE_ID']; } else { echo "50"; } ?>">
 <div align="center">
@@ -1488,8 +1536,41 @@ if ($prop['PREDICTED_AMT']!="") {
 <tr><td align="right" colspan="1">ARV:</td><td align="left" colspan="3"><input id="rh_arv" type="text" size="15" value="" /></td></tr>
 <tr><td align="right" colspan="1">ARV (80%):</td><td align="left" colspan="3"><input id="rh_arv_eighty" type="text" size="15" value="" /></td></tr>
 <tr><td align="right" colspan="1">Rent Comp:</td><td align="left" colspan="3"><input id="rh_rent_comp" name="rh_rent_comp" type="text" size="15" value="<?=stripslashes($prop['RH_RENT_COMP'])?>" /></td></tr>
-<td align="left" colspan="4"><br /></td>
-
+<td align="left" colspan="4">
+	<br />
+	<?php
+		$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." ORDER BY title ASC") or die(mysql_error());
+	?>
+	<table width="100%">
+		<tr>
+			<td colspan="2"><h2><strong>Attachments</strong></h2></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="file" name="fileToUpload" id="fileToUpload"> <input type="text" name="file_title" id="file_title"> <input class="button" type="submit" name="submit_file" value="Attached File" /></td>
+		</tr>
+		<tr><td colspan="2"><hr /></td></tr>
+		<tr>
+			<td><strong>Title</strong></td>
+			<td><strong>Actions</strong></td>
+		</tr>
+		<?php
+			while ($row_attach = mysqli_fetch_array($attachments_result)) {
+			foreach ($row_attach AS $key => $value) {
+				$row_attach[$key] = stripslashes($value);
+			}				
+		?>
+		<tr>
+			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>
+			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>">View</a> | <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')">Remove</a></td>
+		</tr>
+		<?php
+			}
+		?>
+	</table>
+</td>
+<td align="left" colspan="4">
+	<br />
+</td>
 </table>
 </td></tr>
 
