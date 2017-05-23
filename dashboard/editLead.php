@@ -401,6 +401,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
 <link rel="stylesheet" type="text/css" href="css/dashboard_menu.css"/>
 <link rel="stylesheet" type="text/css" href="js/tigra_calendar/calendar.css">
+
+<link rel="stylesheet" type="text/css" href="css/balloon.min.css"/>
+
 <script type="text/javascript" src="js/tigra_calendar/calendar_db.js"></script>
 <script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js/site.js"></script>
@@ -634,10 +637,10 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <tr><td valign="top">
 <table>
 <tr><td colspan="2"><strong>Client Information</strong></td></tr>
-<tr><td align="right">Company Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Company Name:</div></td><td align="left">
 <input name="company_name" size="30" value="<?=stripslashes($prop['COMPANY_NAME'])?>" /></td></tr>
 
-<tr><td align="right">Lead Type:</td><td align="left" colspan="2">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Lead Type:</div></td><td align="left" colspan="2">
 <select id="lead_type" name="lead_type" required>
 <option value=""></option>
 <option value="Buyer" <?php if($prop['LEAD_TYPE']=='Buyer') echo "selected=\"selected\""?>>Buyer</option>
@@ -654,19 +657,19 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </select>
 </td></tr>
 
-<tr><td align="right">Client Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Client Name:</div></td><td align="left">
 <input name="title" size="2" value="<?=stripslashes($prop['TITLE'])?>" />
 <input name="first_name" size="20" value="<?=stripslashes($prop['FIRST_NAME'])?>" required />
 <input name="last_name" size="20" value="<?=stripslashes($prop['LAST_NAME'])?>" required />
 </td></tr>
 
-<tr><td align="right">Client Email:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Client Email:</div></td><td align="left">
 <input name="client_email" size="45" value="<?=stripslashes($prop['CLIENT_EMAIL'])?>" /></td></tr>
 
-<tr><td align="right">Position:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Position:</div></td><td align="left">
 <input name="position" size="45" value="<?=stripslashes($prop['POSITION'])?>" /></td></tr>
 
-<tr><td align="right">Extra Client Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Extra Client Name:</div></td><td align="left">
 <input name="extra_title" size="2" value="<?=stripslashes($prop['EXTRA_TITLE'])?>" />
 <input name="extra_first_name" size="20" value="<?=stripslashes($prop['EXTRA_FIRST_NAME'])?>" />
 <input name="extra_last_name" size="20" value="<?=stripslashes($prop['EXTRA_LAST_NAME'])?>" />
@@ -1597,7 +1600,7 @@ if ($prop['PREDICTED_AMT']!="") {
 		?>
 		<tr>
 			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>
-			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>">View</a> | <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')">Remove</a></td>
+			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a> <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Attachment' title='Delete Attachment' /></a></td>
 		</tr>
 		<?php
 			}
