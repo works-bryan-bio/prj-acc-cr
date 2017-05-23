@@ -69,8 +69,29 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
                         <a href="dripCampaignDetails.php?drip_id=<?=$row['id']?>">
                             <img src='images/email.png' alt='Campaign Details' title='Campaign Details' />
                         </a>
+                        <a class="modal-poplight" href="#?w=700" rel="create_campaign_popup_<?= $row['id'] ?>">
+                            <img src='images/edit.png' alt='Edit' title='Edit' />
+                        </a>
+
+                        <div id="create_campaign_popup_<?= $row['id'] ?>" class="popup_block">
+                            <h3>Edit Campaign</h3><br/>
+                            <form name="dripEdit" action="dripCampaignHelper.php" method="post">
+                            <input type="hidden" name="updateDripcampaign" value="1">
+                            <input type="hidden" name="campaignId" value="<?= $row['id'] ?>">
+                                <table style="width:100%;" class="table-form">
+                                    <tr>
+                                        <td style="width:180px;">Campaign Name</td>
+                                        <td><input id="dripName" name="name" value="<?= $row['name'] ?>" type="text" style="width:97%" placeholder="" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align:right;"><input class="button" type="submit" id="saveCampaign" name="saveCampaign" value="Save Campaign" onClick="callHelper('searchReportHelper.php?action=sendEmail&lead_id='); $('.popup_block').hide(); $('#fade, a.close').remove();" /></td>
+                                    </tr>           
+                                </table>
+                            </form>
+                        </div>
+
                     </td>
-                    <td><?php echo $row['name']; ?></td>                    
+                    <td><?= $row['name'] ?></td>                    
                 </tr>
                 <?php
                     }
