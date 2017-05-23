@@ -51,7 +51,7 @@ require_once("include/db_connect.php");
         <input type="hidden" name="lead_sc_default" value="<?php echo $result_array['recipient_type']; ?>">
         <table class="input drip_edit_form">
             <tr>
-                <th>Add New Drip Campaign List</th>
+                <th>Edit Drip Campaign</th>
                 <th>&nbsp;</th>
                 <th style="text-align:right;">Last Update: </th>
             </tr>

@@ -66,8 +66,8 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
                 <?php while($row = mysqli_fetch_array($result_query)){ ?>
                 <tr>
                     <td class="center">
-                        <a href="editDripCampaign.php?drip_id=<?=$row['id']?>">
-                            <img src='images/edit.png' alt='Edit Drip Campaign' title='Edit Drip Campaign' />
+                        <a href="dripCampaignDetails.php?drip_id=<?=$row['id']?>">
+                            <img src='images/email.png' alt='Campaign Details' title='Campaign Details' />
                         </a>
                     </td>
                     <td><?php echo $row['name']; ?></td>                    
