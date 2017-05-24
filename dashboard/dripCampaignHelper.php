@@ -39,31 +39,10 @@ class DripCampaignHelper {
         global $session, $database, $form;
 
         $data = $_POST;
-        if( $data['subject'] != '' && $data['date_to_send'] != '' ){
-            $is_recipient_valid = false;
-            $recipients         = "";
-            if( $data['lead_sc'] == 'search_lead' ){
-                $recipient_type = 1;
-                if( $data['search_leads_auto_completec'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['search_leads_auto_completec'];
-                }
-            }else{
-                $recipient_type = 2;
-                if( $data['lead_type'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['lead_type'];
-                }
-            }
-
-            if( $is_recipient_valid ){
-                $q = "INSERT INTO drip_campaign (subject, recipient_type, recipients, date_to_send, body_content, status, created) VALUES('" . stripslashes(str_replace('\r\n', ' ', $data['subject'])) . "'," . $recipient_type . ",'" . stripslashes(str_replace('\r\n', ' ', $recipients)) . "','" . date("Y-m-d",strtotime($data['date_to_send'])) . "','" . stripslashes(str_replace('\r\n', ' ', $data['messageDrip'])) . "',0,'" . date("Y-m-d H:i:s") . "')";                                
-                $result = $database->query($q);                
-                header("Location: dripCampaign.php");
-            }else{
-                $form->setError("lead_sc", "Invalid recipient<br>");
-                header("Location: " . $session->referrer);
-            }
+        if( $data['name'] != '' ){            
+            $q = "INSERT INTO drip_campaign (name, created) VALUES('" . stripslashes(str_replace('\r\n', ' ', $data['name'])) . "','" . date("Y-m-d H:i:s") . "')";                                
+            $result = $database->query($q);                
+            header("Location: dripCampaign.php");
         }else{
             $form->setError("", "Cannot save record<br>");
             header("Location: " . $session->referrer);
@@ -75,41 +54,10 @@ class DripCampaignHelper {
 
         $data = $_POST;
 
-        if( $data['subject'] != '' && $data['date_to_send'] != '' ){
-            $is_recipient_valid = false;
-            $recipients         = "";
-            if( $data['lead_sc'] == 'search_lead' ){
-                $recipient_type = 1;
-                if( $data['search_leads_auto_completec'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['search_leads_auto_completec'];
-                }
-            }elseif($data['lead_sc'] == 'search_lead_type'){
-                $recipient_type = 2;
-                if( $data['lead_type'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['lead_type'];
-                }
-            } else {
-                $is_recipient_valid = true;
-                $recipient_type = $data['lead_sc'] == 'null' ? $data['lead_sc_default'] : $data['lead_sc'];
-                $recipients = $data['leads_default_data'];
-            } 
-
-            if( $is_recipient_valid ){
-                $id = $data['id'];
-                $subject = $data['subject'];
-                $date_to_send_arr = explode("/", $data['date_to_send']);
-                $date_to_send_format = $date_to_send_arr[2] . '-' . $date_to_send_arr[0] . '-' . $date_to_send_arr[1];
-                $messageDrip = $data['messageDrip'];
-
-                $q = "UPDATE drip_campaign SET subject = '". stripslashes(str_replace('\r\n', ' ', $subject)) ."', recipient_type = $recipient_type, recipients = '" . stripslashes(str_replace('\r\n', ' ', $recipients)). "', date_to_send = '$date_to_send_format', body_content = '" . stripslashes(str_replace('\r\n', ' ', $messageDrip)) . "' WHERE id = $id ";
-                $result = $database->query($q);
-                header("Location: dripCampaign.php");
-            }else{
-                $form->setError("lead_sc", "Invalid recipient<br>");
-                header("Location: " . $session->referrer);
-            }
+        if( $data['name'] != '' ){   
+            $q = "UPDATE drip_campaign SET name = '". stripslashes(str_replace('\r\n', ' ', $data['name'])) . "' WHERE id =" . $data['campaignId'];
+            $result = $database->query($q);
+            header("Location: dripCampaign.php");
         }else{
             $form->setError("", "Cannot save record<br>");
             header("Location: " . $session->referrer);

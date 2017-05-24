@@ -186,7 +186,15 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$notes = $_POST['notes'];
 		}
 
-		// save the data to the database
+		//Save the data to the database
+		//Master Account only can change
+		$manager_arv = $prop['MANAGER_ARV'];
+		$manager_as_is_price = $prop['MANAGRE_AS_IS_PRICE'];
+		if( $session->isMaster() ){
+			$manager_arv = $_POST['manager_arv'];
+			$manager_as_is_price = $_POST['manager_as_is_price'];
+		}
+
 		$stmt = $mysqli->prepare("UPDATE leads SET
 								USERNAME=?, COMPANY_NAME=?, TITLE=?, FIRST_NAME=?, LAST_NAME=?, CLIENT_EMAIL=?, POSITION=?,
 								EXTRA_TITLE=?, EXTRA_FIRST_NAME=?, EXTRA_LAST_NAME=?, EXTRA_CLIENT_EMAIL=?, OFFICE_PHONE=?, CELL_PHONE=?,
@@ -203,9 +211,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 								TERM=?, MOVE_DATE=?, DEPOSIT=?, LISTED=?, HOW_LONG=?,
 								LISTING_PRICE=?, OFFER_PRICE=?, MOVING_REASON=?, TIME_FRAME_SELL=?, PRICE_FLEXIBLE=?,
 								ASKING_PRICE_REASON=?, CASH_QUICK_CLOSE=?, ANY_BETTER=?, DOESNT_SELL=?,
-								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?
+								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?, MANAGER_ARV=?, MANAGER_AS_IS_PRICE=?
 								WHERE lead_id=$lead_id") or die($mysqli->error);
-		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiii",
+		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiiiii",
 		$mysqli->real_escape_string($_POST["username"]),
 			stripslashes($mysqli->real_escape_string($_POST["company_name"])),
 			stripslashes($mysqli->real_escape_string($_POST["title"])),
@@ -301,7 +309,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$mysqli->real_escape_string($_POST["hh_repair_cost"]),
 			$mysqli->real_escape_string($_POST["wt_repair_cost"]),
 			$mysqli->real_escape_string($_POST["rh_lipstick"]),
-			$mysqli->real_escape_string($_POST["rh_rent_comp"])
+			$mysqli->real_escape_string($_POST["rh_rent_comp"]),
+			$mysqli->real_escape_string($manager_arv),
+			$mysqli->real_escape_string($manager_as_is_price)
 		) or die($mysqli->error);
 
 		/* Execute the statement */
@@ -391,6 +401,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
 <link rel="stylesheet" type="text/css" href="css/dashboard_menu.css"/>
 <link rel="stylesheet" type="text/css" href="js/tigra_calendar/calendar.css">
+
+<link rel="stylesheet" type="text/css" href="css/balloon.min.css"/>
+
 <script type="text/javascript" src="js/tigra_calendar/calendar_db.js"></script>
 <script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js/site.js"></script>
@@ -606,15 +619,15 @@ if($lead_id!=null) {
 </div>
 <table class="input" width="100%">
 <tr>
-<th valign="bottom">
+<th valign="bottom" style="width: 65%">
 <a href="editLead.php?lead_id=<?=$lead_id?>">Client Information</a>&nbsp;|&nbsp;
 <a href="searchReport.php?lead_id=<?=$lead_id?>">Search Report</a>&nbsp;|&nbsp;
 <a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
-<a href="https://fathom.backagent.net/" target="_new">Backagent</a>
+<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
+<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>" target="_new">Transaction Coordinator</a>
 </th>
-
-<th style="text-align:right;">
+<th style="text-align:right; width: 35%">
 <?php if ($lead_id!=null) { ?>
 Date Created: <?=date("m/d/Y h:i A T", strtotime($prop['DATE_ADDED']))?><br />
 Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
@@ -624,10 +637,10 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <tr><td valign="top">
 <table>
 <tr><td colspan="2"><strong>Client Information</strong></td></tr>
-<tr><td align="right">Company Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Company Name:</div></td><td align="left">
 <input name="company_name" size="30" value="<?=stripslashes($prop['COMPANY_NAME'])?>" /></td></tr>
 
-<tr><td align="right">Lead Type:</td><td align="left" colspan="2">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Lead Type:</div></td><td align="left" colspan="2">
 <select id="lead_type" name="lead_type" required>
 <option value=""></option>
 <option value="Buyer" <?php if($prop['LEAD_TYPE']=='Buyer') echo "selected=\"selected\""?>>Buyer</option>
@@ -644,19 +657,19 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </select>
 </td></tr>
 
-<tr><td align="right">Client Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Client Name:</div></td><td align="left">
 <input name="title" size="2" value="<?=stripslashes($prop['TITLE'])?>" />
 <input name="first_name" size="20" value="<?=stripslashes($prop['FIRST_NAME'])?>" required />
 <input name="last_name" size="20" value="<?=stripslashes($prop['LAST_NAME'])?>" required />
 </td></tr>
 
-<tr><td align="right">Client Email:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Client Email:</div></td><td align="left">
 <input name="client_email" size="45" value="<?=stripslashes($prop['CLIENT_EMAIL'])?>" /></td></tr>
 
-<tr><td align="right">Position:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s." data-balloon-pos="right" >Position:</div></td><td align="left">
 <input name="position" size="45" value="<?=stripslashes($prop['POSITION'])?>" /></td></tr>
 
-<tr><td align="right">Extra Client Name:</td><td align="left">
+<tr><td align="right"><div data-balloon-length="medium" data-balloon="Lorem Ipsum is simply dummy text of the printing and typesetting industry." data-balloon-pos="right" >Extra Client Name:</div></td><td align="left">
 <input name="extra_title" size="2" value="<?=stripslashes($prop['EXTRA_TITLE'])?>" />
 <input name="extra_first_name" size="20" value="<?=stripslashes($prop['EXTRA_FIRST_NAME'])?>" />
 <input name="extra_last_name" size="20" value="<?=stripslashes($prop['EXTRA_LAST_NAME'])?>" />
@@ -1004,8 +1017,34 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </tr>
 
 <tr>
+<td align="right">MANAGER ARV:</td>
+<td align="left">
+	<?php 
+		$field_disabled = "";
+		if( !$session->isMaster() ){
+			$field_disabled = 'readonly="readonly" disabled="disabled"';
+		}
+	?>
+	<input id="manager_arv" name="manager_arv" <?php echo $field_disabled; ?> size="15" value="<?=$prop['MANAGER_ARV']?>" /> (No Commas)
+</td>
+</tr>
+
+<tr>
 <td align="right">As-Is Price:</td>
 <td align="left"><input id="as_is_price" name="as_is_price" size="15" value="<?=$prop['AS_IS_PRICE']?>" /> (No Commas)</td>
+</tr>
+
+<tr>
+<td align="right">Manager As-Is Price:</td>
+<td align="left">
+	<?php 
+		$field_disabled = "";
+		if( !$session->isMaster() ){
+			$field_disabled = 'readonly="readonly" disabled="disabled"';
+		}
+	?>
+	<input id="manager_as_is_price" name="manager_as_is_price" <?php echo $field_disabled; ?> size="15" value="<?=$prop['MANAGER_AS_IS_PRICE']?>" /> (No Commas)
+</td>
 </tr>
 
 <tr>
@@ -1561,7 +1600,7 @@ if ($prop['PREDICTED_AMT']!="") {
 		?>
 		<tr>
 			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>
-			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>">View</a> | <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')">Remove</a></td>
+			<td><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a> <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Attachment' title='Delete Attachment' /></a></td>
 		</tr>
 		<?php
 			}

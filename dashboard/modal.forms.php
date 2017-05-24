@@ -114,7 +114,7 @@ $(document).ready(function () {
 								$row[$key] = stripslashes($value);
 							}
 					?>
-						<li><label><input type="checkbox" name="lead_type[]" /><?php echo $row['LEAD_TYPE']; ?></label></li>
+						<li><label><input type="checkbox" name="lead_type[]" value="<?php echo $row['LEAD_TYPE']; ?>" /><?php echo $row['LEAD_TYPE']; ?></label></li>
 					<?php } ?>
 					</ul>						
 				</td>

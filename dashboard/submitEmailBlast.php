@@ -3,7 +3,10 @@
 require_once("include/db_connect.php");
 require_once ("include/swiftmailer/lib/swift_required.php");
 
-if($_POST['lead_s'] == "search_lead"){ 
+
+
+
+if($_POST['search_leads_auto_complete']){ 
 	 $email_list = "'". str_replace(",", "','", $_POST['search_leads_auto_complete']) ."'" ;
 	$email =  array();
 	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.")") or die(mysql_error());
@@ -21,25 +24,28 @@ if($_POST['lead_s'] == "search_lead"){
 
 }
 
-if($_POST['lead_s'] == "search_lead_type"){ 
+if(is_array($_POST['lead_type'])){ 
 
-	$lead_type = $_POST['lead_type']; 
-	$email =  array();
-	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_TYPE = ". '"'.$lead_type.'"' ."  ") or die(mysql_error());
+	 $lead_type = "'". implode("','",$_POST['lead_type']) ."'" ; 
+	$email1 =  array();
+	$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_TYPE IN(".$lead_type.")  ") or die(mysql_error());
 				while($row = mysqli_fetch_array($result)){
 					foreach($row AS $key => $value) {
 						$row[$key] = stripslashes($value);
 					}
-					$email[] = $row;
+					$email1[] = $row;
 				}
-	if($email){ 
-		foreach ($email as $key => $value) {
+	if($email1){ 
+		foreach ($email1 as $key => $value) {
 			if($value['CLIENT_EMAIL'] != ""){
-			   $bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
+			   $bcc1[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
 			}
 		}
 	}
+
+	
 }
+
 
 
 
@@ -67,7 +73,7 @@ $message = Swift_Message::newInstance($subject)
 
 // Set the BCC for the recipient with multiple email for email blast 
 ->setBcc($bcc)
-
+->setBcc($bcc1)
 // Give it a body
 ->setBody($content)
 ;
