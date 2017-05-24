@@ -619,15 +619,15 @@ if($lead_id!=null) {
 </div>
 <table class="input" width="100%">
 <tr>
-<th valign="bottom">
+<th valign="bottom" style="width: 65%">
 <a href="editLead.php?lead_id=<?=$lead_id?>">Client Information</a>&nbsp;|&nbsp;
 <a href="searchReport.php?lead_id=<?=$lead_id?>">Search Report</a>&nbsp;|&nbsp;
 <a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
-<a href="https://fathom.backagent.net/" target="_new">Backagent</a>
+<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
+<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>" target="_new">Transaction Coordinator</a>
 </th>
-
-<th style="text-align:right;">
+<th style="text-align:right; width: 35%">
 <?php if ($lead_id!=null) { ?>
 Date Created: <?=date("m/d/Y h:i A T", strtotime($prop['DATE_ADDED']))?><br />
 Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
