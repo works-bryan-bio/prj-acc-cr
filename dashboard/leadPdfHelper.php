@@ -378,7 +378,7 @@ class leadPdfHelper {
         $html2pdf->Output("files/$pdfFileName", 'F');           
 
         //$base_folder = '/bigfish/tim/prj-acc-cr/dashboard/';
-        $base_folder = '/sl/prj-acc-cr/dashboard/';
+        $base_folder = '/tim/prj-acc-cr/dashboard/';
 
         $pdf_path = 'http://' . $_SERVER['SERVER_NAME'] . $base_folder . 'files/' . $pdfFileName;
         header('Location: ' . $pdf_path);

@@ -590,13 +590,13 @@ if ($action == 'add') {
 				$client_email_link = "<a href='mailto:" . $client_email . "'>" . $client_email . "</a>";
 			}
 			if ($property_id == null) {
-				$result = $mysqli->query("SELECT search_report.SEARCH_REPORT_ID, providers.COMPANY_NAME, properties.CENTER_NAME, properties.PROVIDER_CENTER_ID, properties.CONTACT_EMAIL FROM search_report " .
+				$result = $mysqli->query("SELECT search_report.SEARCH_REPORT_ID, providers.COMPANY_NAME, properties.CENTER_NAME, properties.LEAD_COUNTIES, properties.CONTACT_EMAIL FROM search_report " .
 					"JOIN properties ON search_report.PROPERTY_ID=properties.PROPERTY_ID " .
 					"JOIN providers ON providers.PROVIDER_ID=properties.PROVIDER_ID " .
 					"WHERE search_report.INQUIRYSENT=0 AND search_report.LEAD_ID=" . $lead_id)
 					or die($mysqli->error);
 			} else {
-				$result = $mysqli->query("SELECT search_report.SEARCH_REPORT_ID, providers.COMPANY_NAME, properties.CENTER_NAME, properties.PROVIDER_CENTER_ID, properties.CONTACT_EMAIL FROM search_report " .
+				$result = $mysqli->query("SELECT search_report.SEARCH_REPORT_ID, providers.COMPANY_NAME, properties.CENTER_NAME, properties.LEAD_COUNTIES, properties.CONTACT_EMAIL FROM search_report " .
 					"JOIN properties ON search_report.PROPERTY_ID=properties.PROPERTY_ID " .
 					"JOIN providers ON providers.PROVIDER_ID=properties.PROVIDER_ID " .
 					"WHERE properties.PROPERTY_ID=" . $property_id . " AND search_report.LEAD_ID=" . $lead_id)
