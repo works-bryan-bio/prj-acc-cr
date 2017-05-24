@@ -54,11 +54,26 @@ if (isset($_GET['lead_id'])) {
 			<?php } ?>
 		</div>
 		<br /><br />
+
+			<table class="input" width="100%">
+			<tr>
+				<td valign="bottom" style="width: 65%">
+					<a href="editLead.php?lead_id=<?=$lead_id?>">Client Information</a>&nbsp;|&nbsp;
+					<a href="searchReport.php?lead_id=<?=$lead_id?>">Search Report</a>&nbsp;|&nbsp;
+					<a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
+					<a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
+					<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
+					<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>
+				</td>
+			</tr>
+			<table>
+			<form name="form1" method="post" action="transactionCoordinatorHelper.php">
+			<input type="hidden" name="update_task" value="1">
             <table class="grid">
                 <tr><td colspan="2"><h3>Task</h3></td></tr>
                 <tr>
                     <td style="width: 50%;">
-						&nbsp;
+						<input class="button" type="submit" name="update_task_button" value="Update" />
                     </td>
                     <td style="width: 50%;">
 						<p><strong>Please complete if contract is terminated</strong></p>                  	
@@ -99,14 +114,23 @@ if (isset($_GET['lead_id'])) {
                     </td>
                 </tr>
             </table>
+            </form>
             <br />
+
 			<?php
-				$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." ORDER BY title ASC") or die(mysql_error());
+				$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 2 ORDER BY title ASC") or die(mysql_error());
 			?>            
+			<form name="form1" method="post" action="transactionCoordinatorHelper.php" enctype="multipart/form-data">
+			<input type="hidden" name="add_contractpaper_work" value="1">
+			<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
             <table class="grid">
                 <tr><td colspan="2"><h3>Contract Paperwork</h3></td></tr>
                 <tr>
-                	<td colspan="2" style="text-align: right;"><input type="file" name="fileToUpload" id="fileToUpload"> <input type="text" name="file_title" id="file_title"> <input class="button" type="submit" name="submit_file" value="Attached File" /></td>
+                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <input type="text" name="file_title" id="file_title"> <input class="button" type="submit" name="submit_file" value="Save File" /></td>
+                </tr>
+                <tr>
+                	<th>Actions</th>
+                	<th>Title</th>
                 </tr>
                 <?php if($attachments_result->num_rows > 0) { ?>
 				<?php
@@ -116,14 +140,20 @@ if (isset($_GET['lead_id'])) {
 					}				
 				?>
 					<tr>
-						<td style="width: 10%;">&nbsp;&nbsp;<a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a> <a href="editLead.php?lead_id=<?php echo $lead_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Attachment' title='Delete Attachment' /></a></td>
-						<td style="width: 90%"><a target="_blank" href="files/lead_attachments/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>						
+						<td style="width: 10%;">
+							&nbsp;&nbsp;
+							<!-- <a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a>  -->
+							<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_paperwork=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Contract Paperwork' title='Delete Contract Paperwork' /></a>
+							<a href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/contract_paperworks/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Contract Paperwork' title='View Contract Paperwork' /></a>
+						</td>
+						<td style="width: 90%"><a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>						
 					</tr>
 				<?php } ?>
 				<?php } else { ?>
 							<tr><td colspan="2">No Attched File</td></tr>
 				<?php } ?>
             </table> 
+            </form>
             <br /><br />    
         </div>       
     </body>
