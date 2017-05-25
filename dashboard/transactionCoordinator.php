@@ -69,6 +69,43 @@ if (isset($_GET['lead_id'])) {
 			<table>
 			<form name="form1" method="post" action="transactionCoordinatorHelper.php">
 			<input type="hidden" name="update_task" value="1">
+			<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
+			<?php 
+
+				$task_d =  $mysqli->query("SELECT * FROM lead_trans_task_list WHERE lead_id = " .$lead_id. " ORDER BY id DESC LIMIT 1") or die(mysql_error());
+				$task_row = mysqli_fetch_array($task_d);
+				$task_unserialize = unserialize($task_row['task_list']);
+
+				$task_arr = array();
+				$task_arr = array(
+						1  => 'Intro Email',
+						2  => 'Review Executed Contract and send to Title',
+						3  => 'Make sure we have SD, LBP, SURVEY, LEASE', 
+						4  => 'Add to Sales Boards-Online and Visual',
+						5  => 'Make a Property Folder in Google Drive',
+						6  => 'Upload Docs, Pics, Move to Oppty Folder to <strong>Buying the House</strong>',
+						7  => 'Add to Google Calendar a reminder for End of Option and Tentative Close Date',
+						8  => 'Email link to - Link Here and Link Here',
+						9  => 'Schedule Project Mgr Walk Thru-only if necessary with aquisition sales',
+						10 => 'Schedule Pics and Lock Box Placement at Property',
+						11 => 'Upload in Back Agent and request CDA',
+						12 => 'Send Title Commitment with PLV Intake to Attorney to draw lender docs',
+						13 => 'Review HUD before closing and forward to LINK HERE to approve',
+						14 => 'Obtain Writing Instructions from title and give to Frank for',
+						15 => 'Secure Closing Date and update on Calendar for Brandon',
+						16 => 'Provide Post Closing Instruction to Title',
+						17 => 'Notify Leadership of Funding and Liz in account with acct# ',
+						18 => 'Order Insurance for date we closed and turn on utilities',
+						19 => 'Upload final HUD with date in Google Drive for property and upload in Backagent',
+						20 => 'Update Sales Board online and Visual Wholesale or Flip',
+						21 => 'File away hard copy or forward to PM or flip',
+						22 => 'Email Monitizer Department that sale has been completed',
+						23 => 'Send Shane email to update to update database for Acquisition Team/Send Feedback Email',
+						24 => 'Upload EOI in google under insurance file and update utility spreadshit with new address',
+						25 => 'Seller Leaseback Deposit if applicable',
+						26 => 'Email Frank, Send Thank You card to lender and update social media of purchase'
+					)
+			?>
             <table class="grid">
                 <tr><td colspan="2"><h3>Task</h3></td></tr>
                 <tr>
@@ -81,36 +118,18 @@ if (isset($_GET['lead_id'])) {
                 </tr>
                 <tr>
                     <td style="width: 50%;" valign="top">
-						<input type="checkbox" name="vehicle" value="Bike">Intro Email<br>
-						<input type="checkbox" name="vehicle" value="Car">Review Executed Contract and send to Title<br />
-						<input type="checkbox" name="vehicle" value="Car">Review Executed Contract and send to Title<br />
-						<input type="checkbox" name="vehicle" value="Car">Make sure we have SD, LBP, SURVEY, LEASE<br />
-						<input type="checkbox" name="vehicle" value="Car">Add to Sales Boards-Online and Visual<br />
-						<input type="checkbox" name="vehicle" value="Car">Make a Property Folder in Google Drive<br />
-						<input type="checkbox" name="vehicle" value="Car">Upload Docs, Pics, Move to Oppty Folder to <strong>Buying the House</strong><br />
-						<input type="checkbox" name="vehicle" value="Car">Add to Google Calendar a reminder for End of Option and Tentative Close Date<br />
-						<input type="checkbox" name="vehicle" value="Car">Email link to - Link Here and Link Here <br />
-						<input type="checkbox" name="vehicle" value="Car">Schedule Project Mgr Walk Thru-only if necessary with aquisition sales<br />
-						<input type="checkbox" name="vehicle" value="Car">Schedule Pics and Lock Box Placement at Property<br />
-						<input type="checkbox" name="vehicle" value="Car">Upload in Back Agent and request CDA<br />
-						<input type="checkbox" name="vehicle" value="Car">Send Title Commitment with PLV Intake to Attorney to draw lender docs <br />
-						<input type="checkbox" name="vehicle" value="Car">Review HUD before closing and forward to LINK HERE to approve<br />
-						<input type="checkbox" name="vehicle" value="Car">Obtain Writing Instructions from title and give to Frank for<br />
-						<input type="checkbox" name="vehicle" value="Car">Secure Closing Date and update on Calendar for Brandon<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
+                    	<?php foreach($task_arr as $tkey => $t) { ?>
+								<input <?php echo isset($task_unserialize[$tkey]) ? 'checked' : ''; ?> type="checkbox" name="task[<?php echo $tkey; ?>]" value="1"> <?php echo $t; ?><br />
+						<?php } ?>
+						<br />
                     </td>
                     <td style="width: 50%;" valign="top">
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />
-						<input type="checkbox" name="vehicle" value="Car">etc.<br />                   	
+						<input type="checkbox" name="task" value="Car">etc.<br />
+						<input type="checkbox" name="task" value="Car">etc.<br />
+						<input type="checkbox" name="task" value="Car">etc.<br />
+						<input type="checkbox" name="task" value="Car">etc.<br />
+						<input type="checkbox" name="task" value="Car">etc.<br />
+						<input type="checkbox" name="task" value="Car">etc.<br />                   	
                     </td>
                 </tr>
             </table>

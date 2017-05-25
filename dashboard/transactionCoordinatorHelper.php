@@ -96,7 +96,36 @@ class transactionCoordinatorHelper {
 
         $data = $_POST;
         if (isset($data["update_task"]) || isset($data['update_task_button'])) {
-            echo 'This is update task';
+
+            $s_data = serialize($data['task']);
+
+            $result_count = $database->query("SELECT COUNT(id) as total FROM lead_trans_task_list WHERE lead_id = " .$data['lead_id']. " ORDER BY id DESC LIMIT 1") or die(mysql_error());
+            $row_data     = mysqli_fetch_array($result_count);
+
+            if($row_data['total'] <= 0 ) {
+                //Insert New Record
+                $q = "INSERT INTO lead_trans_task_list (
+                                        lead_id, task_list, date_created
+                                    )VALUES(
+                                        " . $data['lead_id'] . ",
+                                        '" . stripslashes(str_replace('\r\n', ' ', $s_data)) . "',
+                                        '" . stripslashes(str_replace('\r\n', ' ', date("Y-m-d"))) . "')";  
+
+                $result = $database->query($q);                 
+                header("Location: transactionCoordinator.php?lead_id=" . $data['lead_id']);   
+                exit;
+            } else {
+                //Update Exiting Record'
+                $s_data = serialize($data['task']);
+                $q = "UPDATE lead_trans_task_list SET 
+                            task_list= '".stripslashes(str_replace('\r\n', ' ', $s_data))."'
+                        WHERE lead_id= ".$data['lead_id']." ";
+
+                $result = $database->query($q); 
+                header("Location: transactionCoordinator.php?lead_id=" . $data['lead_id']);   
+                exit;
+            }
+
         }
         exit;
     }
