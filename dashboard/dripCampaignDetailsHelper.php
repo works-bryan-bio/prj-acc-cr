@@ -41,8 +41,7 @@ class DripCampaignHelper {
         $data = $_POST;        
         $campaign_id = $data['campaign_id'];
         if( $data['subject'] != '' && $data['date_to_send'] != '' ){
-            $is_recipient_valid = false;
-            $recipients         = "";
+            $is_recipient_valid = false;            
             $recipients = $data['search_leads_auto_completec'];
             $lead_types = implode(",", $data['lead_type']);
             if( $recipients != "" || $lead_types != "" ){
@@ -67,38 +66,26 @@ class DripCampaignHelper {
         global $session, $database, $form;
 
         $data = $_POST;
-
         if( $data['subject'] != '' && $data['date_to_send'] != '' ){
             $is_recipient_valid = false;
-            $recipients         = "";
-            if( $data['lead_sc'] == 'search_lead' ){
-                $recipient_type = 1;
-                if( $data['search_leads_auto_completec'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['search_leads_auto_completec'];
-                }
-            }elseif($data['lead_sc'] == 'search_lead_type'){
-                $recipient_type = 2;
-                if( $data['lead_type'] != '' ){
-                    $is_recipient_valid = true;
-                    $recipients = $data['lead_type'];
-                }
-            } else {
+            $recipients = $data['search_leads_auto_completec'];
+            $lead_types = implode(",", $data['lead_type']);
+            if( $recipients != "" || $lead_types != "" ){
                 $is_recipient_valid = true;
-                $recipient_type = $data['lead_sc'] == 'null' ? $data['lead_sc_default'] : $data['lead_sc'];
-                $recipients = $data['leads_default_data'];
             } 
+            
 
-            if( $is_recipient_valid ){
-                $id = $data['id'];
-                $subject = $data['subject'];
+            if( $is_recipient_valid ){                
+                $id               = $data['id'];
+                $drip_campaign_id = $data['drip_campaign_id'];
+                $subject          = $data['subject'];
                 $date_to_send_arr = explode("/", $data['date_to_send']);
                 $date_to_send_format = $date_to_send_arr[2] . '-' . $date_to_send_arr[0] . '-' . $date_to_send_arr[1];
-                $messageDrip = $data['messageDrip'];
+                $messageDrip         = $data['messageDrip'];
 
-                $q = "UPDATE drip_campaign SET subject = '". stripslashes(str_replace('\r\n', ' ', $subject)) ."', recipient_type = $recipient_type, recipients = '" . stripslashes(str_replace('\r\n', ' ', $recipients)). "', date_to_send = '$date_to_send_format', body_content = '" . stripslashes(str_replace('\r\n', ' ', $messageDrip)) . "' WHERE id = $id ";
+                $q = "UPDATE drip_campaign_details SET subject = '". stripslashes(str_replace('\r\n', ' ', $subject)) ."', lead_types = '" . stripslashes(str_replace('\r\n', ' ', $lead_types)) . "', recipients = '" . stripslashes(str_replace('\r\n', ' ', $recipients)) . "', date_to_send = '$date_to_send_format', body_content = '" . stripslashes(str_replace('\r\n', ' ', $messageDrip)) . "' WHERE id = $id ";                
                 $result = $database->query($q);
-                header("Location: dripCampaign.php");
+                header("Location: dripCampaignDetails.php?drip_id=" . $drip_campaign_id);
             }else{
                 $form->setError("lead_sc", "Invalid recipient<br>");
                 header("Location: " . $session->referrer);
@@ -113,13 +100,13 @@ class DripCampaignHelper {
         global $session, $database, $form;
 
         if ($_POST['name'] != null) {
-            $q = "DELETE FROM drip_campaign WHERE id = '" . $data['id']. "'";
+            $q = "DELETE FROM drip_campaign_details WHERE id = '" . $data['id']. "'";
             $database->query($q);
             header("Location: " . $session->referrer);
         }elseif(isset($_GET['del']) && isset($_GET['drip_id'])) {
-            $q = "DELETE FROM drip_campaign WHERE id = '" . $_GET['drip_id'] . "'";
+            $q = "DELETE FROM drip_campaign_details WHERE id = '" . $_GET['drip_id'] . "'";
             $database->query($q);
-            header("Location: dripCampaign.php");
+            header("Location: dripCampaignDetails.php?drip_id=" . $_GET['drip_campaing_id']);
         } else {
 			$form->setError("deltemplate", "Name not entered<br>");
 			header("Location: " . $session->referrer);

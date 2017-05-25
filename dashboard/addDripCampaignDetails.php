@@ -6,7 +6,7 @@ require_once("include/db_connect.php");
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>SimpleHouseSolutions.com - Edit Drip Campaign</title>
+        <title>SimpleHouseSolutions.com - Add Drip Campaign</title>
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
         <link rel="stylesheet" type="text/css" href="css/dashboard_menu.css"/>
@@ -59,7 +59,7 @@ require_once("include/db_connect.php");
 <?php $date_to_send = ""; ?>
     <form name="dripForm" method="post" action="dripCampaignDetailsHelper.php" enctype="multipart/form-data">
         <br />
-        <input class="button" type="submit" name="saveCampaign" id="saveCampaign" value="Save Changes">        
+        <input class="button" type="submit" name="saveCampaign" id="saveCampaign" value="Save">        
         <input class="button" type="button" onClick="javascript:history.back()" value="Cancel">
         <input type="hidden" name="addripcampaignDetails" value="1">
         <input type="hidden" name="campaign_id" value="<?php echo $result_array['id']; ?>">        
@@ -73,7 +73,7 @@ require_once("include/db_connect.php");
         <h3 class="modal-label">Recipient Details</h3>
         <table class="input drip_edit_form">
             <tr>
-                <td align="right" style="width:20%;">Subject:</td>
+                <td align="right" style="width:10%;">Subject:</td>
                 <td align="left" colspan="">
                     <input id="dripSubject" name="subject" type="text" style="width:97%" value="<?php echo $result_array['subject']; ?>" placeholder="" />
                 </td>
@@ -113,7 +113,7 @@ require_once("include/db_connect.php");
                 
             ?>
             <tr>
-                <td align="right">Date to send:</td>
+                <td align="right" style="width:15%;">Date to send:</td>
                 <td align="left" colspan="">
                     <input type="text" name="date_to_send" id="date_to_send" size="10" value="<?php echo $result_array['date_to_send'] != '' ? $format_date_to_send : $date_to_send; ?>" onChange="" />
                     <script type="text/javascript">

@@ -72,6 +72,9 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign ORDER BY " . $orderb
                         <a class="modal-poplight" href="#?w=700" rel="create_campaign_popup_<?= $row['id'] ?>">
                             <img src='images/edit.png' alt='Edit' title='Edit' />
                         </a>
+                        <a href="dripCampaignDelete.php?drip_id=<?=$row['id']?>">
+                            <img src='images/delete.png' alt='Delete' title='Delete' />
+                        </a>
 
                         <div id="create_campaign_popup_<?= $row['id'] ?>" class="popup_block">
                             <h3>Edit Campaign</h3><br/>

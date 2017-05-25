@@ -84,8 +84,11 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign_details WHERE drip_c
                 <?php while($row = mysqli_fetch_array($result_query)){ ?>
                 <tr>
                     <td class="center">
-                        <a href="editDripCampaign.php?drip_id=<?=$row['id']?>">
+                        <a href="editDripCampaignDetails.php?drip_detail_id=<?=$row['id']?>">
                             <img src='images/edit.png' alt='Edit Drip Campaign' title='Edit Drip Campaign' />
+                        </a>
+                        <a href="dripCampaignDetailsDelete.php?drip_id=<?= $result_array['id'] ?>&drip_detail_id=<?=$row['id']?>">
+                            <img src='images/delete.png' alt='Delete' title='Delete' />
                         </a>
                     </td>
                     <td><?php echo $row['subject']; ?></td>
