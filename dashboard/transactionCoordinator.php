@@ -286,7 +286,7 @@ if (isset($_GET['lead_id'])) {
 			            <table class="grid">
 			                <tr><td colspan="2"><h3>Hud</h3></td></tr>
 			                <tr>
-			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <input class="button" type="submit" name="submit_file" value="Save File" /></td>
+			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <!-- <input class="button" type="submit" name="submit_file" value="Save File" /> --></td>
 			                </tr>
 			                <tr>
 			                	<th>Actions</th>
