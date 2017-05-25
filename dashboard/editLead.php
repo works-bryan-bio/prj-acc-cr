@@ -365,8 +365,9 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			//After upload save file to database
 			global $session, $database, $form;			
 			$q = "INSERT INTO lead_attachments (
-                                    lead_id, title, filename, date_uploaded
+                                    type, lead_id, title, filename, date_uploaded
                                 )VALUES(
+                                	1,
                                     " . $lead_id . ",
                                     '" . stripslashes(str_replace('\r\n', ' ', $_POST['file_title'])) . "',
                                     '" . stripslashes(str_replace('\r\n', ' ', strtolower($file_name))) . "',
@@ -625,7 +626,7 @@ if($lead_id!=null) {
 <a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
 <a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
-<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>" target="_new">Transaction Coordinator</a>
+<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>
 </th>
 <th style="text-align:right; width: 35%">
 <?php if ($lead_id!=null) { ?>
@@ -1578,7 +1579,7 @@ if ($prop['PREDICTED_AMT']!="") {
 <td align="left" colspan="4">
 	<br />
 	<?php
-		$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." ORDER BY title ASC") or die(mysql_error());
+		$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 1 ORDER BY title ASC") or die(mysql_error());
 	?>
 	<table width="100%">
 		<tr>
