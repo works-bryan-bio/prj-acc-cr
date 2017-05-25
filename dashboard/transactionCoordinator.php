@@ -8,7 +8,6 @@ $lead_id = null;
 if (isset($_GET['lead_id'])) {
 	$lead_id = $_GET['lead_id'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,8 +64,21 @@ if (isset($_GET['lead_id'])) {
 					<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
 					<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>
 				</td>
+				<td valign="bottom" style="width: 35%; text-align: right;">
+					<strong>Lead ID:</strong> <?php echo $lead_id; ?>
+				</td>
 			</tr>
 			<table>
+
+			<?php If($_SESSION['TEMP_VAR']['UPDATE_TASK']) { ?>
+					<br />
+					<div class="alert">
+					  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+					  <?php echo $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE']; ?>
+					</div>		
+					<?php unset($_SESSION['TEMP_VAR']['UPDATE_TASK']); ?>
+			<?php } ?>
+
 			<form name="form1" method="post" action="transactionCoordinatorHelper.php">
 			<input type="hidden" name="update_task" value="1">
 			<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
@@ -104,8 +116,19 @@ if (isset($_GET['lead_id'])) {
 						24 => 'Upload EOI in google under insurance file and update utility spreadshit with new address',
 						25 => 'Seller Leaseback Deposit if applicable',
 						26 => 'Email Frank, Send Thank You card to lender and update social media of purchase'
-					)
+					);
+
+				$task_arr2 = array();
+				$task_arr2 = array(
+						27 => 'Draw up Termination of Contract & Release of EM and have buyer sign it',
+						28 => 'Send to seller or seller’s agent',
+						29 => 'Send to Title Company',
+						30 => 'Erase off the board',
+						31 => 'Throw away hard copy folder in bin',
+						32 => 'Move property folder to “Potential Property” folder'
+					);
 			?>
+
             <table class="grid">
                 <tr><td colspan="2"><h3>Task</h3></td></tr>
                 <tr>
@@ -124,21 +147,54 @@ if (isset($_GET['lead_id'])) {
 						<br />
                     </td>
                     <td style="width: 50%;" valign="top">
-						<input type="checkbox" name="task" value="Car">etc.<br />
-						<input type="checkbox" name="task" value="Car">etc.<br />
-						<input type="checkbox" name="task" value="Car">etc.<br />
-						<input type="checkbox" name="task" value="Car">etc.<br />
-						<input type="checkbox" name="task" value="Car">etc.<br />
-						<input type="checkbox" name="task" value="Car">etc.<br />                   	
+                    	<?php foreach($task_arr2 as $tkey2 => $t2) { ?>
+								<input <?php echo isset($task_unserialize[$tkey2]) ? 'checked' : ''; ?> type="checkbox" name="task[<?php echo $tkey2; ?>]" value="1"> <?php echo $t2; ?><br />
+						<?php } ?>        
+						<br />          	
+						<table class="" width="100%">
+							<tr><td colspan="2"><hr /></td></tr>
+							<tr>
+								<td width="25%">Roof/Insurance Claim:</td>
+								<td width="75%">
+									<select id="roof_ins_claim" name="roof_ins_claim">
+										<option <?php echo $task_row['roof_ins_claim'] == "Yes" ? 'selected' : ''; ?> value="Yes">Yes</option>								
+										<option <?php echo $task_row['roof_ins_claim'] == "No" ? 'selected' : ''; ?> value="No">No</option>								
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td width="25%">Combo: </td>
+								<td width="75%"><input type="text" style="width: 350px;" name="combo" id="combo" value="<?php echo $task_row['combo']; ?>"></td>
+							</tr>
+						</table>
                     </td>
                 </tr>
             </table>
             </form>
             <br />
 
+			<?php If($_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK']) { ?>
+					<br />
+					<div class="alert">
+					  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+					  <?php echo $_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK']['MESSAGE']; ?>
+					</div>		
+					<?php unset($_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK']); ?>
+			<?php } ?>
+
+			<?php If($_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK_DEL']) { ?>
+					<br />
+					<div class="alert">
+					  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+					  <?php echo $_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK_DEL']['MESSAGE']; ?>
+					</div>		
+					<?php unset($_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK_DEL']); ?>
+			<?php } ?>
+
 			<?php
-				$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 2 ORDER BY title ASC") or die(mysql_error());
-			?>            
+				//$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 2 ORDER BY title ASC") or die(mysql_error());
+			?>   
+			<!--         
 			<form name="form1" method="post" action="transactionCoordinatorHelper.php" enctype="multipart/form-data">
 			<input type="hidden" name="add_contractpaper_work" value="1">
 			<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
@@ -161,11 +217,13 @@ if (isset($_GET['lead_id'])) {
 					<tr>
 						<td style="width: 10%;">
 							&nbsp;&nbsp;
-							<!-- <a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a>  -->
+							<a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a> 
 							<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_paperwork=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Contract Paperwork' title='Delete Contract Paperwork' /></a>
 							<a href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/contract_paperworks/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Contract Paperwork' title='View Contract Paperwork' /></a>
 						</td>
-						<td style="width: 90%"><a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>						
+						<td style="width: 90%">
+							<a href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/contract_paperworks/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><?php echo $row_attach['title']; ?></a>
+						</td>
 					</tr>
 				<?php } ?>
 				<?php } else { ?>
@@ -173,6 +231,94 @@ if (isset($_GET['lead_id'])) {
 				<?php } ?>
             </table> 
             </form>
+            -->
+
+            <table width="100%">
+            	<tr>
+					<?php
+						$attachments_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 2 ORDER BY title ASC") or die(mysql_error());
+					?>              	
+            		<td width="50%" valign="top">
+						<form name="form1" method="post" action="transactionCoordinatorHelper.php" enctype="multipart/form-data">
+						<input type="hidden" name="add_contractpaper_work" value="1">
+						<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
+			            <table class="grid">
+			                <tr><td colspan="2"><h3>Contract Paperwork</h3></td></tr>
+			                <tr>
+			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <input type="text" name="file_title" id="file_title"> <input class="button" type="submit" name="submit_file" value="Save File" /></td>
+			                </tr>
+			                <tr>
+			                	<th>Actions</th>
+			                	<th>Title</th>
+			                </tr>
+			                <?php if($attachments_result->num_rows > 0) { ?>
+							<?php
+								while ($row_attach = mysqli_fetch_array($attachments_result)) {
+								foreach ($row_attach AS $key => $value) {
+									$row_attach[$key] = stripslashes($value);
+								}				
+							?>
+								<tr>
+									<td style="width: 10%;">
+										&nbsp;&nbsp;
+										<!-- <a target="_blank" href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a>  -->
+										<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_paperwork=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Contract Paperwork' title='Delete Contract Paperwork' /></a>
+										<a href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/contract_paperworks/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Contract Paperwork' title='View Contract Paperwork' /></a>
+									</td>
+									<td style="width: 90%">
+										<a href="files/contract_paperworks/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/contract_paperworks/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><?php echo $row_attach['title']; ?></a>
+									</td>
+								</tr>
+							<?php } ?>
+							<?php } else { ?>
+										<tr><td colspan="2">No Attched File</td></tr>
+							<?php } ?>
+			            </table> 
+			            </form>            			
+            		</td>
+					<?php
+						$attachments_hud_result = $mysqli->query("SELECT * FROM lead_attachments WHERE lead_id= ".$lead_id." AND type = 3 ORDER BY title ASC") or die(mysql_error());
+					?>              		
+            		<td width="50%" valign="top">
+						<form name="form1" method="post" action="transactionCoordinatorHelper.php" enctype="multipart/form-data">
+						<input type="hidden" name="add_hud" value="1">
+						<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
+			            <table class="grid">
+			                <tr><td colspan="2"><h3>Hud</h3></td></tr>
+			                <tr>
+			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <input class="button" type="submit" name="submit_file" value="Save File" /></td>
+			                </tr>
+			                <tr>
+			                	<th>Actions</th>
+			                	<th>Title</th>
+			                </tr>
+			                <?php if($attachments_hud_result->num_rows > 0) { ?>
+							<?php
+								while ($row_attach_hud = mysqli_fetch_array($attachments_hud_result)) {
+								foreach ($row_attach_hud AS $key => $value) {
+									$row_attach_hud[$key] = stripslashes($value);
+								}				
+							?>
+								<tr>
+									<td style="width: 10%;">
+										&nbsp;&nbsp;
+										<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_paperwork=1&attach_id=<?php echo $row_attach_hud['id']; ?>&file=<?php echo $row_attach_hud['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Hud' title='Delete Hud' /></a>
+										<a href="files/hud/<?php echo $row_attach_hud['filename']; ?>"  onclick="window.open('files/hud/<?php echo $row_attach_hud['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Hud' title='View Hud' /></a>
+									</td>
+									<td style="width: 90%">
+										<a href="files/hud/<?php echo $row_attach_hud['filename']; ?>"  onclick="window.open('files/hud/<?php echo $row_attach_hud['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><?php echo $row_attach_hud['filename']; ?></a>
+									</td>
+								</tr>
+							<?php } ?>
+							<?php } else { ?>
+										<tr><td colspan="2">No Attched File</td></tr>
+							<?php } ?>
+			            </table> 
+			            </form>        			
+            		</td>
+            	</tr>
+            </table>
+
             <br /><br />    
         </div>       
     </body>
