@@ -20,6 +20,8 @@ class transactionCoordinatorHelper {
         elseif( isset($_POST['update_task']) ) {
             $this->updateTask();
             exit;
+        }elseif( isset($_POST['add_hud']) ) {
+            $this->addHud();
         }
         else if( isset($_GET['del_paperwork']) ) {
             if($_GET['del_paperwork'] == 1) {
@@ -90,6 +92,64 @@ class transactionCoordinatorHelper {
             header("Location: " . $session->referrer);                
         }
 
+    }
+
+    function addHud() {
+        global $session, $database, $form;
+
+        $data = $_POST;
+        $file = $_FILES;   
+        if (isset($data["submit_file"]) || isset($data['add_hud'])) {
+
+            header('Content-Type: text/plain; charset=utf-8');
+
+            if(isset($file['fileToUpload'])){
+
+                $errors      = array();
+                $file_name = $file['fileToUpload']['name'];
+                $file_size = $file['fileToUpload']['size'];
+                $file_tmp  = $file['fileToUpload']['tmp_name'];
+                $file_type = $file['fileToUpload']['type'];
+                $file_err  = $file['fileToUpload']['error'];
+                //$file_title = $data['file_title'];
+                $lead_id   = $data['lead_id'];
+
+                if(isset($file_err) && $file_err != 0) {
+                    $errors[] = 'Error uploading file..';
+                }
+
+                /*if(!isset($file_title) || $file_title == '') {
+                    $errors[] = 'File Name must not be null..';
+                }*/
+
+                if(empty($errors)==true) {
+                    move_uploaded_file($file_tmp,"files/hud/".strtolower($file_name));
+                    //After upload save file to database
+                    global $session, $database, $form;          
+                    $q = "INSERT INTO lead_attachments (
+                                            type, lead_id, title, filename, date_uploaded
+                                        )VALUES(
+                                            3,
+                                            " . $lead_id . ",
+                                            '" . stripslashes(str_replace('\r\n', ' ', 'NA')) . "',
+                                            '" . stripslashes(str_replace('\r\n', ' ', strtolower($file_name))) . "',
+                                            '" . stripslashes(str_replace('\r\n', ' ', date("Y-m-d"))) . "')";  
+
+                    $result = $database->query($q); 
+                    $_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK']['MESSAGE'] = 'Successfully add contract paper work.';                  
+                    header("Location: transactionCoordinator.php?lead_id=" . $lead_id);
+                    exit;
+                }else{
+                 print_r($errors);
+                 exit;
+                }
+            }   
+
+            header("Location: index.php");
+        } else {
+            $form->setError("", "Cannot save record<br>");
+            header("Location: " . $session->referrer);                
+        }             
     }
 
     function updateTask() {

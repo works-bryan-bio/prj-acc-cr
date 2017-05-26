@@ -283,10 +283,10 @@ if (isset($_GET['lead_id'])) {
 						<form name="form1" method="post" action="transactionCoordinatorHelper.php" enctype="multipart/form-data">
 						<input type="hidden" name="add_hud" value="1">
 						<input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
-			            <table class="grid">
+			            <table class="grid" width="100%">
 			                <tr><td colspan="2"><h3>Hud</h3></td></tr>
 			                <tr>
-			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <!-- <input class="button" type="submit" name="submit_file" value="Save File" /> --></td>
+			                	<td colspan="2" style="text-align: left;"><input type="file" name="fileToUpload" id="fileToUpload"> <input class="button" type="submit" name="submit_file" value="Save File" /></td>
 			                </tr>
 			                <tr>
 			                	<th>Actions</th>
