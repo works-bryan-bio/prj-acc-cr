@@ -49,7 +49,7 @@ class DripCampaignHelper {
             }            
 
             if( $is_recipient_valid ){
-                $q = "INSERT INTO drip_campaign_details (drip_campaign_id, subject, lead_types, recipients, date_to_send, body_content, status, created) VALUES(" . $campaign_id . ",'" . stripslashes(str_replace('\r\n', ' ', $data['subject'])) . "','" . stripslashes(str_replace('\r\n', ' ', $lead_types)) . "','" . stripslashes(str_replace('\r\n', ' ', $recipients)) . "','" . date("Y-m-d",strtotime($data['date_to_send'])) . "','" . stripslashes(str_replace('\r\n', ' ', $data['messageDrip'])) . "',0,'" . date("Y-m-d H:i:s") . "')";                                
+                $q = "INSERT INTO drip_campaign_details (drip_campaign_id, subject, recipients, date_to_send, body_content, status, created) VALUES(" . $campaign_id . ",'" . stripslashes(str_replace('\r\n', ' ', $data['subject'])) . "','" . stripslashes(str_replace('\r\n', ' ', $recipients)) . "','" . date("Y-m-d",strtotime($data['date_to_send'])) . "','" . stripslashes(str_replace('\r\n', ' ', $data['messageDrip'])) . "',0,'" . date("Y-m-d H:i:s") . "')";                                
                 $result = $database->query($q);                
                 header("Location: dripCampaignDetails.php?drip_id=" . $campaign_id);
             }else{
