@@ -28,6 +28,11 @@ class transactionCoordinatorHelper {
                 $this->deleteAttachedPaperwork();
                 exit;
             }
+        }else if( isset($_GET['del_hud']) ) {
+            if($_GET['del_hud'] == 1) {
+                $this->deleteHud();
+                exit;
+            }
         }
 
         /* Should not get here, redirect to home page */ else {
@@ -166,28 +171,47 @@ class transactionCoordinatorHelper {
             if($row_data['total'] <= 0 ) {
                 //Insert New Record
                 $q = "INSERT INTO lead_trans_task_list (
-                                        lead_id, task_list, roof_ins_claim, combo, date_created
+                                        lead_id, task_list, roof_ins_claim, combo, exit_strategy, first_lien, second_lien, date_created
                                     )VALUES(
                                         " . $data['lead_id'] . ",
                                         '" . stripslashes(str_replace('\r\n', ' ', $s_data)) . "',
                                         '" . stripslashes(str_replace('\r\n', ' ', $data['roof_ins_claim'])) . "',
                                         '" . stripslashes(str_replace('\r\n', ' ', $data['combo'])) . "',
+                                        '" . stripslashes(str_replace('\r\n', ' ', $data['exit_strategy'])) . "',
+                                        '" . stripslashes(str_replace('\r\n', ' ', $data['first_lien'])) . "',
+                                        '" . stripslashes(str_replace('\r\n', ' ', $data['second_lien'])) . "',
                                         '" . stripslashes(str_replace('\r\n', ' ', date("Y-m-d"))) . "')";  
 
-                $result = $database->query($q);                 
-                $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE'] = 'Successfully Update Task Textbox.';
+                $result = $database->query($q);     
+
+                if( !empty($data['exit_strategy'])) {
+                    //Send new exit strategy email
+                }
+
+                $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE'] = 'Successfully Update Task.';
                 header("Location: transactionCoordinator.php?lead_id=" . $data['lead_id']);   
                 exit;
             } else {
+                $exit_s = $database->query("SELECT exit_strategy FROM lead_trans_task_list WHERE lead_id = " .$data['lead_id']. " ORDER BY id DESC LIMIT 1") or die(mysql_error());
+                $exist_s_prop = mysqli_fetch_array($exit_s);
+
                 //Update Exiting Record'
                 $s_data = serialize($data['task']);
                 $q = "UPDATE lead_trans_task_list SET 
                             task_list= '".stripslashes(str_replace('\r\n', ' ', $s_data))."',
                             roof_ins_claim= '".stripslashes(str_replace('\r\n', ' ', $data['roof_ins_claim']))."',
+                            exit_strategy = '".stripslashes(str_replace('\r\n', ' ', $data['exit_strategy']))."',
+                            first_lien = '".stripslashes(str_replace('\r\n', ' ', $data['first_lien']))."',
+                            second_lien = '".stripslashes(str_replace('\r\n', ' ', $data['second_lien']))."',
                             combo= '".stripslashes(str_replace('\r\n', ' ', $data['combo']))."'
                         WHERE lead_id= ".$data['lead_id']." ";
 
                 $result = $database->query($q); 
+
+                if( !empty($data['exit_strategy']) && $data['exit_strategy'] != $exist_s_prop['exit_strategy']) {
+                    //Send new exit strategy email
+                }
+
                 $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE'] = 'Successfully Update Task Textbox.';
                 header("Location: transactionCoordinator.php?lead_id=" . $data['lead_id']);   
                 exit;
@@ -208,6 +232,19 @@ class transactionCoordinatorHelper {
         header("Location: transactionCoordinator.php?lead_id=" . $_GET['lead_id']);   
         
         exit;
+    }
+
+    function deleteHud() {
+        global $session, $database, $form;
+
+        unlink('files/hud/'. $_GET['file']);
+
+        $del = "DELETE FROM lead_attachments WHERE id = ". $_GET['attach_id'] ." ";  
+        $result = $database->query($del);
+        $_SESSION['TEMP_VAR']['CONTRACT_PAPERWORK_DEL']['MESSAGE'] = 'Successfully delete hud.';  
+        header("Location: transactionCoordinator.php?lead_id=" . $_GET['lead_id']);   
+        
+        exit;        
     }
 
 }

@@ -1101,8 +1101,8 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 </select>
 </td>
 </tr>
-
-<tr>
+<input type="hidden" name="exit_strategy" id="exit_strategy" value="">
+<!-- <tr>
 <td align="right">Exit Strategy:</td>
 <td align="left">
 <select name="exit_strategy">
@@ -1115,7 +1115,7 @@ Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
 <option value="Listing" <?php if($prop['EXIT_STRATEGY']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
 </select>
 </td>
-</tr>
+</tr> -->
 
 <tr><td align="right">Need Lender:</td><td align="left">
 <select name="need_lender">

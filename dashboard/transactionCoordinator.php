@@ -166,6 +166,38 @@ if (isset($_GET['lead_id'])) {
 								<td width="25%">Combo: </td>
 								<td width="75%"><input type="text" style="width: 350px;" name="combo" id="combo" value="<?php echo $task_row['combo']; ?>"></td>
 							</tr>
+							<tr>
+								<td width="25%">Exit Strategy: </td>
+								<td width="75%">
+									<select name="exit_strategy" id="exit_strategy">
+										<option value=""></option>
+										<option value="Flip" <?php if($task_row['exit_strategy']=="Flip") echo "selected=\"selected\"";?>>Flip</option>
+										<option value="Wholesale" <?php if($task_row['exit_strategy']=="Wholesale") echo "selected=\"selected\"";?>>Wholesale</option>
+										<option value="Assignment" <?php if($task_row['exit_strategy']=="Assignment") echo "selected=\"selected\"";?>>Assignment</option>
+										<option value="Hedge Fund" <?php if($task_row['exit_strategy']=="Hedge Fund") echo "selected=\"selected\"";?>>Hedge Fund</option>
+										<option value="Rental" <?php if($task_row['exit_strategy']=="Rental") echo "selected=\"selected\"";?>>Rental</option>
+										<option value="Listing" <?php if($task_row['exit_strategy']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td width="25%">Lender 1st Lien: </td>
+								<td width="75%">
+									<select name="first_lien" id="first_lien">
+										<option value=""></option>
+										<option value="1st Lien">1st Lien</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td width="25%">Lender 2nd Lien: </td>
+								<td width="75%">
+									<select name="second_lien" id="second_lien">
+										<option value=""></option>
+										<option value="2nd Lien">1st Lien</option>
+									</select>
+								</td>
+							</tr>
 						</table>
                     </td>
                 </tr>
@@ -302,7 +334,7 @@ if (isset($_GET['lead_id'])) {
 								<tr>
 									<td style="width: 10%;">
 										&nbsp;&nbsp;
-										<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_paperwork=1&attach_id=<?php echo $row_attach_hud['id']; ?>&file=<?php echo $row_attach_hud['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Hud' title='Delete Hud' /></a>
+										<a href="transactionCoordinatorHelper.php?lead_id=<?php echo $lead_id; ?>&del_hud=1&attach_id=<?php echo $row_attach_hud['id']; ?>&file=<?php echo $row_attach_hud['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Hud' title='Delete Hud' /></a>
 										<a href="files/hud/<?php echo $row_attach_hud['filename']; ?>"  onclick="window.open('files/hud/<?php echo $row_attach_hud['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Hud' title='View Hud' /></a>
 									</td>
 									<td style="width: 90%">
