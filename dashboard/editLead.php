@@ -36,6 +36,11 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$notes = $_POST['notes'];
 		}
 
+		if ($_POST['add_manager_notes']!="") {
+		} else {
+			$manager_notes = $_POST['manager_notes'];
+		}		
+
 		// save the data to the database
 		$stmt = $mysqli->prepare("INSERT INTO leads (USERNAME, COMPANY_NAME, TITLE, FIRST_NAME, LAST_NAME, CLIENT_EMAIL, POSITION,
 								EXTRA_TITLE, EXTRA_FIRST_NAME, EXTRA_LAST_NAME, EXTRA_CLIENT_EMAIL,
@@ -186,6 +191,12 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$notes = $_POST['notes'];
 		}
 
+		if ($_POST['add_manager_notes']!="") {
+			$manager_notes = "[" . date("m/d/Y h:i A T") . " - " . $username . "]&#13;" . $mysqli->real_escape_string(stripslashes($_POST['add_manager_notes'])) . "&#13;&#13;" . $_POST['manager_notes'];
+		} else {
+			$manager_notes = $_POST['manager_notes'];
+		}
+
 		//Save the data to the database
 		//Master Account only can change
 		$manager_arv = $prop['MANAGER_ARV'];
@@ -202,7 +213,7 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 								FUNDS_FOR_PURCHASE=?, FINANCING_AVAILABLE=?, NEED_LENDER=?,
 								CLOSER=?, PRIORITY=?, TITLE_COMPANY=?, STATUS=?, PROPERTY_TYPE=?, YEAR_BUILT=?, SQUARE_FEET=?, GARAGE_TYPE=?, GARAGES=?, GARAGE_CONVERTED=?,
 								BEDROOMS=?, BATHROOMS=?, STORIES=?, POOL=?, RENTED=?, ARV=?, ASKING_PRICE=?, CURRENT_MORTGAGE=?, CURRENT_PAYMENTS=?, DEAD_REASON=?, BACKSIDE_CONTRACT=?,
-								CLOSED_DATE=?, EXIT_STRATEGY=?, FOLLOW_UP_DATE=?, FOLLOW_UP_TIME=?, PROVIDER_INFO=?, NOTES=?, LEAD_TYPE=?,
+								CLOSED_DATE=?, EXIT_STRATEGY=?, FOLLOW_UP_DATE=?, FOLLOW_UP_TIME=?, PROVIDER_INFO=?, NOTES=?, MANAGER_NOTES=?, LEAD_TYPE=?,
 								PREDICTED_AMT=?, FORECAST_CHANCE=?, EARNEST_RECEIPT=?, EXECUTED_DATE=?, END_OF_OPTION=?, SEARCH_CITY=?,
 								SEARCH_STATE=?, AREA_OF_INTEREST=?, AFFILIATE_ID=?,
 								AS_IS_PRICE=?, OWNER_OCCUPIED=?, HOW_LONG_OWNED=?, ROOF_AGE=?, HVAC_AGE=?,
@@ -213,7 +224,7 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 								ASKING_PRICE_REASON=?, CASH_QUICK_CLOSE=?, ANY_BETTER=?, DOESNT_SELL=?,
 								HH_REPAIR_COST=?, WT_REPAIR_COST=?, RH_LIPSTICK=?, RH_RENT_COMP=?, MANAGER_ARV=?, MANAGER_AS_IS_PRICE=?
 								WHERE lead_id=$lead_id") or die($mysqli->error);
-		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddssssssssssdsssssssiisssssssssssssississiisssssssiiiiii",
+		$stmt->bind_param("ssssssssssssssssssssssssssssssssisisiiissdddsssssssssssssssssssiisssssssssssssississiisssssssiiiiii",
 		$mysqli->real_escape_string($_POST["username"]),
 			stripslashes($mysqli->real_escape_string($_POST["company_name"])),
 			stripslashes($mysqli->real_escape_string($_POST["title"])),
@@ -267,6 +278,7 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 			$mysqli->real_escape_string($_POST["follow_up_time"]),
 			stripslashes(str_replace('\r\n', ' ', $mysqli->real_escape_string($_POST["provider_info"]))),
 			$notes,
+			$manager_notes,
 			$mysqli->real_escape_string($_POST["lead_type"]),
 			$mysqli->real_escape_string($_POST["predicted_amt"]),
 			$mysqli->real_escape_string($_POST["forecast_chance"]),
@@ -554,6 +566,7 @@ if($lead_id!=null) {
 }
 ?>
 <form name="form1" method="post" action="<?=$PHP_SELF?>" onsubmit="return check_hot_strong();" enctype="multipart/form-data">
+
 <input type="hidden" name="date_added" value="<?=date("Y-m-d H:i:s")?>">
 <input type="hidden" name="affiliate_id" value="<?php if ($prop!=null) { echo $prop['AFFILIATE_ID']; } else { echo "50"; } ?>">
 <div align="center">
@@ -620,20 +633,21 @@ if($lead_id!=null) {
 </div>
 <table class="input" width="100%">
 <tr>
-<th valign="bottom" style="width: 65%">
-<a href="editLead.php?lead_id=<?=$lead_id?>">Client Information</a>&nbsp;|&nbsp;
-<a href="searchReport.php?lead_id=<?=$lead_id?>">Search Report</a>&nbsp;|&nbsp;
-<a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
-<a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
-<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
-<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>
-</th>
-<th style="text-align:right; width: 35%">
-<?php if ($lead_id!=null) { ?>
-Date Created: <?=date("m/d/Y h:i A T", strtotime($prop['DATE_ADDED']))?><br />
-Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
-<?php } ?>
-</th>
+	<th width="85%" valign="bottom" style="width: 85%;">
+		<a href="editLead.php?lead_id=<?=$lead_id?>">Client Information</a>&nbsp;|&nbsp;
+		<a href="searchReport.php?lead_id=<?=$lead_id?>">Search Report</a>&nbsp;|&nbsp;
+		<a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
+		<a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
+		<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
+		<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>&nbsp;|&nbsp;
+		<a href="Pictures.php?lead_id=<?php echo $lead_id; ?>">Pictures</a>
+	</th>
+	<th width="15%" valign="bottom" style="text-align:right; width: 15%;">
+		<?php if ($lead_id!=null) { ?>
+				Date Created: <?=date("m/d/Y h:i A T", strtotime($prop['DATE_ADDED']))?><br />
+				Last Update: <?=date("m/d/Y h:i A T", strtotime($prop['LAST_UPDATED']))?>
+		<?php } ?>
+	</th>
 </tr>
 <tr><td valign="top">
 <table>
@@ -1507,6 +1521,19 @@ if ($prop['PREDICTED_AMT']!="") {
 <tr><td align="left" colspan="4">Note History:</td></tr>
 <tr><td align="left" colspan="4">
 <textarea style="width:98%;height:200px" wrap="virtual" name="notes" required <?php if(!$session->isAdmin() || $lead_id==null) echo "readonly" ?>><?=stripslashes($prop['NOTES'])?></textarea></td>
+</tr>
+
+<tr><td align="left" colspan="4">Manager Notes:</td></tr>
+<tr>
+<td align="left" colspan="4">
+<textarea style="width:98%;height:60px" wrap="virtual" name="add_manager_notes" <?php if($lead_id==null) echo "readonly" ?>></textarea><br />
+<input class="button" style="float:right" type="submit" name="submit" value="Submit" <?php if ($lead_id==null) echo "disabled='disabled'" ?> />
+</td>
+</tr>
+
+<tr><td align="left" colspan="4">Manager Notes History:</td></tr>
+<tr><td align="left" colspan="4">
+<textarea style="width:98%;height:200px" wrap="virtual" name="manager_notes" required <?php if(!$session->isAdmin() || $lead_id==null) echo "readonly" ?>><?=stripslashes($prop['MANAGER_NOTES'])?></textarea></td>
 </tr>
 
 <tr>

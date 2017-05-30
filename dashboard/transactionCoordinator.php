@@ -62,7 +62,8 @@ if (isset($_GET['lead_id'])) {
 					<a class="poplight" href="#?w=700" rel="email_popup">Email Contact</a>&nbsp;|&nbsp;
 					<a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$prop['CLIENT_EMAIL']?>" target="_blank">Gmail</a>&nbsp;|&nbsp;
 					<a href="https://fathom.backagent.net/" target="_new">Backagent</a>&nbsp;|&nbsp;
-					<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>
+					<a href="transactionCoordinator.php?lead_id=<?php echo $lead_id; ?>">Transaction Coordinator</a>&nbsp;|&nbsp;
+					<a href="Pictures.php?lead_id=<?php echo $lead_id; ?>">Pictures</a>
 				</td>
 				<td valign="bottom" style="width: 35%; text-align: right;">
 					<strong>Lead ID:</strong> <?php echo $lead_id; ?>
