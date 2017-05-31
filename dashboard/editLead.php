@@ -200,7 +200,7 @@ if (isset($_POST["submit"]) && $lead_id==null) {
 		//Save the data to the database
 		//Master Account only can change
 		$manager_arv = $prop['MANAGER_ARV'];
-		$manager_as_is_price = $prop['MANAGRE_AS_IS_PRICE'];
+		$manager_as_is_price = $prop['MANAGER_AS_IS_PRICE'];
 		if( $session->isMaster() ){
 			$manager_arv = $_POST['manager_arv'];
 			$manager_as_is_price = $_POST['manager_as_is_price'];
@@ -1522,12 +1522,18 @@ if ($prop['PREDICTED_AMT']!="") {
 <tr><td align="left" colspan="4">
 <textarea style="width:98%;height:200px" wrap="virtual" name="notes" required <?php if(!$session->isAdmin() || $lead_id==null) echo "readonly" ?>><?=stripslashes($prop['NOTES'])?></textarea></td>
 </tr>
-
+<?php 
+	$field_disabled = "";
+	if( !$session->isMaster() ){
+		$field_disabled = 'readonly="readonly" disabled="disabled"';
+		$disable_button = "disabled";
+	}
+?>
 <tr><td align="left" colspan="4">Manager Notes:</td></tr>
 <tr>
 <td align="left" colspan="4">
-<textarea style="width:98%;height:60px" wrap="virtual" name="add_manager_notes" <?php if($lead_id==null) echo "readonly" ?>></textarea><br />
-<input class="button" style="float:right" type="submit" name="submit" value="Submit" <?php if ($lead_id==null) echo "disabled='disabled'" ?> />
+<textarea style="width:98%;height:60px" wrap="virtual" <?php echo $field_disabled; ?> name="add_manager_notes" <?php if($lead_id==null) echo "readonly" ?>></textarea><br />
+<input class="button" style="float:right" type="submit" <?php echo $disable_button; ?> name="submit" value="Submit" <?php if ($lead_id==null) echo "disabled='disabled'" ?> />
 </td>
 </tr>
 
