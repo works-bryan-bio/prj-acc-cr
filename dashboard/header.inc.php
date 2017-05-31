@@ -17,7 +17,3 @@ if ($total_leads > 0) {
 }
 ?>
 </div>
-
-<div style="float:right">
-<input class="button" type="button" value="Logout" onclick="window.location.href='process.php'" />
-</div>

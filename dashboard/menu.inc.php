@@ -71,4 +71,43 @@ require_once('include/session.php');
     </li>
 	<?php } ?>
 </ul>
+<?php 
+$notification_date = date("Y-m-d");
+$minutesBefore     = strtotime('-5 minutes');
+$minutesBefore     = date("H:i:00",$minutesBefore);
+$result_followup_notification = $mysqli->query("SELECT LEAD_ID, FIRST_NAME, LAST_NAME, FOLLOW_UP_TIME FROM leads WHERE FOLLOW_UP_DATE='{$notification_date}' AND FOLLOW_UP_TIME >= '{$minutesBefore}'") or die(mysql_error());
+$is_with_followup_notification = false;
+
+if( $result_followup_notification->num_rows > 0 ){
+	$is_with_followup_notification = true;
+}
+?>
 <?php require_once('modal.forms.php'); ?>
+<?php if( $is_with_followup_notification ){ ?>
+<a class="modal-poplight button modal-followup-notification" style="display:none;" href="#?w=700" rel="followup_notification_popup"></a>
+<script>	
+	$(function(){
+		$(".modal-followup-notification").click();
+	});
+</script>
+<?php } ?>
+<div style="float:right">
+<input class="button" type="button" value="Logout" onclick="window.location.href='process.php'" />
+</div>
+<div id="followup_notification_popup" class="popup_block">
+	<h3>Leads for today's followup</h3><br/>
+	<table class="grid">
+		<tr>
+			<th>Name</th>
+			<th>Followup Time</th>
+			<th></th>
+		</tr>
+		<?php while($row = mysqli_fetch_array($result_followup_notification)){ ?>
+			<tr>
+				<td><b><?php echo $row['FIRST_NAME'] . ' ' . $row['LAST_NAME']; ?></b></td>
+				<td><b><?php echo $row['FOLLOW_UP_TIME'] ?></b></td>
+				<td align='center'><a href="editLead.php?lead_id=<?= $row['LEAD_ID'] ?>"><img src='images/edit.png' alt='Edit Lead' title='Edit Lead' /></a></td>
+			</tr>
+		<?php } ?>
+	</table>	
+</div>
