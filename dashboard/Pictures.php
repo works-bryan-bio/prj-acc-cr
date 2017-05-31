@@ -18,8 +18,11 @@ if (isset($_GET['lead_id'])) {
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
         <link rel="stylesheet" type="text/css" href="css/dashboard_menu.css"/>
-       <link rel="stylesheet" type="text/css" href="js/tigra_calendar/calendar.css">
-      <script type="text/javascript" src="js/tigra_calendar/calendar_us.js"></script> 
+        <link rel="stylesheet" type="text/css" href="js/tigra_calendar/calendar.css">
+        <link rel="stylesheet" type="text/css" href="css/colorbox.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+      	<script type="text/javascript" src="js/tigra_calendar/calendar_us.js"></script> 
+      	<script type="text/javascript" src="js/colorbox/jquery.colorbox.js"></script> 
     </head>
     <?php 
 
@@ -41,8 +44,36 @@ if (isset($_GET['lead_id'])) {
     ?>
     <body>
         <div id="header"><?php require "header.inc.php"; ?></div>
-        <div id="menu"><?php require "menu.inc.php"; ?></div>
+        <div id="menu"><?php require "_menu.inc.php"; ?></div>
         <div id="content">
+
+		<script>
+			$.noConflict();
+			$(document).ready(function(){
+				//Examples of how to assign the ColorBox event to elements
+				$(".group1").colorbox({rel:'group1'});
+				$(".group2").colorbox({rel:'group2', transition:"fade"});
+				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+				$(".group4").colorbox({rel:'group4', slideshow:true});
+				$(".ajax").colorbox();
+				$(".youtube").colorbox({iframe:true, innerWidth:425, innerHeight:344});
+				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+				$(".inline").colorbox({inline:true, width:"50%"});
+				$(".callbacks").colorbox({
+					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
+				
+				//Example of preserving a JavaScript event for inline calls.
+				$("#click").click(function(){ 
+					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+					return false;
+				});
+			});
+		</script>        
 
 		<div style="float:right;margin-right:10px;">	
 			<?php if( !empty($prop_previous) ){ ?>
@@ -89,6 +120,27 @@ if (isset($_GET['lead_id'])) {
             	</td>
             </tr>
         </table>        
+
+		<h2>Elastic Transition</h2>
+		<p><a class="group1" href="files/ohoopee1.jpg" title="Me and my grandfather on the Ohoopee.">Grouped Photo 1</a></p>
+		<p><a class="group1" href="files/ohoopee2.jpg" title="On the Ohoopee as a child">Grouped Photo 2</a></p>
+		<p><a class="group1" href="files/ohoopee3.jpg" title="On the Ohoopee as an adult">Grouped Photo 3</a></p>
+		
+		<h2>Fade Transition</h2>
+		<p><a class="group2" href="files/ohoopee1.jpg" title="Me and my grandfather on the Ohoopee">Grouped Photo 1</a></p>
+		<p><a class="group2" href="files/ohoopee2.jpg" title="On the Ohoopee as a child">Grouped Photo 2</a></p>
+		<p><a class="group2" href="files/ohoopee3.jpg" title="On the Ohoopee as an adult">Grouped Photo 3</a></p>
+		
+		<h2>No Transition + fixed width and height (75% of screen size)</h2>
+		<p><a class="group3" href="files/ohoopee1.jpg" title="Me and my grandfather on the Ohoopee.">Grouped Photo 1</a></p>
+		<p><a class="group3" href="files/ohoopee2.jpg" title="On the Ohoopee as a child">Grouped Photo 2</a></p>
+		<p><a class="group3" href="files/ohoopee3.jpg" title="On the Ohoopee as an adult">Grouped Photo 3</a></p>
+		
+		<h2>Slideshow</h2>
+		<p><a class="group4"  href="files/ohoopee1.jpg" title="Me and my grandfather on the Ohoopee.">Grouped Photo 1</a></p>
+		<p><a class="group4"  href="files/ohoopee2.jpg" title="On the Ohoopee as a child">Grouped Photo 2</a></p>
+		<p><a class="group4"  href="files/ohoopee3.jpg" title="On the Ohoopee as an adult">Grouped Photo 3</a></p>
+
    
         </div>       
     </body>
