@@ -1575,6 +1575,8 @@ if ($prop['PREDICTED_AMT']!="") {
 <select id="hh_repair_cost" name="hh_repair_cost">
 <option value="5000" <?php if ($prop['HH_REPAIR_COST'] == 5000) echo "selected='selected'" ?>>5,000</option>
 <option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 10000) echo "selected='selected'" ?>>10,000</option>
+<option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 15000) echo "selected='selected'" ?>>15,000</option>
+<option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 20000) echo "selected='selected'" ?>>20,000</option>
 </select>
 </td></tr>
 <tr><td align="right" colspan="1">Asking Price:</td><td align="left" colspan="3"><input id="hh_asking" type="text" size="15" value="" /></td></tr>
