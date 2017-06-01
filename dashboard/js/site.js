@@ -55,6 +55,7 @@ function calculateUA() {
 	if (document.getElementById("arv")) {
 		var arv = document.getElementById("arv").value;
 		var arv_seventy = arv * .70;
+		var arv_seventyseven = arv * .77;
 		var bathrooms = document.getElementById("bathrooms").value;
 		var roof_age = document.getElementById("roof_age").value;
 		var insurance = document.getElementById("insurance").value;
@@ -66,7 +67,9 @@ function calculateUA() {
 
 	if (arv > 0) {
 		document.getElementById("ua_arv").value = arv;
-		document.getElementById("ua_arv_seventy").value = arv_seventy;
+		//document.getElementById("ua_arv_seventy").value = arv_seventy;
+		document.getElementById("ua_arv_seventyseven").value = arv_seventyseven;
+		
 
 		var repair_cost = 17000;
 
@@ -138,8 +141,12 @@ function calculateUA() {
 		document.getElementById("ua_repair_cost").value = repair_cost;
 
 		var mao_total = 0;
-		if (arv_seventy && repair_cost) {
+		/*if (arv_seventy && repair_cost) {
 			mao_total = arv_seventy - repair_cost;
+		}*/
+		if (arv_seventyseven && repair_cost) {
+			mao_total = arv_seventyseven - repair_cost;
+			
 		}
 		document.getElementById("ua_mao").value = mao_total;
 
