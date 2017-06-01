@@ -1564,7 +1564,8 @@ if ($prop['PREDICTED_AMT']!="") {
 
 <tr><td align="right" colspan="1"><strong>Unlimited Access:</strong></td><td colspan="3"></td></tr>
 <tr><td align="right" colspan="1">ARV:</td><td align="left" colspan="3"><input id="ua_arv" type="text" size="15" value="" /></td></tr>
-<tr><td align="right" colspan="1">ARV (70%):</td><td align="left" colspan="3"><input id="ua_arv_seventy" type="text" size="15" value="" /></td></tr>
+<!-- <tr><td align="right" colspan="1">ARV (70%):</td><td align="left" colspan="3"><input id="ua_arv_seventy" type="text" size="15" value="" /></td></tr> -->
+<tr><td align="right" colspan="1">ARV (77%):</td><td align="left" colspan="3"><input id="ua_arv_seventyseven" type="text" size="15" value="" /></td></tr>
 <tr><td align="right" colspan="1">Bath:</td><td align="left" colspan="3"><input id="ua_bath" type="text" size="15" value="" /></td></tr>
 <tr><td align="right" colspan="1">Roof:</td><td align="left" colspan="3"><input id="ua_roof" type="text" size="15" value="" /></td></tr>
 <tr><td align="right" colspan="1">Foundation:</td><td align="left" colspan="3"><input id="ua_foundation" type="text" size="15" value="" /></td></tr>
@@ -1581,6 +1582,8 @@ if ($prop['PREDICTED_AMT']!="") {
 <select id="hh_repair_cost" name="hh_repair_cost">
 <option value="5000" <?php if ($prop['HH_REPAIR_COST'] == 5000) echo "selected='selected'" ?>>5,000</option>
 <option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 10000) echo "selected='selected'" ?>>10,000</option>
+<option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 15000) echo "selected='selected'" ?>>15,000</option>
+<option value="10000" <?php if ($prop['HH_REPAIR_COST'] == 20000) echo "selected='selected'" ?>>20,000</option>
 </select>
 </td></tr>
 <tr><td align="right" colspan="1">Asking Price:</td><td align="left" colspan="3"><input id="hh_asking" type="text" size="15" value="" /></td></tr>

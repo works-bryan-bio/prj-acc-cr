@@ -82,7 +82,7 @@ if( $result_followup_notification->num_rows > 0 ){
 	$is_with_followup_notification = true;
 }
 ?>
-<?php require_once('modal.forms.php'); ?>
+<?php require_once('_modal.forms.php'); ?>
 <?php if( $is_with_followup_notification ){ ?>
 <a class="modal-poplight button modal-followup-notification" style="display:none;" href="#?w=700" rel="followup_notification_popup"></a>
 <script>	
