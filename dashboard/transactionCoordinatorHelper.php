@@ -185,7 +185,7 @@ class transactionCoordinatorHelper {
                 $result = $database->query($q);     
 
                 if( !empty($data['exit_strategy'])) {
-                    //Send new exit strategy email
+                    $this->emailExitStrategy($data);
                 }
 
                 $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE'] = 'Successfully Update Task.';
@@ -210,6 +210,7 @@ class transactionCoordinatorHelper {
 
                 if( !empty($data['exit_strategy']) && $data['exit_strategy'] != $exist_s_prop['exit_strategy']) {
                     //Send new exit strategy email
+                    $this->emailExitStrategy($data);
                 }
 
                 $_SESSION['TEMP_VAR']['UPDATE_TASK']['MESSAGE'] = 'Successfully Update Task Textbox.';
@@ -245,6 +246,28 @@ class transactionCoordinatorHelper {
         header("Location: transactionCoordinator.php?lead_id=" . $_GET['lead_id']);   
         
         exit;        
+    }
+
+    function emailExitStrategy( $data = array() ) {
+        require_once ("include/swiftmailer/lib/swift_required.php");
+        $subject = "SimpleHouseSolutions :  Exit Strategy";
+        $to      = array('works.bryan.bio@gmail.com' => 'works.bryan.bio@gmail.com');
+        $content = "Hi, <Br/>";
+        $content .= "<p>Below are the details for roof insurance claim</p>";
+
+        //Send Email
+        $transport = Swift_SmtpTransport::newInstance('mail.simplehousesolutionscrm.com', 26)
+          ->setUsername('info@simplehousesolutionscrm.com')
+          ->setPassword('abc123!xyz')
+          ;
+        $mailer  = Swift_Mailer::newInstance($transport);               
+        $message = Swift_Message::newInstance($subject)
+        ->setFrom(array('info@simplehousesolutionscrm.com' => 'Info'))
+        ->setTo($to)
+        //->setBcc($email_bcc)
+        ->setBody($content)
+        ;
+        $result = $mailer->send($message);  
     }
 
 }
