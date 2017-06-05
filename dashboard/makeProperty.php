@@ -225,6 +225,19 @@ if (isset($_POST["submit"]))
 else {
 // if the form hasn't been submitted, display the form
 ?>
+
+<?php 
+	$lead_id = null;
+	if (isset($_GET['lead_id'])) {
+		$lead_id = $_GET['lead_id'];
+	}
+
+	$prop = null;
+	if($lead_id!=null) {
+		$result = $mysqli->query("SELECT * FROM leads WHERE lead_id=" . $lead_id) or die(mysqli_error());
+		$prop = mysqli_fetch_array($result);
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -262,9 +275,9 @@ else {
 <input type="hidden" name="date_added" value="<?=date("Y-m-d")?>">
 <table class="input">
 <tr>
-<th>Add Property</th>
+<th>Make Property</th>
 <th style="text-align: center;">
-<input class="button" type="submit" name="submit" value="Add Property">
+<input class="button" type="submit" name="submit" value="Make Property">
 <input class="button" type="button" onClick="javascript:history.back()" value="Cancel">
 </th>
 <th>&nbsp;</th>
@@ -283,7 +296,7 @@ else {
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['PROVIDER_ID']?>"><?=$row['COMPANY_NAME']?></option>
+<option <?php echo $row['PROVIDER_ID'] == 1062 ? 'selected' : ''; ?> value="<?=$row['PROVIDER_ID']?>"><?=$row['COMPANY_NAME']?></option>
 <?php
 		}
 ?>
@@ -368,77 +381,77 @@ else {
 <tr><td colspan="2"><strong>Property Information</strong></td></tr>
 
 <tr><td align="right">Year Built:</td><td align="left">
-<input name="year_built" size="10" value="" /></td></tr>
+<input name="year_built" size="10" value="<?php echo $prop['YEAR_BUILT']; ?>" /></td></tr>
 
 <tr><td align="right">Square Feet:</td><td align="left">
-<input name="square_feet" size="10" value="" /></td></tr>
+<input name="square_feet" size="10" value="<?php $prop['SQUARE_FEET']; ?>" /></td></tr>
 
 <tr><td align="right">Garage Type:</td>
 <td align="left">
 <select name="garage_type">
 	<option value=""></option>
-	<option value="Attached">Attached</option>
-	<option value="Detached">Detached</option>
+	<option <?php echo $prop['GARAGE_TYPE'] == 'Attached' ? 'selected' : ''; ?> value="Attached">Attached</option>
+	<option <?php echo $prop['GARAGE_TYPE'] == 'Attached' ? 'Detached' : ''; ?> value="Detached">Detached</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Garages:</td>
 <td align="left">
 <select name="garages">
-	<option value="0">0</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	<option value="5">5</option>
+	<option <?php echo $prop['GARAGES'] == 0 ? 'selected' : ''; ?> value="0">0</option>
+	<option <?php echo $prop['GARAGES'] == 1 ? 'selected' : ''; ?> value="1">1</option>
+	<option <?php echo $prop['GARAGES'] == 2 ? 'selected' : ''; ?> value="2">2</option>
+	<option <?php echo $prop['GARAGES'] == 3 ? 'selected' : ''; ?> value="3">3</option>
+	<option <?php echo $prop['GARAGES'] == 4 ? 'selected' : ''; ?> value="4">4</option>
+	<option <?php echo $prop['GARAGES'] == 5 ? 'selected' : ''; ?> value="5">5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Converted Garage:</td>
 <td align="left">
 <select name="converted_garage">
-	<option value="No">No</option>
-	<option value="Yes">Yes</option>
+	<option <?php echo $prop['GARAGE_CONVERTED'] == "No" ? 'selected' : ''; ?> value="No">No</option>
+	<option <?php echo $prop['GARAGE_CONVERTED'] == "Yes" ? 'selected' : ''; ?> value="Yes">Yes</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Bedrooms:</td>
 <td align="left">
 <select name="bedrooms">
-	<option value="0">0</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	<option value="5">5</option>
+	<option <?php echo $prop['BEDROOMS'] == 0 ? 'selected' : ''; ?> value="0">0</option>
+	<option <?php echo $prop['BEDROOMS'] == 1 ? 'selected' : ''; ?> value="1">1</option>
+	<option <?php echo $prop['BEDROOMS'] == 2 ? 'selected' : ''; ?> value="2">2</option>
+	<option <?php echo $prop['BEDROOMS'] == 3 ? 'selected' : ''; ?> value="3">3</option>
+	<option <?php echo $prop['BEDROOMS'] == 4 ? 'selected' : ''; ?> value="4">4</option>
+	<option <?php echo $prop['BEDROOMS'] == 5 ? 'selected' : ''; ?> value="5">5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Bathrooms:</td>
 <td align="left">
 <select name="bathrooms">
-	<option value="0">0</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	<option value="5">5</option>
+	<option <?php echo $prop['BATHROOMS'] == 0 ? 'selected' : ''; ?> value="0">0</option>
+	<option <?php echo $prop['BATHROOMS'] == 1 ? 'selected' : ''; ?> value="1">1</option>
+	<option <?php echo $prop['BATHROOMS'] == 2 ? 'selected' : ''; ?> value="2">2</option>
+	<option <?php echo $prop['BATHROOMS'] == 3 ? 'selected' : ''; ?> value="3">3</option>
+	<option <?php echo $prop['BATHROOMS'] == 4 ? 'selected' : ''; ?> value="4">4</option>
+	<option <?php echo $prop['BATHROOMS'] == 5 ? 'selected' : ''; ?> value="5">5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Stories:</td>
 <td align="left">
 <select name="stories">
-	<option value="1">1</option>
-	<option value="2">2</option>
+	<option <?php echo $prop['STORIES'] == 1 ? 'selected' : ''; ?> value="1">1</option>
+	<option <?php echo $prop['STORIES'] == 2 ? 'selected' : ''; ?> value="2">2</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Pool:</td>
 <td align="left">
 <select name="pool">
-	<option value="No">No</option>
-	<option value="Yes">Yes</option>
+	<option <?php echo $prop['POOL'] == 'No' ? 'selected' : ''; ?> value="No">No</option>
+	<option <?php echo $prop['POOL'] == 'Yes' ? 'selected' : ''; ?> value="Yes">Yes</option>
 </select>
 </td></tr>
 </table>
@@ -451,16 +464,16 @@ else {
 <td align="right" valign="top">Property Type:</td>
 <td align="left" valign="top">
 <select name="property_type">
-<option value="Single Family">Single Family</option>
-<option value="Townhome/Condo">Townhome/Condo</option>
-<option value="Duplex">Duplex</option>
-<option value="Multi Family">Multi Family</option>
-<option value="Land">Land</option>
-<option value="Agent Lead">Agent Lead</option>
-<option value="Listing">Listing</option>
-<option value="TAT Agent">TAT Agent</option>
-<option value="SHS Agent">SHS Agent</option>
-<option value="PLV">PLV</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Single Family' ? 'selected' : ''; ?> value="Single Family">Single Family</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Townhome/Condo' ? 'selected' : ''; ?> value="Townhome/Condo">Townhome/Condo</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Duplex' ? 'selected' : ''; ?> value="Duplex">Duplex</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Multi Family' ? 'selected' : ''; ?> value="Multi Family">Multi Family</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Land' ? 'selected' : ''; ?> value="Land">Land</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Agent Lead' ? 'selected' : ''; ?> value="Agent Lead">Agent Lead</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'Listing' ? 'selected' : ''; ?> value="Listing">Listing</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'TAT Agent' ? 'selected' : ''; ?> value="TAT Agent">TAT Agent</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'SHS Agent' ? 'selected' : ''; ?> value="SHS Agent">SHS Agent</option>
+<option <?php echo $prop['PROPERTY_TYPE'] == 'PLV' ? 'selected' : ''; ?> value="PLV">PLV</option>
 </select>
 </td>
 <td align="right" valign="top">Property Type Details:</td>
