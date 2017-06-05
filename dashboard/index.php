@@ -24,7 +24,7 @@ require_once('include/db_connect.php');
 
         </script>
     </head>
-    <body>
+    <body>    
         <div id="header"><?php require "header.inc.php"; ?></div>
         <div id="menu"><?php require "menu.inc.php"; ?></div>
         <div id="content">
