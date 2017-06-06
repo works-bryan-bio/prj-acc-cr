@@ -54,17 +54,18 @@ require_once("include/db_connect.php");
             $prop[$key] = stripslashes($value);
         }
 
-        $result_array['id']             = $prop['id'];
+        $result_array['id']               = $prop['id'];
         $result_array['drip_campaign_id'] = $prop['drip_campaign_id'];
-        $result_array['subject']        = $prop['subject'];
-        $result_array['lead_types']     = $prop['lead_types'];
-        $result_array['recipients']     = $prop['recipients'];
-        $result_array['date_to_send']   = $prop['date_to_send'];
-        $result_array['body_content']  = $prop['body_content'];
-        $result_array['status']         = $prop['status'];
+        $result_array['subject']          = $prop['subject'];
+        $result_array['lead_types']       = $prop['lead_types'];
+        $result_array['recipients']       = $prop['recipients'];
+        $result_array['recipient_leads']  = $prop['recipient_leads'];
+        $result_array['date_to_send']     = $prop['date_to_send'];
+        $result_array['body_content']     = $prop['body_content'];
+        $result_array['status']           = $prop['status'];
     }
 
-    $a_lead_types  = explode(",", $result_array['lead_types']);
+    $a_lead_types  = explode(",", $result_array['recipient_leads']);
     $a_leads_email = explode(",", $result_array['recipients']);
     $counter = 1;
     foreach( $a_leads_email as $e ){

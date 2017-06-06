@@ -46,8 +46,11 @@ if(is_array($_POST['lead_type'])){
 	
 }
 
-
-
+echo "<pre>";
+print_r($bcc);
+print_r($bcc1);
+echo "</pre>";
+exit;
 
 $subject = $_POST['subject'];
 $content = strip_tags($_POST['messageMassEmail'], '<br>');  

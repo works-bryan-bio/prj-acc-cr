@@ -2,8 +2,8 @@
 
 require_once("include/db_connect.php");
 require_once ("include/swiftmailer/lib/swift_required.php");
-$date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
-			$result = $mysqli->query("SELECT * FROM drip_campaign WHERE date_to_send = '". $date ."' ") or die(mysql_error());
+ $date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
+			$result = $mysqli->query("SELECT * FROM drip_campaign_details WHERE date_to_send = '". $date ."' AND status = 0 ") or die(mysql_error());
 				while($row = mysqli_fetch_array($result)){
 					foreach($row AS $key => $value) {
 						$row[$key] = stripslashes($value);
@@ -15,52 +15,75 @@ $date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
 		  	foreach ($email as $key => $value):
 		  			  		
 		  		$id = $value['id'];
-				$recipient_type = $value['recipient_type'];
+			    $recipient_leads = $value['recipient_leads'];
 				$recipients	 =  $value['recipients'];
 				$subject     = $value['subject'];	
 				$content     = strip_tags($value['body_content'] ,'<br>');
 
 
 				// This set the email and the name of the recipients from the id of leads 
-				if($recipient_type == 1){ 
+				if($recipients){ 
 				    $email_list = "'". str_replace(",", "','", $recipients) ."'" ;
 					$email =  array();
-					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.") AND status = 1") or die(mysql_error());
+					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE CLIENT_EMAIL IN(".$email_list.") ") or die(mysql_error());
 								while($row = mysqli_fetch_array($result)){
 									foreach($row AS $key => $value) {
 										$row[$key] = stripslashes($value);
 									}
 									$email[] = $row;
 								}
-					if($email){
 						
+					if($email){
 						foreach ($email as $key => $value) {
-							$email_bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
+							$email_bcc1[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
 						}
 				    }
 				}
 
+				
 				// This set the email and the name of the recipients from the lead type
-				if($recipient_type == 2){
-
-					$lead_type = $recipients; 
-					$email =  array();
-					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_TYPE = ". '"'.$lead_type.'"' ."  ") or die(mysql_error());
+				if($recipient_leads){
+					
+					$lead_type = "'". str_replace(",", "','", $recipient_leads) ."'"; //$recipients; 
+					$email2 =  array();
+					$result = $mysqli->query("SELECT COMPANY_NAME,CLIENT_EMAIL FROM leads WHERE LEAD_TYPE IN(".$lead_type.") ") or die(mysql_error());
 								while($row = mysqli_fetch_array($result)){
 									foreach($row AS $key => $value) {
 										$row[$key] = stripslashes($value);
 									}
-									$email[] = $row;
+									$email2[] = $row;
 								}
-					if($email){
-						foreach ($email as $key => $value) {
+								
+
+					if($email2){
+						foreach ($email2 as $key => $value) {
 							if($value['CLIENT_EMAIL'] != ""){
-							   $email_bcc[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
+							   $email_bcc2[$value['CLIENT_EMAIL']] = $value['COMPANY_NAME']; 
 							}
 						}
 					}
 				}
 
+
+		   if( isset($email_bcc1) && isset($email_bcc2)){
+
+
+		   	$email_bcc = array_merge($email_bcc1,$email_bcc2);
+		   	unset($email_bcc1,$email_bcc2);
+
+		   }
+
+		   if( isset($email_bcc1)){
+		   	$email_bcc = $email_bcc1;
+		   	unset($email_bcc1);
+		   }		   
+
+		   if( isset($email_bcc2)){
+		   	$email_bcc = $email_bcc2;
+		   	unset($email_bcc2);
+		   }
+
+	
 
 			// Engine for sending email 
 			// Create the Transport
@@ -80,8 +103,7 @@ $date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
 			->setTo(array('info@simplehousesolutionscrm.com' => 'Info'))
 
 			// Set the BCC for the recipient with multiple email for email blast 
-			->setBcc($email_bcc)
-
+			->setBcc($email_bcc)			
 			// Give it a body
 			->setBody($content)
 			;
@@ -90,8 +112,8 @@ $date = date("Y-m-d"); //  	2017-05-05 - Y-m-d
 			$result = $mailer->send($message);	
 			
 			//Update the campaign once sent
-			$mysqli->query("UPDATE drip_campaign SET status = 1  WHERE id = ". $id ." ") or die(mysql_error());
-          
+			$mysqli->query("UPDATE drip_campaign_details SET status = 1  WHERE id = ". $id ." ") or die(mysql_error());
+            
 		  	endforeach;
 		  } 
 
