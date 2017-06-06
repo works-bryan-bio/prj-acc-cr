@@ -623,6 +623,7 @@ if($lead_id!=null) {
 <!-- <input class="button" type="button" name="dbutton" value="Duplicate" onclick="window.location='duplicateLead.php'" formtarget="_blank" /> -->
 <a target="_blank" class="button" href="duplicateLead.php?duplicate_id=<?php echo $lead_id ?>">Duplicate</a>
 <a target="_blank" class="button" href="leadPdfHelper.php?lead_id=<?php echo $lead_id ?>&print=1">Print</a>
+<a target="_blank" class="button" href="makeProperty.php?lead_id=<?php echo $lead_id ?>">Make Property</a>
 <div style="float:right;margin-right:10px;">	
 <?php if( !empty($prop_previous) ){ ?>
 <a class="button" href="editLead.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>

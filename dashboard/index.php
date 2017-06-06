@@ -12,6 +12,7 @@ require_once('include/db_connect.php');
         <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
         <link rel="stylesheet" type="text/css" href="css/dashboard_menu.css"/>
         <link rel="stylesheet" type="text/css" href="js/tigra_calendar/calendar.css">
+        <link rel="stylesheet" type="text/css" href="css/balloon.min.css"/>
         <script type="text/javascript" src="js/tigra_calendar/calendar_us.js"></script>
         <script type="text/javascript">
 
@@ -24,7 +25,7 @@ require_once('include/db_connect.php');
 
         </script>
     </head>
-    <body>
+    <body>    
         <div id="header"><?php require "header.inc.php"; ?></div>
         <div id="menu"><?php require "menu.inc.php"; ?></div>
         <div id="content">
@@ -74,12 +75,32 @@ require_once('include/db_connect.php');
 							$row[$key] = stripslashes($value);
 						}
 						?>
+							<?php
+								$last_note = '';
+								$note_exp1 = explode(']', $row['NOTES']);
+								$note_exp2 = explode('[', $note_exp1[1]); 
+								if(!empty($note_exp2[0])) {
+									$last_note .= 'Last Note: ';
+									//$last_note .= preg_replace('/\s+/', ' ', $note_exp2[0]);
+									$last_note .= $note_exp2[0];
+								} else {
+									$last_note = 'NA';
+								}
+							?>
 						<tr>
 							<td class="center"><input name="leads[]" type="checkbox" value="<?= $row['LEAD_ID'] ?>" /></td>
 							<td class="center"><a href="editLead.php?lead_id=<?= $row['LEAD_ID'] ?>"><img src='images/edit.png' alt='Edit Lead' title='Edit Lead' /></a></td>
 							<td><?= stripslashes($row['LEAD_TYPE']) ?></td>
-							<td><?= stripslashes($row['FIRST_NAME']) ?></td>
-							<td><?= stripslashes($row['LAST_NAME']) ?></td>
+							<td>
+								<div data-balloon-length="medium" data-balloon="<?php echo $last_note; ?>" data-balloon-pos="right" >
+									<?= stripslashes($row['FIRST_NAME']) ?>		
+								</td>
+							</td>
+							<td>
+								<div data-balloon-length="medium" data-balloon="<?php echo $last_note; ?>" data-balloon-pos="right" >
+									<?= stripslashes($row['LAST_NAME']) ?>		
+								</div>
+							</td>
 							<?php if (stripslashes($row['LEAD_TYPE']) == "Buyer") { ?>
 							<td></td>
 							<td><?= stripslashes($row['SEARCH_CITY']) ?></td>
@@ -298,12 +319,32 @@ require_once('include/db_connect.php');
 								}
 							}
 							?>
+							<?php
+								$last_note = '';
+								$note_exp1 = explode(']', $row['NOTES']);
+								$note_exp2 = explode('[', $note_exp1[1]); 
+								if(!empty($note_exp2[0])) {
+									$last_note .= 'Last Note: ';
+									//$last_note .= preg_replace('/\s+/', ' ', $note_exp2[0]);
+									$last_note .= $note_exp2[0];
+								} else {
+									$last_note = 'NA';
+								}
+							?>							
 							<tr>
 								<td class="center"><input name="leads[]" type="checkbox" value="<?= $row['LEAD_ID'] ?>" /></td>
 								<td class="center"><a href="editLead.php?lead_id=<?= $row['LEAD_ID'] ?>"><img src='images/edit.png' alt='Edit Lead' title='Edit Lead' /></a></td>
 								<td><?= stripslashes($row['LEAD_TYPE']) ?></td>
-								<td><?= stripslashes($row['FIRST_NAME']) ?></td>
-								<td><?= stripslashes($row['LAST_NAME']) ?></td>
+								<td>
+									<div data-balloon-length="medium" data-balloon="<?php echo $last_note; ?>" data-balloon-pos="right" >								
+										<?= stripslashes($row['FIRST_NAME']) ?>
+									</div>
+								</td>
+								<td>
+									<div data-balloon-length="medium" data-balloon="<?php echo $last_note; ?>" data-balloon-pos="right" >								
+										<?= stripslashes($row['LAST_NAME']) ?>
+									</div>
+								</td>
 								<?php if (stripslashes($row['LEAD_TYPE']) == "Buyer") { ?>
 								<td></td>
 								<td><?= stripslashes($row['SEARCH_CITY']) ?></td>
@@ -320,7 +361,8 @@ require_once('include/db_connect.php');
 								<td></td>
 								<?php } ?>
 								<?php if ($row['FOLLOW_UP_TIME'] != null && $row['FOLLOW_UP_TIME'] != '00:00:00') { ?>
-								<td><?= $row['FOLLOW_UP_TIME'] ?></td>
+
+								<td><?= date("g:i a", strtotime($row['FOLLOW_UP_TIME'])); ?></td>
 								<?php } else { ?>
 								<td></td>
 								<?php } ?>

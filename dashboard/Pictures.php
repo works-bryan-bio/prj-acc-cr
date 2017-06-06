@@ -92,10 +92,10 @@ if(isset($_GET['folder'])) {
 
 		<div style="float:right;margin-right:10px;">	
 			<?php if( !empty($prop_previous) ){ ?>
-					<a class="button" href="transactionCoordinator.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
+					<a class="button" href="Pictures.php?lead_id=<?php echo $prop_previous['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xab;</a>
 			<?php } ?>
 			<?php if( !empty($prop_next) ){ ?>
-					<a class="button" href="transactionCoordinator.php?lead_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
+					<a class="button" href="Pictures.php?lead_id=<?php echo $prop_next['lead_id']; ?>" style="text-decoration:none;color:#333;font-weight:normal;margin:0px;">&#xbb;</a>
 			<?php } ?>
 		</div>
 		<br /><br />

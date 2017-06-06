@@ -146,7 +146,6 @@ function calculateUA() {
 		}*/
 		if (arv_seventyseven && repair_cost) {
 			mao_total = arv_seventyseven - repair_cost;
-			
 		}
 		document.getElementById("ua_mao").value = mao_total;
 
