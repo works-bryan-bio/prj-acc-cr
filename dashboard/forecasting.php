@@ -251,7 +251,7 @@ if ($session->isSHSAgent()) {
 
 <?php
 if ($forecast_chance=="All") {
-	$chances = array("Hot Lead (0%)","Listing Appointment (20%)","Showing (30%)","Docusign Sent (60%)","Active Listing (70%)","Offer (75%)","Executed (85%)","Pending (90%)","Exit Confirmed (95%)","Closed (100%)");
+	$chances = array("Hot Lead (0%)","Listing Appointment (20%)","Showing (30%)","Docusign Sent (60%)","Active Listing (70%)","Offer (75%)","Executed (75%)", "Executed (85%)","Pending (90%)","Exit Confirmed (95%)","Closed (100%)");
 } else {
 	$chances = array($forecast_chance);
 }
@@ -270,8 +270,8 @@ foreach ($chances as $fc) {
 <th width="120">Lead Source</th>
 <th width="100">Deal<br />Value</th>
 </tr>
-<?php
-	$query = "SELECT * FROM leads WHERE FORECAST_CHANCE='" . $fc . "' AND " . $stquery . " " . $edquery . " " . $sequery . " " . $uquery . " (STATUS='Live' OR STATUS='Placed' OR STATUS='Field Agent') ORDER BY CLOSED_DATE";
+<?php	
+	$query = "SELECT * FROM leads WHERE FORECAST_CHANCE='" . $fc . "' AND " . $stquery . " " . $edquery . " " . $sequery . " " . $uquery . " (STATUS='Live' OR STATUS='Placed' OR STATUS='Field Agent') ORDER BY CLOSED_DATE";	
 	$result = $mysqli->query($query) or die(mysql_error());
 	if ($result->num_rows>0) {
 		$deal_grand_total = 0;
@@ -293,10 +293,22 @@ foreach ($chances as $fc) {
 			}
 			$deal_total = 0;
 			$predicted = (float) $row['PREDICTED_AMT'];
-			if ($fc=="Provider Selected") $deal_total = $predicted * .50;
+			if ($fc=="Hot Lead (0%)") $deal_total += $predicted * 0;
+			if ($fc=="Listing Appointment (30%)") $deal_total += $predicted * .30;
+			if ($fc=="Showing (30%)") $deal_total += $predicted * .30;
+			if ($fc=="Docusign Sent (60%)") $deal_total += $predicted * .60;
+			if ($fc=="Active Listing (70%)") $deal_total += $predicted * .70;
+			if ($fc=="Offer (75%)") $deal_total += $predicted * .75;
+			if ($fc=="Executed (75%)") $deal_total += $predicted * .75;
+			if ($fc=="Pending (75%)") $deal_total += $predicted * .75;
+			if ($fc=="Exit Confirmed (95%)") $deal_total += $predicted * .95;
+			if ($fc=="Closed (100%)") $deal_total += $predicted * 1;
+
+			
+			/*if ($fc=="Provider Selected") $deal_total = $predicted * .50;
 			if ($fc=="Agreement Issued") $deal_total = $predicted * .85;
 			if ($fc=="Signed") $deal_total = $predicted * .95;
-			if ($fc=="Funds Cleared") $deal_total = $predicted * 1;
+			if ($fc=="Funds Cleared") $deal_total = $predicted * 1;*/
 			$deal_grand_total += $deal_total;
 ?>
 <tr>

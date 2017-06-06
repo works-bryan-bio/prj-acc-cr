@@ -93,7 +93,7 @@ $result_query = $mysqli->query("SELECT * FROM drip_campaign_details WHERE drip_c
                     </td>
                     <td><?php echo $row['subject']; ?></td>
                     <td><?php echo $row['recipients']; ?></td>
-                    <td><?php echo $row['lead_types']; ?></td>
+                    <td><?php echo  str_replace(",", ", ", $row['recipient_leads']); ?></td>
                     <td><?php echo $row['date_to_send']; ?></td>
                     <td><?php echo $row['status'] == 1 ? 'Sent' : 'Onqueue'; ?></td>
                 </tr>

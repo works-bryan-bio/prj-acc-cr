@@ -238,6 +238,7 @@ if (isset($_GET['submit'])) {
 ?>
 <p />
 <?php if($result!=null) { ?>
+<div style="float:left; width:88%">
 <table class="grid">
 <tr><td colspan="13"><h3>Matching Leads</h3></td></tr>
 <tr style="font-weight:bold">
@@ -266,6 +267,19 @@ while($row = mysqli_fetch_array($result)){
 		$row[$key] = stripslashes($value);
 	}
 ?>
+<?php
+if ($row['PRIORITY'] == "Hot")
+	++$hot;
+if ($row['PRIORITY'] == "Strong")
+	++$strong;
+if ($row['PRIORITY'] == "Mild")
+	++$mild;
+if ($row['PRIORITY'] == "Weak")
+	++$weak;
+if ($row['PRIORITY'] == "NoContact")
+	++$no_contract;
+++$total;
+?>
 <tr>
 <td class="center"><a href="editLead.php?lead_id=<?=$row['LEAD_ID']?>&action=search"><img src='images/edit.png' alt='Edit Lead' title='Edit Lead' /></a></td>
 <td><?=$row['LEAD_TYPE'] ?></td>
@@ -290,6 +304,18 @@ while($row = mysqli_fetch_array($result)){
 }
 ?>
 </table>
+</div>
+<div style="float:right; width:10%">
+    <table class="grid">
+        <tr><td colspan="2"><h3>Summary</h3></td></tr>
+        <tr><td align="right">Call Back Total:</td><td><?= $total ?></td></tr>
+        <tr class="Hot"><td align="right">Hot:</td><td><?= $hot ?></td></tr>
+        <tr class="Strong"><td align="right">Strong:</td><td><?= $strong ?></td></tr>
+        <tr class="Mild"><td align="right">Mild:</td><td><?= $mild ?></td></tr>
+        <tr class="Weak"><td align="right">Weak:</td><td><?= $weak ?></td></tr>
+        <tr class="NoContact"><td align="right">No Contact:</td><td><?= $no_contract ?></td></tr>
+    </table>
+</div>
 <?php } ?>
 
 <!-- End Content -->
