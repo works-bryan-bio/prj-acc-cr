@@ -273,12 +273,14 @@ else {
 <div align="center">
 <form name="form1" method="post" action="<?=$PHP_SELF?>" enctype="multipart/form-data">
 <input type="hidden" name="date_added" value="<?=date("Y-m-d")?>">
+<input type="hidden" name="addMakeProperty" value="1">
 <table class="input">
 <tr>
 <th>Make Property</th>
 <th style="text-align: center;">
 <input class="button" type="submit" name="submit" value="Make Property">
-<input class="button" type="button" onClick="javascript:history.back()" value="Cancel">
+<!-- <input class="button" type="button" onClick="javascript:history.back()" value="Cancel"> -->
+<input class="button" type="button" onclick="javascript:location.href='index.php'" value="Cancel">
 </th>
 <th>&nbsp;</th>
 </tr>
@@ -315,31 +317,31 @@ else {
 <input name="contact_name" size="50" value="" /></td></tr>
 
 <tr><td align="right">Contact Email:</td><td align="left">
-<input name="contact_email" size="50" maxlength="120" value="" /></td></tr>
+<input name="contact_email" size="50" maxlength="120" value="<?php echo $prop['CLIENT_EMAIL']; ?>" /></td></tr>
 
 <tr><td align="right">Office Phone:</td><td align="left">
-<input name="office_phone" size="30" value="" onblur="formatPhoneNumber(this);" /></td></tr>
+<input name="office_phone" size="30" value="<?php echo $prop['OFFICE_PHONE']; ?>" onblur="formatPhoneNumber(this);" /></td></tr>
 
 <tr><td align="right">Cell Phone:</td><td align="left">
-<input name="cell_phone" size="30" value="" onblur="formatPhoneNumber(this);" /></td></tr>
+<input name="cell_phone" size="30" value="<?php echo $prop['CELL_PHONE']; ?>" onblur="formatPhoneNumber(this);" /></td></tr>
 
 <tr><td align="right">Other Phone:</td><td align="left">
-<input name="other_phone" size="30" value="" onblur="formatPhoneNumber(this);" /></td></tr>
+<input name="other_phone" size="30" value="<?php echo $prop['OTHER_PHONE']; ?>" onblur="formatPhoneNumber(this);" /></td></tr>
 
 <tr><td align="right">Fax:</td><td align="left">
-<input name="fax" size="30" value="" onblur="formatPhoneNumber(this);" /></td></tr>
+<input name="fax" size="30" value="<?php echo $prop['FAX']; ?>" onblur="formatPhoneNumber(this);" /></td></tr>
 
 <tr><td align="right">Web Site:</td><td align="left">
-<input name="website" size="50" value="" /></td></tr>
+<input name="website" size="50" value="<?php echo $prop['WEBSITE']; ?>" /></td></tr>
 
 <tr><td align="right">Address1:</td><td align="left">
-<input name="address_1" size="50" value="" /></td></tr>
+<input name="address_1" size="50" value="<?php echo $prop['ADDRESS_1']; ?>" /></td></tr>
 
 <tr><td align="right">Address2:</td><td align="left">
-<input name="address_2" size="50" value="" /></td></tr>
+<input name="address_2" size="50" value="<?php echo $prop['ADDRESS_2']; ?> " /></td></tr>
 
 <tr><td align="right">City:</td><td align="left">
-<input name="city" size="30" value="" /></td></tr>
+<input name="city" size="30" value="<?php echo $prop['CITY']; ?>" /></td></tr>
 
 <tr><td align="right">State:</td><td align="left">
 <select name="state">
@@ -351,7 +353,7 @@ else {
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['ABBREV']?>"><?=$row['ABBREV']?></option>
+<option <?php echo $prop['STATE'] == $row['ABBREV'] ? 'selected' : ''; ?> value="<?=$row['ABBREV']?>"><?=$row['ABBREV']?></option>
 <?php
 		}
 ?>
@@ -359,11 +361,11 @@ else {
 </td></tr>
 
 <tr><td align="right">Zip Code:</td><td align="left">
-<input name="zip" size="10" value="" /></td></tr>
+<input name="zip" size="10" value="<?php echo $prop['ZIP']; ?>" /></td></tr>
 
 <tr><td align="right">Country:</td><td align="left">
 <select name="country">
-<option value="United States" <?if($prop['COUNTRY']=="United States") echo "selected=\"selected\""?>>United States</option>
+<option value="United States" <?php if($prop['COUNTRY']=="United States") echo "selected=\"selected\""; ?>>United States</option>
 <?php
 		$result = $mysqli->query("SELECT * FROM countries")	or die(mysql_error());
 		while($row = mysqli_fetch_array($result)){
@@ -384,7 +386,7 @@ else {
 <input name="year_built" size="10" value="<?php echo $prop['YEAR_BUILT']; ?>" /></td></tr>
 
 <tr><td align="right">Square Feet:</td><td align="left">
-<input name="square_feet" size="10" value="<?php $prop['SQUARE_FEET']; ?>" /></td></tr>
+<input name="square_feet" size="10" value="<?php echo $prop['SQUARE_FEET']; ?>" /></td></tr>
 
 <tr><td align="right">Garage Type:</td>
 <td align="left">
@@ -589,14 +591,13 @@ Condition:<br />
 <input type="checkbox" name="fully_renovated" value="1" />Fully Renovated<br />
 <input type="checkbox" name="rental_grade_finish" value="1" />Rental Grade Finish<br />
 </td></tr>
-
-<td align="left" valign="top">
+<!-- <td align="left" valign="top">
 Condition:<br />
 <input type="checkbox" name="leased" value="1" />Leased<br />
 <input type="checkbox" name="needs_work" value="1" />Needs Work<br />
 <input type="checkbox" name="fully_renovated" value="1" />Fully Renovated<br />
 <input type="checkbox" name="rental_grade_finish" value="1" />Rental Grade Finish<br />
-</td></tr>
+</td></tr> -->
 </table>
 
 <tr><td colspan="3">

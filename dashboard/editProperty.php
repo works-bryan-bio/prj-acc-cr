@@ -6,6 +6,8 @@ require_once("include/db_connect.php");
 require_once("include/simpleimage.php");
 require_once("include/convertAddress.php");
 
+$property_id = $_GET['property_id'];
+
 // check if the form has been submitted. If it has, start to process the form and save it to the database
 if (isset($_POST["submit"]) || isset($_POST["dsubmit"]))
 {
@@ -272,8 +274,57 @@ if (isset($_POST["submit"]) || isset($_POST["dsubmit"]))
 	else	{
 		echo "Error: Property ID is required";
 	}
-}
-else {
+} else if (isset($_POST['submit_file']) && $property_id != null) {
+
+	header('Content-Type: text/plain; charset=utf-8');
+
+	if(isset($_FILES['fileToUpload'])){
+
+		$errors 	 = array();
+		$file_name = $_FILES['fileToUpload']['name'];
+		$file_size = $_FILES['fileToUpload']['size'];
+		$file_tmp  = $_FILES['fileToUpload']['tmp_name'];
+		$file_type = $_FILES['fileToUpload']['type'];
+		$file_err  = $_FILES['fileToUpload']['error'];
+		$file_title = $_POST['file_title'];
+
+		if(isset($file_err) && $file_err != 0) {
+			$errors[] = 'Error uploading file..';
+		}
+
+		/*if(!isset($file_title) || $file_title == '') {
+			$errors[] = 'File Name must not be null..';
+		}*/
+
+		if(empty($errors)==true) {
+			move_uploaded_file($file_tmp,"files/property_attachments/".strtolower($file_name));
+			//After upload save file to database
+			global $session, $database, $form;			
+			$q = "INSERT INTO property_attachments (
+                                    type, property_id, title, filename, date_uploaded
+                                )VALUES(
+                                	1,
+                                    " . $property_id . ",
+                                    '" . stripslashes(str_replace('\r\n', ' ', strtolower($file_name))) . "',
+                                    '" . stripslashes(str_replace('\r\n', ' ', strtolower($file_name))) . "',
+                                    '" . stripslashes(str_replace('\r\n', ' ', date("Y-m-d H:i:s"))) . "')";  
+
+            $result = $database->query($q); 
+            header("Location: editProperty.php?property_id=" . $property_id);
+		}else{
+		 print_r($errors);
+		 exit;
+		}
+	}	
+} else if( $_GET['del_attachment'] != '' && $_GET['del_attachment'] == 1 && $property_id != null ) {
+	global $session, $database, $form;
+
+	unlink('files/property_attachments/'. $_GET['file']);
+
+	$del = "DELETE FROM property_attachments WHERE id = ". $_GET['attach_id'] ." ";  
+	$result = $database->query($del);
+	header("Location: editProperty.php?property_id=" . $property_id); 
+} else {
 // if the form hasn't been submitted, display the form
 ?>
 
@@ -350,7 +401,7 @@ if (!isset($_GET['property_id'])) {
 				$row[$key] = stripslashes($value);
 			}
 ?>
-<option value="<?=$row['PROVIDER_ID']?>" <?if($row['PROVIDER_ID']==$prop['PROVIDER_ID']) echo "selected=\"selected\""?>><?=$row['COMPANY_NAME']?></option>
+<option value="<?=$row['PROVIDER_ID']?>" <?php if($row['PROVIDER_ID']==$prop['PROVIDER_ID']) echo "selected=\"selected\""?>><?=$row['COMPANY_NAME']?></option>
 <?php
 		}
 ?>
@@ -447,73 +498,72 @@ if (!isset($_GET['property_id'])) {
 <tr><td align="right">Garage Type:</td>
 <td align="left">
 <select name="garage_type">
-	<option value="" <?if($prop['GARAGE_TYPE']=='') echo "selected=\"selected\""?>></option>
-	<option value="Attached" <?if($prop['GARAGE_TYPE']=='Attached') echo "selected=\"selected\""?>>Attached</option>
-	<option value="Detached" <?if($prop['GARAGE_TYPE']=='Detached') echo "selected=\"selected\""?>>Detached</option>
+	<option value="" <?php if($prop['GARAGE_TYPE']=='') echo "selected=\"selected\""?>></option>
+	<option value="Attached" <?php if($prop['GARAGE_TYPE']=='Attached') echo "selected=\"selected\""?>>Attached</option>
+	<option value="Detached" <?php if($prop['GARAGE_TYPE']=='Detached') echo "selected=\"selected\""?>>Detached</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Garages:</td>
 <td align="left">
 <select name="garages">
-	<option value="0" <?if($prop['GARAGES']=='0') echo "selected=\"selected\""?>>0</option>
-	<option value="1" <?if($prop['GARAGES']=='1') echo "selected=\"selected\""?>>1</option>
-	<option value="2" <?if($prop['GARAGES']=='2') echo "selected=\"selected\""?>>2</option>
-	<option value="3" <?if($prop['GARAGES']=='3') echo "selected=\"selected\""?>>3</option>
-	<option value="4" <?if($prop['GARAGES']=='4') echo "selected=\"selected\""?>>4</option>
-	<option value="5" <?if($prop['GARAGES']=='5') echo "selected=\"selected\""?>>5</option>
+	<option value="0" <?php if($prop['GARAGES']=='0') echo "selected=\"selected\""?>>0</option>
+	<option value="1" <?php if($prop['GARAGES']=='1') echo "selected=\"selected\""?>>1</option>
+	<option value="2" <?php if($prop['GARAGES']=='2') echo "selected=\"selected\""?>>2</option>
+	<option value="3" <?php if($prop['GARAGES']=='3') echo "selected=\"selected\""?>>3</option>
+	<option value="4" <?php if($prop['GARAGES']=='4') echo "selected=\"selected\""?>>4</option>
+	<option value="5" <?php if($prop['GARAGES']=='5') echo "selected=\"selected\""?>>5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Converted Garage:</td>
 <td align="left">
 <select name="converted_garage">
-	<option value="No" <?if($prop['CONVERTED_GARAGE']=='No') echo "selected=\"selected\""?>>No</option>
-	<option value="Yes" <?if($prop['CONVERTED_GARAGE']=='Yes') echo "selected=\"selected\""?>>Yes</option>
+	<option value="No" <?php if($prop['CONVERTED_GARAGE']=='No') echo "selected=\"selected\""?>>No</option>
+	<option value="Yes" <?php if($prop['CONVERTED_GARAGE']=='Yes') echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Bedrooms:</td>
 <td align="left">
 <select name="bedrooms">
-	<option value="0" <?if($prop['BEDROOMS']=='0') echo "selected=\"selected\""?>>0</option>
-	<option value="1" <?if($prop['BEDROOMS']=='1') echo "selected=\"selected\""?>>1</option>
-	<option value="2" <?if($prop['BEDROOMS']=='2') echo "selected=\"selected\""?>>2</option>
-	<option value="3" <?if($prop['BEDROOMS']=='3') echo "selected=\"selected\""?>>3</option>
-	<option value="4" <?if($prop['BEDROOMS']=='4') echo "selected=\"selected\""?>>4</option>
-	<option value="5" <?if($prop['BEDROOMS']=='5') echo "selected=\"selected\""?>>5</option>
+	<option value="0" <?php if($prop['BEDROOMS']=='0') echo "selected=\"selected\""?>>0</option>
+	<option value="1" <?php if($prop['BEDROOMS']=='1') echo "selected=\"selected\""?>>1</option>
+	<option value="2" <?php if($prop['BEDROOMS']=='2') echo "selected=\"selected\""?>>2</option>
+	<option value="3" <?php if($prop['BEDROOMS']=='3') echo "selected=\"selected\""?>>3</option>
+	<option value="4" <?php if($prop['BEDROOMS']=='4') echo "selected=\"selected\""?>>4</option>
+	<option value="5" <?php if($prop['BEDROOMS']=='5') echo "selected=\"selected\""?>>5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Bathrooms:</td>
 <td align="left">
 <select name="bathrooms">
-	<option value="0" <?if($prop['BATHROOMS']=='0') echo "selected=\"selected\""?>>0</option>
-	<option value="1" <?if($prop['BATHROOMS']=='1') echo "selected=\"selected\""?>>1</option>
-	<option value="2" <?if($prop['BATHROOMS']=='2') echo "selected=\"selected\""?>>2</option>
-	<option value="3" <?if($prop['BATHROOMS']=='3') echo "selected=\"selected\""?>>3</option>
-	<option value="4" <?if($prop['BATHROOMS']=='4') echo "selected=\"selected\""?>>4</option>
-	<option value="5" <?if($prop['BATHROOMS']=='5') echo "selected=\"selected\""?>>5</option>
+	<option value="0" <?php if($prop['BATHROOMS']=='0') echo "selected=\"selected\""?>>0</option>
+	<option value="1" <?php if($prop['BATHROOMS']=='1') echo "selected=\"selected\""?>>1</option>
+	<option value="2" <?php if($prop['BATHROOMS']=='2') echo "selected=\"selected\""?>>2</option>
+	<option value="3" <?php if($prop['BATHROOMS']=='3') echo "selected=\"selected\""?>>3</option>
+	<option value="4" <?php if($prop['BATHROOMS']=='4') echo "selected=\"selected\""?>>4</option>
+	<option value="5" <?php if($prop['BATHROOMS']=='5') echo "selected=\"selected\""?>>5</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Stories:</td>
 <td align="left">
 <select name="stories">
-	<option value="1" <?if($prop['STORIES']=='1') echo "selected=\"selected\""?>>1</option>
-	<option value="2" <?if($prop['STORIES']=='2') echo "selected=\"selected\""?>>2</option>
+	<option value="1" <?php if($prop['STORIES']=='1') echo "selected=\"selected\""?>>1</option>
+	<option value="2" <?php if($prop['STORIES']=='2') echo "selected=\"selected\""?>>2</option>
 </select>
 </td></tr>
 
 <tr><td align="right">Pool:</td>
 <td align="left">
 <select name="pool">
-	<option value="No" <?if($prop['POOL']=='No') echo "selected=\"selected\""?>>No</option>
-	<option value="Yes" <?if($prop['POOL']=='Yes') echo "selected=\"selected\""?>>Yes</option>
+	<option value="No" <?php if($prop['POOL']=='No') echo "selected=\"selected\""?>>No</option>
+	<option value="Yes" <?php if($prop['POOL']=='Yes') echo "selected=\"selected\""?>>Yes</option>
 </select>
 </td></tr>
 </table>
-
 </td>
 <td align="left" valign="top" width="50%">
 
@@ -522,24 +572,24 @@ if (!isset($_GET['property_id'])) {
 <td align="right" valign="top">Property Type:</td>
 <td align="left" valign="top">
 <select name="property_type">
-<option value="Single Family" <?if($prop['PROPERTY_TYPE']=="Single Family") echo "selected=\"selected\"";?>>Single Family</option>
-<option value="Townhome/Condo" <?if($prop['PROPERTY_TYPE']=="Townhome/Condo") echo "selected=\"selected\"";?>>Townhome/Condo</option>
-<option value="Duplex" <?if($prop['PROPERTY_TYPE']=="Duplex") echo "selected=\"selected\"";?>>Duplex</option>
-<option value="Multi Family" <?if($prop['PROPERTY_TYPE']=="Multi Family") echo "selected=\"selected\"";?>>Multi Family</option>
-<option value="Land" <?if($prop['PROPERTY_TYPE']=="Land") echo "selected=\"selected\"";?>>Land</option>
-<option value="Agent Lead" <?if($prop['PROPERTY_TYPE']=="Agent Lead") echo "selected=\"selected\"";?>>Agent Lead</option>
-<option value="Listing" <?if($prop['PROPERTY_TYPE']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
-<option value="TAT Agent" <?if($prop['PROPERTY_TYPE']=="TAT Agent") echo "selected=\"selected\"";?>>TAT Agent</option>
-<option value="SHS Agent" <?if($prop['PROPERTY_TYPE']=="SHS Agent") echo "selected=\"selected\"";?>>SHS Agent</option>
-<option value="PLV" <?if($prop['PROPERTY_TYPE']=="PLV") echo "selected=\"selected\"";?>>PLV</option>
+<option value="Single Family" <?php if($prop['PROPERTY_TYPE']=="Single Family") echo "selected=\"selected\"";?>>Single Family</option>
+<option value="Townhome/Condo" <?php if($prop['PROPERTY_TYPE']=="Townhome/Condo") echo "selected=\"selected\"";?>>Townhome/Condo</option>
+<option value="Duplex" <?php if($prop['PROPERTY_TYPE']=="Duplex") echo "selected=\"selected\"";?>>Duplex</option>
+<option value="Multi Family" <?php if($prop['PROPERTY_TYPE']=="Multi Family") echo "selected=\"selected\"";?>>Multi Family</option>
+<option value="Land" <?php if($prop['PROPERTY_TYPE']=="Land") echo "selected=\"selected\"";?>>Land</option>
+<option value="Agent Lead" <?php if($prop['PROPERTY_TYPE']=="Agent Lead") echo "selected=\"selected\"";?>>Agent Lead</option>
+<option value="Listing" <?php if($prop['PROPERTY_TYPE']=="Listing") echo "selected=\"selected\"";?>>Listing</option>
+<option value="TAT Agent" <?php if($prop['PROPERTY_TYPE']=="TAT Agent") echo "selected=\"selected\"";?>>TAT Agent</option>
+<option value="SHS Agent" <?php if($prop['PROPERTY_TYPE']=="SHS Agent") echo "selected=\"selected\"";?>>SHS Agent</option>
+<option value="PLV" <?php if($prop['PROPERTY_TYPE']=="PLV") echo "selected=\"selected\"";?>>PLV</option>
 </select>
 </td>
 <td align="right" valign="top">Property Type Details:</td>
 <td align="left">
-<input type="checkbox" name="property_type_details[]" value="Rental" <?if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Rental") !== FALSE) echo "checked";?> />Rental<br />
-<input type="checkbox" name="property_type_details[]" value="Flip" <?if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Flip") !== FALSE) echo "checked";?> />Flip<br />
-<input type="checkbox" name="property_type_details[]" value="Wholesale" <?if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Wholesale") !== FALSE) echo "checked";?> />Wholesale<br />
-<input type="checkbox" name="property_type_details[]" value="Owner Occupied" <?if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Owner Occupied") !== FALSE) echo "checked";?> />Owner Occupied<br />
+<input type="checkbox" name="property_type_details[]" value="Rental" <?php if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Rental") !== FALSE) echo "checked";?> />Rental<br />
+<input type="checkbox" name="property_type_details[]" value="Flip" <?php if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Flip") !== FALSE) echo "checked";?> />Flip<br />
+<input type="checkbox" name="property_type_details[]" value="Wholesale" <?php if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Wholesale") !== FALSE) echo "checked";?> />Wholesale<br />
+<input type="checkbox" name="property_type_details[]" value="Owner Occupied" <?php if(strpos($prop['PROPERTY_TYPE_DETAILS'], "Owner Occupied") !== FALSE) echo "checked";?> />Owner Occupied<br />
 </td>
 </tr>
 
@@ -547,9 +597,9 @@ if (!isset($_GET['property_id'])) {
 <td align="right">Rating:</td>
 <td align="left">
 <select name="rating">
-<option value="3" <?if($prop['RATING']=="3") echo "selected=\"selected\"";?>>3 Star</option>
-<option value="4" <?if($prop['RATING']=="4") echo "selected=\"selected\"";?>>4 Star</option>
-<option value="5" <?if($prop['RATING']=="5") echo "selected=\"selected\"";?>>5 Star</option>
+<option value="3" <?php if($prop['RATING']=="3") echo "selected=\"selected\"";?>>3 Star</option>
+<option value="4" <?php if($prop['RATING']=="4") echo "selected=\"selected\"";?>>4 Star</option>
+<option value="5" <?php if($prop['RATING']=="5") echo "selected=\"selected\"";?>>5 Star</option>
 </select>
 </td>
 <td align="right">Term End Date:</td><td align="left" colspan="2">
@@ -570,8 +620,8 @@ if (!isset($_GET['property_id'])) {
 <td align="right">Term Tier:</td>
 <td align="left">
 <select name="term_tier">
-<option value="Regular" <?if($prop['TERM_TIER']=="Regular") echo "selected=\"selected\"";?>>Regular</option>
-<option value="Preferred" <?if($prop['TERM_TIER']=="Preferred") echo "selected=\"selected\"";?>>Preferred</option>
+<option value="Regular" <?php if($prop['TERM_TIER']=="Regular") echo "selected=\"selected\"";?>>Regular</option>
+<option value="Preferred" <?php if($prop['TERM_TIER']=="Preferred") echo "selected=\"selected\"";?>>Preferred</option>
 </select>
 </td>
 </tr>
@@ -580,14 +630,14 @@ if (!isset($_GET['property_id'])) {
 <td align="right" valign="top">Property Status:</td>
 <td align="left">
 <select name="status" class="<?=$prop['STATUS']?>" onchange="this.setAttribute('class',this.value);">
-<option value="active" <?if($prop['STATUS']=="active") echo "selected=\"selected\"";?>>Active</option>
-<option value="pending" <?if($prop['STATUS']=="pending") echo "selected=\"selected\"";?>>Pending</option>
-<option value="delisted" <?if($prop['STATUS']=="delisted") echo "selected=\"selected\"";?>>Delisted</option>
+<option value="active" <?php if($prop['STATUS']=="active") echo "selected=\"selected\"";?>>Active</option>
+<option value="pending" <?php if($prop['STATUS']=="pending") echo "selected=\"selected\"";?>>Pending</option>
+<option value="delisted" <?php if($prop['STATUS']=="delisted") echo "selected=\"selected\"";?>>Delisted</option>
 </select>
 </td>
 <td align="right">Accepted Terms:</td>
 <td align="left">
-<input type="checkbox" name="accepted_terms" value="1" <?if($prop['ACCEPTED_TERMS']==1) echo "checked=\"checked\"";?>/>
+<input type="checkbox" name="accepted_terms" value="1" <?php if($prop['ACCEPTED_TERMS']==1) echo "checked=\"checked\"";?>/>
 </td>
 </tr>
 
@@ -631,12 +681,12 @@ if (!isset($_GET['property_id'])) {
 <td align="right">Primary Photo:</td>
 <td align="left" colspan="3">
 <select name="primary_photo">
-<option value="1" <?if($prop['PRIMARY_PHOTO']=="1") echo "selected=\"selected\"";?>>1</option>
-<option value="2" <?if($prop['PRIMARY_PHOTO']=="2") echo "selected=\"selected\"";?>>2</option>
-<option value="3" <?if($prop['PRIMARY_PHOTO']=="3") echo "selected=\"selected\"";?>>3</option>
-<option value="4" <?if($prop['PRIMARY_PHOTO']=="4") echo "selected=\"selected\"";?>>4</option>
-<option value="5" <?if($prop['PRIMARY_PHOTO']=="5") echo "selected=\"selected\"";?>>5</option>
-<option value="6" <?if($prop['PRIMARY_PHOTO']=="6") echo "selected=\"selected\"";?>>6</option>
+<option value="1" <?php if($prop['PRIMARY_PHOTO']=="1") echo "selected=\"selected\"";?>>1</option>
+<option value="2" <?php if($prop['PRIMARY_PHOTO']=="2") echo "selected=\"selected\"";?>>2</option>
+<option value="3" <?php if($prop['PRIMARY_PHOTO']=="3") echo "selected=\"selected\"";?>>3</option>
+<option value="4" <?php if($prop['PRIMARY_PHOTO']=="4") echo "selected=\"selected\"";?>>4</option>
+<option value="5" <?php if($prop['PRIMARY_PHOTO']=="5") echo "selected=\"selected\"";?>>5</option>
+<option value="6" <?php if($prop['PRIMARY_PHOTO']=="6") echo "selected=\"selected\"";?>>6</option>
 </select>
 </td>
 </tr>
@@ -649,14 +699,60 @@ if (!isset($_GET['property_id'])) {
 <tr>
 <td align="left" valign="top">
 Condition:<br />
-<input type="checkbox" name="leased" value="1" <?if($prop['LEASED']==1) echo "checked=\"checked\"";?> />Leased<br />
-<input type="checkbox" name="needs_work" value="1" <?if($prop['NEEDS_WORK']==1) echo "checked=\"checked\"";?> />Needs Work<br />
-<input type="checkbox" name="fully_renovated" value="1" <?if($prop['FULLY_RENOVATED']==1) echo "checked=\"checked\"";?> />Fully Renovated<br />
-<input type="checkbox" name="rental_grade_finish" value="1" <?if($prop['RENTAL_GRADE_FINISH']==1) echo "checked=\"checked\"";?> />Rental Grade Finish<br />
+<input type="checkbox" name="leased" value="1" <?php if($prop['LEASED']==1) echo "checked=\"checked\"";?> />Leased<br />
+<input type="checkbox" name="needs_work" value="1" <?php if($prop['NEEDS_WORK']==1) echo "checked=\"checked\"";?> />Needs Work<br />
+<input type="checkbox" name="fully_renovated" value="1" <?php if($prop['FULLY_RENOVATED']==1) echo "checked=\"checked\"";?> />Fully Renovated<br />
+<input type="checkbox" name="rental_grade_finish" value="1" <?php if($prop['RENTAL_GRADE_FINISH']==1) echo "checked=\"checked\"";?> />Rental Grade Finish<br />
 </td></tr>
 </table>
+<tr>
+	<td colspan="1">
+		<hr />
+		<?php
+			$attachments_result = $mysqli->query("SELECT * FROM property_attachments WHERE property_id= ".$prop_id." AND type = 1 ORDER BY filename ASC") or die(mysql_error());
+		?>
+		<table width="100%">
+				<tr>
+					<td colspan="2"><h2><strong>Contract Paperworks</strong></h2></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="file" name="fileToUpload" id="fileToUpload"> <!-- <input type="text" name="file_title" id="file_title"> --> <input class="button" type="submit" name="submit_file" value="Attached File" /></td>
+				</tr>
+				<tr><td colspan="2"><hr /></td></tr>
+				<?php if($attachments_result->num_rows) { ?>
+				<tr>
+					<td><strong>Title</strong></td>
+					<td><strong>Actions</strong></td>
+				</tr>
+						<?php
+							while ($row_attach = mysqli_fetch_array($attachments_result)) {
+							foreach ($row_attach AS $key => $value) {
+								$row_attach[$key] = stripslashes($value);
+							}				
+						?>
+						<tr>
+							<td><a target="_blank" href="files/property_attachments/<?php echo $row_attach['filename']; ?>"><?php echo $row_attach['title']; ?></a></td>
+							<td>
+								<a href="files/property_attachments/<?php echo $row_attach['filename']; ?>" download><img src='images/download.png' alt='Download File' title='Download File' /></a>
+								<a href="files/property_attachments/<?php echo $row_attach['filename']; ?>"  onclick="window.open('files/property_attachments/<?php echo $row_attach['filename']; ?>', 'newwindow', 'width=800, height=800'); return false;"><img src='images/k-view-icon.png' alt='View Attachment' title='View Attachment' /></a>
+								<a href="editProperty.php?property_id=<?php echo $property_id; ?>&del_attachment=1&attach_id=<?php echo $row_attach['id']; ?>&file=<?php echo $row_attach['filename']; ?>" onclick="return confirm('Are you sure you want to remove this file?')"><img src='images/delete.png' alt='Delete Attachment' title='Delete Attachment' /></a>
+							</td>
+						</tr>
+						<?php
+							}
+						?>
+				<?php } else { ?>
+						<tr><td colspan="2">No attached file found..</td></tr>
+				<?php }?>
+		</table>				
+	</td>
+	<td colspan="2">
+		&nbsp;
+	</td>
 
+</tr>
 <tr><td colspan="3">
+<hr />
 <table width="100%">
 <tr>
 <td align="right" valign="top">Photo 1:</td>
