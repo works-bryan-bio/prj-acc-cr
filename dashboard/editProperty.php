@@ -381,7 +381,7 @@ if (!isset($_GET['property_id'])) {
 <input class="button" type="button" onClick="javascript:history.back()" value="Cancel">
 <table class="input">
 <tr>
-<th>Edit Property</th>
+<th><a href="editProperty.php?property_id=<?php echo $property_id; ?>">Edit Property</a> | <a href="propertyPictures.php?property_id=<?php echo $property_id; ?>">Pictures</a></th>
 <th>
 &nbsp;
 </th>
